@@ -40,7 +40,7 @@ namespace FitnessPanelMVC.Infrastructure
             builder.Entity<MealProduct>()
                 .HasOne<Product>(it => it.Product)
                 .WithMany(i => i.MealProducts)
-                .HasForeignKey(IT => IT.ProductId);
+                .HasForeignKey(it => it.ProductId);
 
             builder.Entity<RecipeProduct>()
                 .HasKey(it => new { it.RecipeId, it.ProductId });

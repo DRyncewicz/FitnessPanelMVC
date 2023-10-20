@@ -32,7 +32,7 @@ namespace FitnessPanelMVC.Infrastructure.Repositories
             }
         }
 
-        public IQueryable<Product> GetAll()
+        public IQueryable<Product> GetAllProducts()
         {
             var products = _dbContext.Products;
             return products.AsQueryable();
