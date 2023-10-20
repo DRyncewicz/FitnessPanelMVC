@@ -12,43 +12,43 @@ namespace FitnessPanelMVC.Infrastructure.Repositories
 {
     public class MealRepository : IMealRepository<Meal>
     {
-        private readonly Context _dbCotenxt;
+        private readonly Context _dbContext;
 
         public MealRepository(Context dbContext)
         {
-            _dbCotenxt = dbContext;
+            _dbContext = dbContext;
         }
         public int CreateMeal(Meal meal)
         {
-            _dbCotenxt.Meals.Add(meal);
-            _dbCotenxt.SaveChanges();
+            _dbContext.Meals.Add(meal);
+            _dbContext.SaveChanges();
             return meal.Id;
 
         }
 
-        public void DeleteMeal(int mealId)
+        public void DeleteMeal(int id)
         {
-            var meal = _dbCotenxt.Meals.Find(mealId);
+            var meal = _dbContext.Meals.Find(id);
             if (meal != null)
             {
-                _dbCotenxt.Meals.Remove(meal);
-                _dbCotenxt.SaveChanges();
+                _dbContext.Meals.Remove(meal);
+                _dbContext.SaveChanges();
             }
         }
 
         public IQueryable<Meal> GetMealsByDate(DateTime date)
         {
-            var meals = _dbCotenxt.Meals.Where(i => i.MealDate == date);
+            var meals = _dbContext.Meals.Where(i => i.MealDate == date);
             return meals;
         }
 
-        public int UpdateMeal(int mealId)
+        public int UpdateMeal(int id)
         {
-            var meal = _dbCotenxt.Meals.Find(mealId);
+            var meal = _dbContext.Meals.Find(id);
             if (meal != null)
             {
-                _dbCotenxt.Meals.Update(meal);
-                _dbCotenxt.SaveChanges();
+                _dbContext.Meals.Update(meal);
+                _dbContext.SaveChanges();
                 return meal.Id;
             }
             return 0;
