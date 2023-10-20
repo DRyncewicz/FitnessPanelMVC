@@ -46,6 +46,6 @@ namespace FitnessPanelMVC.Infrastructure.Repositories
             var mealProducts = _dbCotenxt.MealProduct.Where(x => x.MealId == mealId);
             return mealProducts;
         }
-
+        
     }
 }

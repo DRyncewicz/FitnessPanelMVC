@@ -18,26 +18,26 @@ namespace FitnessPanelMVC.Infrastructure.Repositories
 
         public int CreateExercise(Exercise exercise)
         {
-            _dbCotenxt.Exercise.Add(exercise);
+            _dbCotenxt.Exercises.Add(exercise);
             _dbCotenxt.SaveChanges();
             return exercise.Id;
         }
 
         public void DeleteExercise(int id) 
         {
-            var exercise = _dbCotenxt.Exercise.Find(id);
+            var exercise = _dbCotenxt.Exercises.Find(id);
             if (exercise != null)
             {
-                _dbCotenxt.Exercise.Remove(exercise);
+                _dbCotenxt.Exercises.Remove(exercise);
                 _dbCotenxt.SaveChanges();
             }
         }
 
         public int UpdateExercise(Exercise exercise)
         {
-            if (_dbCotenxt.Exercise.Find(exercise.Id) != null)
+            if (_dbCotenxt.Exercises.Find(exercise.Id) != null)
             {
-                _dbCotenxt.Exercise.Update(exercise);
+                _dbCotenxt.Exercises.Update(exercise);
                 _dbCotenxt.SaveChanges();
                 return exercise.Id;
             }
@@ -46,13 +46,13 @@ namespace FitnessPanelMVC.Infrastructure.Repositories
 
         public IQueryable<Exercise> GetExercises()
         {
-            var exercises = _dbCotenxt.Exercise;
+            var exercises = _dbCotenxt.Exercises;
             return exercises;
         }
 
         public IQueryable<Exercise> GetExercisesByNameContains(string name)
         {
-            var exercises = _dbCotenxt.Exercise.Where(x => x.Name.Contains(name));
+            var exercises = _dbCotenxt.Exercises.Where(x => x.Name.Contains(name));
             return exercises;
         }
 
