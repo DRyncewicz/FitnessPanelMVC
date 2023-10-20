@@ -13,5 +13,10 @@ namespace FitnessPanelMVC.Domain.Model
         public MealType MealType { get; set; }
         public DateTime MealDate { get; set; }
         public ICollection<MealProduct> MealProducts { get; set; }
+        public double TotalCalories { get; set; }
+        public double TotalCarbs { get; set; }
+        public double TotalFat { get; set; }
+        public double TotalProtein { get; set; }
+
     }
 }
