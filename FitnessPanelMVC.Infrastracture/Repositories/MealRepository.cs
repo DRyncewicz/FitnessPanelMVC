@@ -42,10 +42,9 @@ namespace FitnessPanelMVC.Infrastructure.Repositories
             return meals;
         }
 
-        public int UpdateMeal(int id)
+        public int UpdateMeal(Meal meal)
         {
-            var meal = _dbContext.Meals.Find(id);
-            if (meal != null)
+            if (_dbContext.Meals.Find(meal.Id) != null)
             {
                 _dbContext.Meals.Update(meal);
                 _dbContext.SaveChanges();

@@ -51,13 +51,12 @@ namespace FitnessPanelMVC.Infrastructure.Repositories
         public IQueryable<Product> GetProductsByNameContains(string name)
         {
             var products = _dbContext.Products.Where(i => i.Name.Contains(name));
-            return products;
+            return products.AsQueryable();
         }
 
-        public int UpdateProduct(int id)
+        public int UpdateProduct(Product product)
         {
-            var product = _dbContext.Products.Find(id);
-            if (product != null)
+            if (_dbContext.Products.Find(product.Id) != null)
             {
                 _dbContext.Products.Update(product);
                 _dbContext.SaveChanges();
