@@ -1,0 +1,95 @@
+[33mcommit 7805550ae8e9065d0bd04cacf9a0cd2ca0db307f[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m
+Author: Dominik Ryryry <ereence@gmail.com>
+Date:   Sat Oct 21 12:40:42 2023 +0200
+
+    Preparation for DTOs and Services
+
+[33mcommit 8e0f7d8eb6a1f4261a0b00d5f62bfaa0c048d150[m
+Author: Dominik Ryryry <ereence@gmail.com>
+Date:   Sat Oct 21 01:52:39 2023 +0200
+
+    Folder name change from  Interface to Interfaces
+
+[33mcommit 901eb4ef726bf42f18e75c7a11c337059be1e382[m
+Author: Dominik Ryryry <ereence@gmail.com>
+Date:   Sat Oct 21 01:00:26 2023 +0200
+
+    Change table name from Exercise to Exercises
+
+[33mcommit 3099ad63f9554112d47f2ac6360027551986a21d[m
+Merge: b08426e b532b5a
+Author: Dominik Ryryry <ereence@gmail.com>
+Date:   Sat Oct 21 00:49:43 2023 +0200
+
+    Merge branch 'master' of https://github.com/DRyncewicz/FitnessPanelMVC
+
+[33mcommit b08426ea93cd721cf51cbd669060a0f0758176e1[m
+Author: Dominik Ryryry <ereence@gmail.com>
+Date:   Sat Oct 21 00:49:35 2023 +0200
+
+    Added all repositories for Models
+
+[33mcommit 3e10479a52da6d33c66eb519ea6220f87184593b[m
+Author: Dominik Ryryry <ereence@gmail.com>
+Date:   Sat Oct 21 00:48:59 2023 +0200
+
+    Added concract for all repository methods
+
+[33mcommit b532b5ad08c60d56674bcf4a861bbb6298ea3432[m
+Author: DRyncewicz <97690111+DRyncewicz@users.noreply.github.com>
+Date:   Fri Oct 20 23:34:48 2023 +0200
+
+    Update README.md
+
+[33mcommit b4fab8fa0d876de730007a47b47effb3f64b48a9[m
+Author: Dominik Ryryry <ereence@gmail.com>
+Date:   Fri Oct 20 20:57:11 2023 +0200
+
+    Added IProductRepository, ProductRepository
+
+[33mcommit fea6b5acaca19c97e09b1d510926fd570e994777[m
+Merge: 4269c37 b9ecb82
+Author: Dominik Ryryry <ereence@gmail.com>
+Date:   Fri Oct 20 00:55:07 2023 +0200
+
+    Merge branch 'master' of https://github.com/DRyncewicz/FitnessPanelMVC
+
+[33mcommit 4269c3794ee953a19d6228e17315facd819ab8ef[m
+Author: Dominik Ryryry <ereence@gmail.com>
+Date:   Fri Oct 20 00:54:20 2023 +0200
+
+    #Model definition for core,
+    initial migration added,
+    repository for Meals
+
+[33mcommit b9ecb82a9c18f94db853e27dc4057b1d158463da[m
+Author: DRyncewicz <97690111+DRyncewicz@users.noreply.github.com>
+Date:   Thu Oct 19 23:55:27 2023 +0200
+
+    Update README.md
+
+[33mcommit 57a926ea9cef6cd9ebd2d5036fbcb9002988fc1c[m
+Author: DRyncewicz <97690111+DRyncewicz@users.noreply.github.com>
+Date:   Thu Oct 19 23:16:26 2023 +0200
+
+    Update README.md
+    
+    A description containing something between notes and documentation ;)
+
+[33mcommit 93ce353c221019b15b32002d2cb1d33ba84ce149[m
+Author: DRyncewicz <97690111+DRyncewicz@users.noreply.github.com>
+Date:   Thu Oct 19 23:12:20 2023 +0200
+
+    Update README.md
+
+[33mcommit 50e030fb53772e0f672af8e60e93380a02ca94e2[m
+Author: Dominik Ryryry <ereence@gmail.com>
+Date:   Thu Oct 19 23:10:38 2023 +0200
+
+    Add project files.
+
+[33mcommit 31ce2c7791b102d565a7003d67ec347884614a0d[m
+Author: Dominik Ryryry <ereence@gmail.com>
+Date:   Thu Oct 19 23:10:35 2023 +0200
+
+    Add .gitattributes, .gitignore, and README.md.

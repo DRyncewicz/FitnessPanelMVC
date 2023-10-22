@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace FitnessPanelMVC.Domain.Interface
 {
-    public interface IMealRepository<T>
+    public interface IMealRepository
     {
-        public int CreateMeal(T meal);
-        public int UpdateMeal(T meal); 
+        public int CreateMeal(Meal meal);
+        public int UpdateMeal(Meal meal); 
         public void DeleteMeal(int id);
         public IQueryable<Meal> GetMealsByDate(DateTime date);
     }

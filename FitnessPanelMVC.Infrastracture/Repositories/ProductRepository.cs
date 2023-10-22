@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace FitnessPanelMVC.Infrastructure.Repositories
 {
-    public class ProductRepository : IProductRepository<Product>
+    public class ProductRepository : IProductRepository
     {
         private readonly Context _dbContext;
         public ProductRepository(Context dbContext)

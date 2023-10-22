@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace FitnessPanelMVC.Domain.Interface
 {
-    public interface IRecipeRepository<T>
+    public interface IRecipeRepository
     {
-        public int CreateRecipe(T recipe);
-        public IQueryable<T> GetAllRecipes();
+        public int CreateRecipe(Recipe recipe);
+        public IQueryable<Recipe> GetAllRecipes();
         public void RemoveRecipe(int id);
-        public int UpdateRecipe(T recipe);
+        public int UpdateRecipe(Recipe recipe);
     }
 }

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace FitnessPanelMVC.Infrastructure.Repositories
 {
-    public class MealRepository : IMealRepository<Meal>
+    public class MealRepository : IMealRepository
     {
         private readonly Context _dbContext;
 
