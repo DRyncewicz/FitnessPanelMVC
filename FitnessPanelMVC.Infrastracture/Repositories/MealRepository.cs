@@ -36,9 +36,9 @@ namespace FitnessPanelMVC.Infrastructure.Repositories
             }
         }
 
-        public IQueryable<Meal> GetMealsByDate(DateTime date)
+        public IQueryable<Meal> GetAllMeals()
         {
-            var meals = _dbContext.Meals.Where(i => i.MealDate == date);
+            var meals = _dbContext.Meals;
             return meals;
         }
 

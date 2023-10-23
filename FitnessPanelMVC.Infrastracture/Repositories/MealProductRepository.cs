@@ -1,5 +1,6 @@
 ﻿using FitnessPanelMVC.Domain.Interface;
 using FitnessPanelMVC.Domain.Model;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,40 +11,41 @@ namespace FitnessPanelMVC.Infrastructure.Repositories
 {
     public class MealProductRepository : IMealProductRepository
     {
-        private readonly Context _dbCotenxt;
+        private readonly Context _dbContext;
         public MealProductRepository(Context dbContext)
         {
-            _dbCotenxt = dbContext;
+            _dbContext = dbContext;
         }
 
         public int CreateMealProduct(MealProduct mealProduct)
         {
-            _dbCotenxt.MealProduct.Add(mealProduct);
-            _dbCotenxt.SaveChanges();
+            _dbContext.MealProduct.Add(mealProduct);
+            _dbContext.SaveChanges();
             return mealProduct.Id;
         }
         public void DeleteMealProduct(int id)
         {
-            var mealProduct = _dbCotenxt.MealProduct.Find(id);
+            var mealProduct = _dbContext.MealProduct.Find(id);
             if (mealProduct != null)
             {
-                _dbCotenxt.MealProduct.Remove(mealProduct);
-                _dbCotenxt.SaveChanges();
+                _dbContext.MealProduct.Remove(mealProduct);
+                _dbContext.SaveChanges();
             }
         }
         public int UpdateMealProduct(MealProduct mealProduct)
         {
-            if (_dbCotenxt.MealProduct.Find(mealProduct.Id) != null)
+            if (_dbContext.MealProduct.Find(mealProduct.Id) != null)
             {
-                _dbCotenxt.MealProduct.Update(mealProduct);
-                _dbCotenxt.SaveChanges();
+                _dbContext.MealProduct.Update(mealProduct);
+                _dbContext.SaveChanges();
                 return mealProduct.Id;
             }
             return 0;
         }
-        public IQueryable<MealProduct> GetMealProductByMealId(int mealId)
+        public IQueryable<MealProduct> GetAllMealProduct()
         {
-            var mealProducts = _dbCotenxt.MealProduct.Where(x => x.MealId == mealId);
+            var mealProducts =_dbContext.MealProduct;
+            
             return mealProducts;
         }
         

@@ -12,6 +12,6 @@ namespace FitnessPanelMVC.Domain.Interface
         public int CreateMeal(Meal meal);
         public int UpdateMeal(Meal meal); 
         public void DeleteMeal(int id);
-        public IQueryable<Meal> GetMealsByDate(DateTime date);
+        public IQueryable<Meal> GetAllMeals();
     }
 }

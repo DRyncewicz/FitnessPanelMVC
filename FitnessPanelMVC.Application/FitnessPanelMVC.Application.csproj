@@ -7,11 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="ViewModels\Meal\" />
+    <ProjectReference Include="..\FitnessPanelMVC.Domain\FitnessPanelMVC.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FitnessPanelMVC.Domain\FitnessPanelMVC.Domain.csproj" />
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
   </ItemGroup>
 
 </Project>

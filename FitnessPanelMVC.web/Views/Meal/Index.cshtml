@@ -1,0 +1,42 @@
+﻿@model FitnessPanelMVC.Application.ViewModels.Meal.ListMealForListVm
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Meal Details
+            </th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var meal in Model.Meals)
+        {
+            <tr>
+                <td>
+                    <strong>@meal.MealType.ToString()</strong>
+                    <ul>
+                        @foreach (var product in meal.MealProducts)
+                        {
+                            <li>@product.ProductName - @product.Weight, @product.Calories, @product.Protein, @product.Fat, @product.Carbs </li>
+                        }
+                    </ul>
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = meal.Id }) |
+                    @Html.ActionLink("Details", "Details", new { id = meal.Id }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = meal.Id })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

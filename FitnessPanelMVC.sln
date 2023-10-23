@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34202.233
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FitnessPanelMVC.web", "FitnessPanelMVC.web\FitnessPanelMVC.web.csproj", "{D9F787F7-9389-4CB1-B45D-C59A5AE9DB72}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FitnessPanelMVC.web", "FitnessPanelMVC.web\FitnessPanelMVC.web.csproj", "{D9F787F7-9389-4CB1-B45D-C59A5AE9DB72}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application", "{E4EEAF8A-5510-4901-924F-A85B9F08C511}"
 EndProject
@@ -15,13 +15,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{E122FFC5-A
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{682E1DA8-0771-4E9C-AFAD-0B7ED5EA1226}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FitnessPanelMVC.Application", "FitnessPanelMVC.Application\FitnessPanelMVC.Application.csproj", "{6687EE55-F443-462D-A51B-72E78F753F0B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FitnessPanelMVC.Application", "FitnessPanelMVC.Application\FitnessPanelMVC.Application.csproj", "{6687EE55-F443-462D-A51B-72E78F753F0B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FitnessPanelMVC.Domain", "FitnessPanelMVC.Domain\FitnessPanelMVC.Domain.csproj", "{FA93B7EA-5F3B-4A6D-928E-22A8DFE85689}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FitnessPanelMVC.Domain", "FitnessPanelMVC.Domain\FitnessPanelMVC.Domain.csproj", "{FA93B7EA-5F3B-4A6D-928E-22A8DFE85689}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FitnessPanelMVC.Infrastructure", "FitnessPanelMVC.Infrastracture\FitnessPanelMVC.Infrastructure.csproj", "{F9DB6CFC-B673-4F51-93D6-07EB25DECF1E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FitnessPanelMVC.Infrastructure", "FitnessPanelMVC.Infrastracture\FitnessPanelMVC.Infrastructure.csproj", "{F9DB6CFC-B673-4F51-93D6-07EB25DECF1E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FitnessPanelMVC.Tests", "FitnessPanelMVC.Tests\FitnessPanelMVC.Tests.csproj", "{4B17AC5A-17CF-4CE1-B5A9-E48669C7C87F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FitnessPanelMVC.Tests", "FitnessPanelMVC.Tests\FitnessPanelMVC.Tests.csproj", "{4B17AC5A-17CF-4CE1-B5A9-E48669C7C87F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -20,3 +20,16 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.custom-button {
+    width: auto;
+    padding: 5px 10px;
+    font-size: 14px;
+}
+.custom-input {
+    width: 200px; 
+    padding: 5px; 
+}
+.table-row {
+    margin-bottom: 10px; 
+}
