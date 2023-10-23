@@ -1,5 +1,7 @@
 ﻿using FitnessPanelMVC.Application.Interfaces;
+using FitnessPanelMVC.Application.ViewModels.Meal;
 using Microsoft.AspNetCore.Mvc;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace FitnessPanelMVC.web.Controllers
 {
@@ -11,9 +13,17 @@ namespace FitnessPanelMVC.web.Controllers
             _mealService = mealService;
         }
 
+        [HttpGet]
+        public IActionResult Index()
+        {
+            var model = _mealService.GetMealsForListByDate(DateTime.Now);
+            return View(model);
+        }
+
+        [HttpPost]
         public IActionResult Index(DateTime date)
         {
-            var model = _mealService.GetMealsForListByDate(new DateTime(2023, 10, 11));
+            var model = _mealService.GetMealsForListByDate(date);
             return View(model);
         }
     }
