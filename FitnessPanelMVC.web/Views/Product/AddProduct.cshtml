@@ -1,0 +1,66 @@
+﻿@model FitnessPanelMVC.Application.ViewModels.Product.NewProductVm
+
+@{
+    ViewData["Title"] = "AddProduct";
+}
+
+<h1>AddProduct</h1>
+
+<h4>NewProductVm</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="AddProduct">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Restaurant" class="control-label"></label>
+                <input asp-for="Restaurant" class="form-control" />
+                <span asp-validation-for="Restaurant" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Barcode" class="control-label"></label>
+                <input asp-for="Barcode" class="form-control" />
+                <span asp-validation-for="Barcode" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CaloriesPer100g" class="control-label"></label>
+                <input asp-for="CaloriesPer100g" class="form-control" />
+                <span asp-validation-for="CaloriesPer100g" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CarbsPer100g" class="control-label"></label>
+                <input asp-for="CarbsPer100g" class="form-control" />
+                <span asp-validation-for="CarbsPer100g" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FatPer100g" class="control-label"></label>
+                <input asp-for="FatPer100g" class="form-control" />
+                <span asp-validation-for="FatPer100g" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProteinPer100g" class="control-label"></label>
+                <input asp-for="ProteinPer100g" class="form-control" />
+                <span asp-validation-for="ProteinPer100g" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@* @section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+ *@

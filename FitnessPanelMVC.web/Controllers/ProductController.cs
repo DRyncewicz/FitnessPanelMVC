@@ -1,22 +1,29 @@
 ﻿using FitnessPanelMVC.Application.Interfaces;
+using FitnessPanelMVC.Application.ViewModels.Product;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace FitnessPanelMVC.web.Controllers
 {
     public class ProductController : Controller
     {
         private readonly IProductService _productService;
+        private readonly IValidator<NewProductVm> _validator;
 
-        public ProductController(IProductService productService)
+        public ProductController(IProductService productService, IValidator<NewProductVm> validator)
         {
             _productService = productService;
+            _validator = validator;
         }
+
         [HttpGet]
         public IActionResult Index()
         {
             var model = _productService.GetAllProductsForList(2, 1, "");
             return View(model);
         }
+
         [HttpPost]
         public IActionResult Index(int pageSize, int? pageNo, string searchString)
         {
@@ -32,15 +39,23 @@ namespace FitnessPanelMVC.web.Controllers
             return View(model);
         }
 
-
-
-
         [HttpGet]
         public IActionResult AddProduct()
         {
-
             return View();
         }
 
+        [HttpPost]
+        public IActionResult AddProduct(NewProductVm newProduct)
+        {
+            var result = _validator.Validate(newProduct);
+
+            if (result.IsValid)
+            {
+                _productService.AddNewProduct(newProduct);
+                return RedirectToAction("Index");
+            }
+            return View();
+        }
     }
 }

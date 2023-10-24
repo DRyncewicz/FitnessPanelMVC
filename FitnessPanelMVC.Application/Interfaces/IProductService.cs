@@ -9,6 +9,7 @@ namespace FitnessPanelMVC.Application.Interfaces
 {
     public interface IProductService
     {
+        int AddNewProduct(NewProductVm newProductVm);
         public ListProductForListVm GetAllProductsForList(int pageSize, int pageNo, string searchString);
     }
 }

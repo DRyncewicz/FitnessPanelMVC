@@ -3,6 +3,7 @@ using AutoMapper.QueryableExtensions;
 using FitnessPanelMVC.Application.Interfaces;
 using FitnessPanelMVC.Application.ViewModels.Product;
 using FitnessPanelMVC.Domain.Interface;
+using FitnessPanelMVC.Domain.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,7 +27,7 @@ namespace FitnessPanelMVC.Application.Services
         {
             var products = _productRepository.GetAllProducts().Where(p => p.Name.StartsWith(searchString))
                 .ProjectTo<ProductForListVm>(_mapper.ConfigurationProvider).ToList();
-            var productsToShow = products.Skip(pageSize*(pageNo-1)).Take(pageSize).ToList();
+            var productsToShow = products.Skip(pageSize * (pageNo - 1)).Take(pageSize).ToList();
             var productList = new ListProductForListVm()
             {
                 PageSize = pageSize,
@@ -39,5 +40,11 @@ namespace FitnessPanelMVC.Application.Services
             return productList;
         }
 
+        public int AddNewProduct(NewProductVm newProductVm)
+        {
+            var product = _mapper.Map<Product>(newProductVm);
+            int productId = _productRepository.CreateProduct(product);
+            return productId;
+        }
     }
 }

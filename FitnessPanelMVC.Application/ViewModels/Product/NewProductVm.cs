@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using FitnessPanelMVC.Application.Mapping;
-using FitnessPanelMVC.Application.ViewModels.Meal;
 using FitnessPanelMVC.Domain.Model;
 using System;
 using System.Collections.Generic;
@@ -21,10 +20,9 @@ namespace FitnessPanelMVC.Application.ViewModels.Product
         public double FatPer100g { get; set; }
         public double ProteinPer100g { get; set; }
 
-
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<FitnessPanelMVC.Domain.Model.Product, NewProductVm>();
+            profile.CreateMap<FitnessPanelMVC.Domain.Model.Product, NewProductVm>().ReverseMap();
         }
     }
 }

@@ -27,17 +27,15 @@ namespace FitnessPanelMVC.Application.Services
 
         public ListMealForListVm GetMealsForListByDate(DateTime date)
         {
-            var meals = _mealRepository.GetAllMeals().Where(i => i.MealDate.Date == date.Date);
-            var mealProducts = meals.SelectMany(m => m.MealProducts).AsQueryable();
-            var products = mealProducts.Select(m => m.Product).AsQueryable();
-
-            var mealsVm = meals.ProjectTo<MealForListVm>(_mapper.ConfigurationProvider).ToList();
-            var mealProductsVm = mealProducts.ProjectTo<MealProductForListVm>(_mapper.ConfigurationProvider).ToList();
+            var mealsVm = _mealRepository.GetAllMeals().
+                Where(i => i.MealDate.Date == date.Date).
+                ProjectTo<MealForListVm>(_mapper.ConfigurationProvider).
+                ToList();
 
             return new ListMealForListVm
             {
                 Meals = mealsVm,
-                Count = meals.Count()
+                Count = mealsVm.Count()
             };
         }
     }

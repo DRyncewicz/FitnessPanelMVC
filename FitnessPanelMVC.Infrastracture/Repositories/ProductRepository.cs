@@ -19,6 +19,7 @@ namespace FitnessPanelMVC.Infrastructure.Repositories
         public int CreateProduct(Product product)
         {
             _dbContext.Products.Add(product);
+            _dbContext.SaveChanges();
             return product.Id;
         }
 

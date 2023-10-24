@@ -5,16 +5,22 @@
 }
 
 <h1>Index</h1>
-<form method="post">
-    <div class="form-group">
-        <label for="date">Select Date:</label>
-        <input type="date" class="form-control" id="date" name="date" />
+<div class="row">
+    <div class="col-md-6">
+        <form method="post">
+            <div class="form-group">
+                <label for="date">Select Date:</label>
+                <input type="date" class="form-control" id="date" name="date" />
+            </div>
+            <button type="submit" class="btn btn-primary">Load Meals</button>
+        </form>
     </div>
-    <button type="submit" class="btn btn-primary">Load Meals</button>
-</form>
-<p>
-    <a asp-action="Create" class="btn btn-primary mb-3">Create New</a>
-</p>
+    <div class="col-md-6 d-flex align-items-center">
+        <a asp-action="Create" class="btn btn-primary">Create New</a>
+    </div>
+
+</div>
+
 <table class="table table-bordered table-hover">
     <thead class="thead-dark">
         <tr>

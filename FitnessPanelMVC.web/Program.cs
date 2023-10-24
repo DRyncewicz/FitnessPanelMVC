@@ -1,6 +1,10 @@
 
 using FitnessPanelMVC.Application;
+using FitnessPanelMVC.Application.Validators;
+using FitnessPanelMVC.Application.ViewModels.Product;
 using FitnessPanelMVC.Infrastructure;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,7 +22,8 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure();
 
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews().AddFluentValidation();
+builder.Services.AddTransient<IValidator<NewProductVm>, NewProductValidation>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
