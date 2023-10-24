@@ -11,5 +11,7 @@ namespace FitnessPanelMVC.Application.Interfaces
     {
         int AddNewProduct(NewProductVm newProductVm);
         public ListProductForListVm GetAllProductsForList(int pageSize, int pageNo, string searchString);
+        NewProductVm GetProductForEdit(int productId);
+        void UpdateProduct(NewProductVm editedProduct);
     }
 }

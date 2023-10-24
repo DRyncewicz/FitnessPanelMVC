@@ -46,5 +46,18 @@ namespace FitnessPanelMVC.Application.Services
             int productId = _productRepository.CreateProduct(product);
             return productId;
         }
+
+        public NewProductVm GetProductForEdit(int productId)
+        {
+            var product = _productRepository.GetProductById(productId);
+            var productVm = _mapper.Map<NewProductVm>(product);
+            return productVm;
+        }
+
+        public void UpdateProduct(NewProductVm editedProduct)
+        {
+            var product = _mapper.Map<Product>(editedProduct);
+            _productRepository.UpdateProduct(product);
+        }
     }
 }

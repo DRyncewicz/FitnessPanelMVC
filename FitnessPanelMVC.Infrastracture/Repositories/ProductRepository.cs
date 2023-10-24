@@ -49,21 +49,18 @@ namespace FitnessPanelMVC.Infrastructure.Repositories
             return product;
         }
 
-        public IQueryable<Product> GetProductsByNameContains(string name)
-        {
-            var products = _dbContext.Products.Where(i => i.Name.Contains(name));
-            return products.AsQueryable();
-        }
 
-        public int UpdateProduct(Product product)
+        public void UpdateProduct(Product product)
         {
-            if (_dbContext.Products.Find(product.Id) != null)
-            {
-                _dbContext.Products.Update(product);
-                _dbContext.SaveChanges();
-                return product.Id;
-            }
-            return 0;
+            _dbContext.Attach(product);
+            _dbContext.Entry(product).Property("Name").IsModified = true;
+            _dbContext.Entry(product).Property("Restaurant").IsModified = true;
+            _dbContext.Entry(product).Property("Barcode").IsModified = true;
+            _dbContext.Entry(product).Property("CaloriesPer100g").IsModified = true;
+            _dbContext.Entry(product).Property("CarbsPer100g").IsModified = true;
+            _dbContext.Entry(product).Property("FatPer100g").IsModified = true;
+            _dbContext.Entry(product).Property("ProteinPer100g").IsModified = true;
+            _dbContext.SaveChanges();
         }
     }
 }

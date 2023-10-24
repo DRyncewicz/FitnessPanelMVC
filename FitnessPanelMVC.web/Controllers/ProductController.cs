@@ -49,12 +49,30 @@ namespace FitnessPanelMVC.web.Controllers
         public IActionResult AddProduct(NewProductVm newProduct)
         {
             var result = _validator.Validate(newProduct);
-
             if (result.IsValid)
             {
                 _productService.AddNewProduct(newProduct);
                 return RedirectToAction("Index");
             }
+
+            return View();
+        }
+        [HttpGet]
+        public IActionResult EditProduct(int id)
+        {
+            var product = _productService.GetProductForEdit(id);
+            return View(product);
+        }
+        [HttpPost]
+        public IActionResult EditProduct(NewProductVm editedProduct)
+        {
+            var result = _validator.Validate(editedProduct);
+            if (result.IsValid)
+            {
+                _productService.UpdateProduct(editedProduct);
+                return RedirectToAction("Index");
+            }
+                
             return View();
         }
     }
