@@ -11,7 +11,6 @@ namespace FitnessPanelMVC.Application.ViewModels.MealProduct
 {
     public class MealProductForListVm : IMapFrom<FitnessPanelMVC.Domain.Model.MealProduct>
     {
-        public int Id { get; set; }
         public int MealId { get; set; }
         public int ProductId { get; set; }
         public double Weight { get; set; }

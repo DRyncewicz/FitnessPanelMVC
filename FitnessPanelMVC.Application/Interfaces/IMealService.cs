@@ -1,4 +1,5 @@
 ﻿using FitnessPanelMVC.Application.ViewModels.Meal;
+using FitnessPanelMVC.Application.ViewModels.Product;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,9 @@ namespace FitnessPanelMVC.Application.Interfaces
 {
     public interface IMealService
     {
+        int AddNewMeal(NewMealVm newMealVm);
+        int AddProductToMeal(int productId, int mealId, double weight);
+        MealForListVm GetMealDetailsById(int mealId);
         ListMealForListVm GetMealsForListByDate(DateTime date);
     }
 }

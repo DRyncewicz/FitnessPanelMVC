@@ -20,7 +20,7 @@ namespace FitnessPanelMVC.web.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            var model = _productService.GetAllProductsForList(2, 1, "");
+            var model = _productService.GetAllProductsForList(20, 1, "");
             return View(model);
         }
 

@@ -17,37 +17,37 @@ namespace FitnessPanelMVC.Infrastructure.Repositories
             _dbContext = dbContext;
         }
 
-        public int CreateMealProduct(MealProduct mealProduct)
+        public void CreateMealProduct(MealProduct mealProduct)
         {
             _dbContext.MealProduct.Add(mealProduct);
             _dbContext.SaveChanges();
-            return mealProduct.Id;
         }
-        public void DeleteMealProduct(int id)
+
+        public void DeleteMealProduct(int mealId, int productId)
         {
-            var mealProduct = _dbContext.MealProduct.Find(id);
+            var mealProduct = _dbContext.MealProduct.Find(mealId, productId);
             if (mealProduct != null)
             {
                 _dbContext.MealProduct.Remove(mealProduct);
                 _dbContext.SaveChanges();
             }
         }
-        public int UpdateMealProduct(MealProduct mealProduct)
+
+        public void UpdateMealProduct(MealProduct mealProduct)
         {
-            if (_dbContext.MealProduct.Find(mealProduct.Id) != null)
+            var existingMealProduct = _dbContext.MealProduct
+                .Find(mealProduct.MealId, mealProduct.ProductId);
+
+            if (existingMealProduct != null)
             {
-                _dbContext.MealProduct.Update(mealProduct);
+                _dbContext.Entry(existingMealProduct).CurrentValues.SetValues(mealProduct);
                 _dbContext.SaveChanges();
-                return mealProduct.Id;
             }
-            return 0;
         }
-        public IQueryable<MealProduct> GetAllMealProduct()
+
+        public IQueryable<MealProduct> GetAllMealProducts()
         {
-            var mealProducts =_dbContext.MealProduct;
-            
-            return mealProducts;
+            return _dbContext.MealProduct;
         }
-        
     }
 }

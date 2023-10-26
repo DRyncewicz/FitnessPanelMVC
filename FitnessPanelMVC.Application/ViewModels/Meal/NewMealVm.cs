@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FitnessPanelMVC.Application.Mapping;
+using FitnessPanelMVC.Application.ViewModels.MealProduct;
 using FitnessPanelMVC.Domain.Enums;
 using FitnessPanelMVC.Domain.Model;
 using System;
@@ -19,11 +20,11 @@ namespace FitnessPanelMVC.Application.ViewModels.Meal
         public double TotalCarbs { get; set; }
         public double TotalFat { get; set; }
         public double TotalProtein { get; set; }
-
+        public List<MealProductForListVm> MealProducts { get; set; }
 
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<FitnessPanelMVC.Domain.Model.Meal, NewMealVm>();
+            profile.CreateMap<FitnessPanelMVC.Domain.Model.Meal, NewMealVm>().ReverseMap();
         }
     }
 }

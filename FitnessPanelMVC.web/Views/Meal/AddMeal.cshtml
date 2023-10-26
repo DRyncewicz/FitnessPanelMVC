@@ -1,0 +1,45 @@
+﻿@model FitnessPanelMVC.Application.ViewModels.Meal.NewMealVm
+
+@{
+    ViewData["Title"] = "Add Meal";
+    var mealTypeSelectList = new SelectList(Enum.GetValues(typeof(FitnessPanelMVC.Domain.Enums.MealType)));
+}
+
+<h1>Add Meal</h1>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="AddMeal">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="TotalCalories" />
+            <input type="hidden" asp-for="TotalCarbs" />
+            <input type="hidden" asp-for="TotalFat" />
+            <input type="hidden" asp-for="TotalProtein" />
+
+            <div class="form-group">
+                <label asp-for="MealType" class="control-label"></label>
+                @Html.DropDownListFor(model => model.MealType, mealTypeSelectList, "Choose Meal Type", new { @class = "form-control" })
+                <span asp-validation-for="MealType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MealDate" class="control-label"></label>
+                <input asp-for="MealDate" class="form-control" />
+                <span asp-validation-for="MealDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

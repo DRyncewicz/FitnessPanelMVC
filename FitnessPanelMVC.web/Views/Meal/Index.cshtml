@@ -1,61 +1,57 @@
 ﻿@model FitnessPanelMVC.Application.ViewModels.Meal.ListMealForListVm
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Meal Overview";
 }
 
-<h1>Index</h1>
+<h1>Meal Overview</h1>
+
 <div class="row">
-    <div class="col-md-6">
-        <form method="post">
-            <div class="form-group">
-                <label for="date">Select Date:</label>
-                <input type="date" class="form-control" id="date" name="date" />
-            </div>
-            <button type="submit" class="btn btn-primary">Load Meals</button>
+    <div class="col-md-12">
+        <form method="post" class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="date" id="date" name="date" placeholder="Select Date" aria-label="Select Date">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Load Meals</button>
+            <a asp-action="AddMeal" class="btn btn-primary ml-2">Add New Meal</a>
         </form>
     </div>
-    <div class="col-md-6 d-flex align-items-center">
-        <a asp-action="Create" class="btn btn-primary">Create New</a>
-    </div>
-
 </div>
 
-<table class="table table-bordered table-hover">
-    <thead class="thead-dark">
-        <tr>
-            <th>
-                Meal Details
-            </th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var meal in Model.Meals)
-        {
-            <tr>
-                <td>
-                    <strong>@meal.MealType.ToString()</strong>
-                    <ul class="list-unstyled">
-                        @foreach (var product in meal.MealProducts)
-                        {
-                            <li>
-                                <span class="font-weight-bold">@product.ProductName:</span>
-                                @product.Weight g,
-                                @product.Calories cal,
-                                @product.Protein g protein,
-                                @product.Fat g fat,
-                                @product.Carbs g carbs
-                            </li>
-                        }
-                    </ul>
-                </td>
-                <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = meal.Id }, new { @class = "btn btn-warning btn-sm" })
-                    @Html.ActionLink("Details", "Details", new { id = meal.Id }, new { @class = "btn btn-info btn-sm" })
-                    @Html.ActionLink("Delete", "Delete", new { id = meal.Id }, new { @class = "btn btn-danger btn-sm" })
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+<div class="row mt-4">
+    <div class="col-md-12">
+        <table class="table table-responsive table-bordered table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Meal informations</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var meal in Model.Meals)
+                {
+                    <tr>
+                        <td>
+                            <strong>@meal.MealType</strong>
+                            <ul>Calories: @meal.TotalCalories
+                                Proteins: @meal.TotalProtein
+                                Carbs: @meal.TotalCarbs
+                                Fat: @meal.TotalFat</ul>
+                            <ul>
+                                @foreach (var product in meal.MealProducts)
+                                {
+                                    <li>
+                                        @product.ProductName: @product.Weight g,
+                                    </li>
+                                }
+                            </ul>
+                        </td>
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { id = meal.Id }, new { @class = "btn btn-warning btn-sm" })
+                            @Html.ActionLink("Details", "Details", new { id = meal.Id }, new { @class = "btn btn-info btn-sm" })
+                            @Html.ActionLink("Delete", "Delete", new { id = meal.Id }, new { @class = "btn btn-danger btn-sm" })
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

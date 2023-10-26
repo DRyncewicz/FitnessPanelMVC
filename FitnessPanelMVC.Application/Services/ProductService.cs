@@ -41,6 +41,7 @@ namespace FitnessPanelMVC.Application.Services
             return productList;
         }
 
+
         public int AddNewProduct(NewProductVm newProductVm)
         {
             var product = _mapper.Map<Product>(newProductVm);
