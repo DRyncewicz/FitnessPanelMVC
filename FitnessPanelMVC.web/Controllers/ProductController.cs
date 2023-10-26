@@ -57,12 +57,14 @@ namespace FitnessPanelMVC.web.Controllers
 
             return View();
         }
+
         [HttpGet]
         public IActionResult EditProduct(int id)
         {
             var product = _productService.GetProductForEdit(id);
             return View(product);
         }
+
         [HttpPost]
         public IActionResult EditProduct(NewProductVm editedProduct)
         {
@@ -72,8 +74,21 @@ namespace FitnessPanelMVC.web.Controllers
                 _productService.UpdateProduct(editedProduct);
                 return RedirectToAction("Index");
             }
-                
+
             return View();
+        }
+
+        public IActionResult DeleteProduct(int id)
+        {
+            _productService.DeleteProduct(id);
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult ProductDetails(int id)
+        {
+
+            var productDetails = _productService.GetProductDetailsById(id);
+            return View(productDetails);
         }
     }
 }

@@ -7,6 +7,7 @@ using FitnessPanelMVC.Domain.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -58,6 +59,36 @@ namespace FitnessPanelMVC.Application.Services
         {
             var product = _mapper.Map<Product>(editedProduct);
             _productRepository.UpdateProduct(product);
+        }
+
+        public void DeleteProduct(int productId)
+        {
+            _productRepository.DeleteProduct(productId);
+        }
+
+        public ProductDetailsVm GetProductDetailsById(int productId)
+        {
+            var product = _productRepository.GetProductById(productId);
+            var productDetailsVm = _mapper.Map<ProductDetailsVm>(product);
+            productDetailsVm = ProductDetailsReflection(productDetailsVm);
+
+            return productDetailsVm;
+        }
+
+        private ProductDetailsVm ProductDetailsReflection(ProductDetailsVm productDetailsVm)
+        {
+            Type type = productDetailsVm.GetType();
+            PropertyInfo[] properties = type.GetProperties();
+
+            foreach (PropertyInfo property in properties)
+            {
+                if (property.GetValue(productDetailsVm) == null && property.PropertyType == typeof(string))
+                {
+                    property.SetValue(productDetailsVm, "Not given");
+                }
+            }
+
+            return productDetailsVm;
         }
     }
 }
