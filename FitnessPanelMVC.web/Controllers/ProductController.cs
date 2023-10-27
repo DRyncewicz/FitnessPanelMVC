@@ -10,11 +10,14 @@ namespace FitnessPanelMVC.web.Controllers
     {
         private readonly IProductService _productService;
         private readonly IValidator<NewProductVm> _validator;
+        private readonly IFileService _fileService;
 
-        public ProductController(IProductService productService, IValidator<NewProductVm> validator)
+        public ProductController(IProductService productService, IValidator<NewProductVm> validator, IFileService fileService)
         {
             _productService = productService;
             _validator = validator;
+            _fileService = fileService;
+
         }
 
         [HttpGet]
@@ -90,5 +93,31 @@ namespace FitnessPanelMVC.web.Controllers
             var productDetails = _productService.GetProductDetailsById(id);
             return View(productDetails);
         }
+
+
+        [HttpPost]
+        public IActionResult GetProductsFromExcel(IFormFile file)
+        {
+            if (file != null && file.Length > 0)
+            {
+                var filePath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString() + ".xlsx");
+
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    file.CopyTo(stream);
+                }
+                _fileService.AddProductsFromFile(filePath);
+                if (System.IO.File.Exists(filePath))
+                {
+                    System.IO.File.Delete(filePath);
+                }
+            }
+
+            return RedirectToAction("Index");
+        }
+
     }
+
+
 }

@@ -5,13 +5,33 @@
 }
 
 <div class="container mt-5">
-    <h1 class="mb-4">Index</h1>
+    <h1 class="mb-4">Product manager</h1>
 
     <p>
         <a asp-action="AddProduct" class="btn btn-primary">Create New</a>
     </p>
+    <form asp-controller="Product" asp-action="GetProductsFromExcel" method="post" enctype="multipart/form-data" class="upload-excel-form">
+        <div class="mb-3">
+            <label for="excelFile" class="form-label"><strong>Upload Products</strong></label>
+            <p class="text-muted">
+                Here you can upload a list of products from an Excel file. Make sure the file is in the correct format.
+            </p>
+            <input type="file" class="form-control" id="excelFile" name="file" aria-describedby="fileHelp">
+            <div id="fileHelp" class="form-text">Accepted formats: .xlsx, .xls</div>
+        </div>
+        <button type="submit" class="btn btn-primary">Upload</button>
+    </form>
 
-    <form asp-action="Index" asp-controller="Product" method="post">
+    <style>
+        .upload-excel-form {
+            padding: 20px;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            background-color: #f8f9fa;
+        }
+    </style>
+
+    <form asp-action="Index" asp-controller="Product" method="post" id="searchForm">
         <div class="input-group mb-3">
             <input type="text" class="form-control" asp-for="SearchString" name="searchString" id="searchString" placeholder="Search for products...">
             <button class="btn btn-outline-secondary" type="submit">Search</button>
@@ -45,28 +65,41 @@
             </table>
         </div>
 
+        @{
+            int currentPage = Model.CurrentPage;
+            int totalPages = (int)Math.Ceiling(Model.Count / (double)Model.PageSize);
+            int startPage = currentPage - 2;
+            int endPage = currentPage + 2;
+
+            if (startPage <= 0)
+            {
+                endPage -= (startPage - 1);
+                startPage = 1;
+            }
+
+            if (endPage > totalPages)
+            {
+                endPage = totalPages;
+                if (endPage > 5)
+                {
+                    startPage = endPage - 4;
+                }
+            }
+        }
+
         <nav aria-label="Page navigation">
             <ul class="pagination">
-                @for (int i = 1; i <= Math.Ceiling(Model.Count / (double)Model.PageSize); i++)
+                @for (int i = startPage; i <= endPage; i++)
                 {
-                    if (i != Model.CurrentPage)
-                    {
-                        <li class="page-item">
-                            <a href="javascript:PagerClick(@i)" class="page-link">@i</a>
-                        </li>
-                    }
-                    else
-                    {
-                        <li class="page-item active">
-                            <span class="page-link">@i</span>
-                        </li>
-                    }
+                    <li class="page-item @(i == currentPage ? "active" : "")">
+                        <a href="javascript:PagerClick(@i)" class="page-link">@i</a>
+                    </li>
                 }
             </ul>
         </nav>
 
         <input type="hidden" name="pageNo" id="pageNo" />
-        <input type="hidden" name="pageSize" id="pageSize" value="2" />
+        <input type="hidden" name="pageSize" id="pageSize" value="20" />
     </form>
 </div>
 
@@ -76,7 +109,7 @@
         function PagerClick(index) 
         {
             document.getElementById("pageNo").value = index;
-            document.forms[0].submit();
+            document.getElementById("searchForm").submit(); 
         }
     </script>
 }

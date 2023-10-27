@@ -17,6 +17,7 @@ namespace FitnessPanelMVC.Application
         {
             services.AddTransient<IMealService, MealService>();
             services.AddTransient<IProductService, ProductService>();
+            services.AddTransient<IFileService, FileService>();
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             return services;
         }
