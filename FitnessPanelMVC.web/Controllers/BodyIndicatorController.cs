@@ -15,10 +15,6 @@ namespace FitnessPanelMVC.web.Controllers
             _fileService = fileService;
         }
 
-        public IActionResult Index()
-        {
-            return View(); 
-        }
         [HttpGet]
         public IActionResult CreateBodyIndicator()
         {
