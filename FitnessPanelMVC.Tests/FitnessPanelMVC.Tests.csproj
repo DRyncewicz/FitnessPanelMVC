@@ -25,6 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\FitnessPanelMVC.Application\FitnessPanelMVC.Application.csproj" />
     <ProjectReference Include="..\FitnessPanelMVC.Domain\FitnessPanelMVC.Domain.csproj" />
   </ItemGroup>
 
