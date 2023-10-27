@@ -1,7 +1,7 @@
-﻿@model FitnessPanelMVC.Application.ViewModels.BMI.BMIFormVm
+﻿@model FitnessPanelMVC.Application.ViewModels.BodyIndicator.NewBodyIndicatorVm
 
 @{
-    ViewData["Title"] = "CreateBMIProfile";
+    ViewData["Title"] = "CreateBodyIndicator";
     var PALSelectList = new SelectList(Enum.GetValues(typeof(FitnessPanelMVC.Domain.Enums.PAL)));
     var sexOptions = new List<SelectListItem>
 {
@@ -12,19 +12,19 @@
     var sexSelectList = new SelectList(sexOptions, "Value", "Text");
 }
 
-<h1>CreateBMIProfile</h1>
+<h1>Create Body Indicators Profile</h1>
 
 <h4>BMIFormVm</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="CreateBMIProfile">
+        <form asp-action="CreateBodyIndicator">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
 
             <div class="form-group">
                 <label asp-for="Sex" class="control-label"></label>
-                @Html.DropDownListFor(model => model.PAL, sexSelectList, "Chose your sex", new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.Sex, sexSelectList, "Chose your sex", new { @class = "form-control" })
                 <span asp-validation-for="Sex" class="text-danger"></span>
             </div>
             <div class="form-group">

@@ -9,6 +9,10 @@ using ClosedXML.Excel;
 using DocumentFormat.OpenXml.Spreadsheet;
 using FitnessPanelMVC.Domain.Model;
 using FitnessPanelMVC.Application.ViewModels.Product;
+using iText.Kernel.Pdf;
+using iText.Layout;
+using iText.Layout.Element;
+using iText.Layout.Properties;
 
 namespace FitnessPanelMVC.Application.Services
 {
@@ -48,6 +52,36 @@ namespace FitnessPanelMVC.Application.Services
                 };
                 _productService.AddNewProduct(newProductVm);
 
+            }
+        }
+        public byte[] GenerateBodyMetricsReport(BodyIndicator bodyIndicators)
+        {
+            using (var stream = new MemoryStream())
+            {
+                using (var writer = new PdfWriter(stream))
+                {
+                    using (var pdf = new PdfDocument(writer))
+                    {
+                        var document = new Document(pdf);
+
+
+                        document.Add(new Paragraph("Body indicator report")
+                            .SetTextAlignment(TextAlignment.CENTER)
+                            .SetFontSize(14));
+
+
+                        document.Add(new Paragraph($"BMI: {bodyIndicators.BMI}"));
+                        document.Add(new Paragraph($"PPM: {bodyIndicators.PPM}"));
+                        document.Add(new Paragraph($"CPM: {bodyIndicators.CPM}"));
+                        document.Add(new Paragraph($"WHtR: {bodyIndicators.WHtR}"));
+                        document.Add(new Paragraph($"NMC: {bodyIndicators.NMC}"));
+                        document.Add(new Paragraph($"BAI: {bodyIndicators.BAI}"));
+                        document.Add(new Paragraph($"BeW: {bodyIndicators.BeW}"));
+                        document.Close();
+                    }
+                }
+
+                return stream.ToArray();
             }
         }
     }

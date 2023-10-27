@@ -1,4 +1,5 @@
 ﻿using FitnessPanelMVC.Domain.Interface;
+using FitnessPanelMVC.Domain.Interfaces;
 using FitnessPanelMVC.Infrastructure.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -21,6 +22,7 @@ namespace FitnessPanelMVC.Infrastructure
             services.AddTransient<IRecipeRepository, RecipeRepository>();
             services.AddTransient<IWorkoutExerciseRepository, WorkoutExerciseRepository>();
             services.AddTransient<IWorkoutRepository, WorkoutRepository>();
+            services.AddTransient<IBodyIndicatorsRepository, BodyIndicatorRepository>();
             return services;
         }
     }
