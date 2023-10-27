@@ -1,0 +1,107 @@
+﻿@model FitnessPanelMVC.Application.ViewModels.Recipe.ListRecipeForListVm
+
+@{
+    ViewData["Title"] = "Recipe overview";
+}
+
+
+<h1>Recipes Overview</h1>
+<p>Here you can view and manage your own recipes.</p>
+<p>
+    <a asp-action="AddProduct" class="btn btn-primary">Create New</a>
+</p>
+<form asp-action="Index" asp-controller="Recipe" method="post" id="searchForm">
+    <div class="input-group mb-3">
+        <input type="text" class="form-control" asp-for="SearchString" name="searchString" id="searchString" placeholder="Search for recipes...">
+        <button class="btn btn-outline-secondary" type="submit">Search</button>
+    </div>
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <table class="table table-responsive table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Meal Information</th>
+                        <th>Products</th>
+                        <th width="300">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var recipe in Model.Recipes)
+                    {
+                        <tr>
+                            <td>
+                                <div>
+                                    <strong>@recipe.Name</strong>
+                                </div>
+                                <table class="table table-sm mt-2">
+                                    <tr><td>Calories:</td><td>@recipe.TotalCalories.ToString("F2")</td></tr>
+                                    <tr><td>Proteins:</td><td>@recipe.TotalProtein.ToString("F2")</td></tr>
+                                    <tr><td>Carbs:</td><td>@recipe.TotalCarbs.ToString("F2")</td></tr>
+                                    <tr><td>Fat:</td><td>@recipe.TotalFat.ToString("F2")</td></tr>
+                                </table>
+                            </td>
+                            <td>
+                                <ul>
+                                    @foreach (var product in recipe.RecipeProducts)
+                                    {
+                                        <li>@product.ProductName: @product.Weight g</li>
+                                    }
+                                </ul>
+                            </td>
+                            <td class="align-middle">
+                                <a asp-action="RecipeDetails" asp-route-id="@recipe.Id" class="btn btn-info btn-sm">Edit</a>
+                                <a asp-action="DeleteRecipe" asp-route-id="@recipe.Id" class="btn btn-danger btn-sm">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    @{
+        int currentPage = Model.PageNo;
+        int totalPages = (int)Math.Ceiling(Model.Count / (double)Model.PageSize);
+        int startPage = currentPage - 2;
+        int endPage = currentPage + 2;
+
+        if (startPage <= 0)
+        {
+            endPage -= (startPage - 1);
+            startPage = 1;
+        }
+
+        if (endPage > totalPages)
+        {
+            endPage = totalPages;
+            if (endPage > 5)
+            {
+                startPage = endPage - 4;
+            }
+        }
+    }
+
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            @for (int i = startPage; i <= endPage; i++)
+            {
+                <li class="page-item @(i == currentPage ? "active" : "")">
+                    <a href="javascript:PagerClick(@i)" class="page-link">@i</a>
+                </li>
+            }
+        </ul>
+    </nav>
+
+    <input type="hidden" name="pageNo" id="pageNo" />
+    <input type="hidden" name="pageSize" id="pageSize" value="10" />
+</form>
+
+
+@section Scripts
+    {
+    <script type="text/javascript">
+        function PagerClick(index) {
+            document.getElementById("pageNo").value = index;
+            document.getElementById("searchForm").submit();
+        }
+    </script>
+}

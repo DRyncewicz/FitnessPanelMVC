@@ -19,7 +19,6 @@ namespace FitnessPanelMVC.Application.Services
         private readonly IMealRepository _mealRepository;
         private readonly IMealProductRepository _mealProductRepository;
         private readonly IProductRepository _productRepository;
-
         private readonly IMapper _mapper;
 
         public MealService(IMealRepository mealRepository, IMapper mapper, IMealProductRepository mealProductRepository, IProductRepository productRepository)
@@ -35,8 +34,8 @@ namespace FitnessPanelMVC.Application.Services
         {
             var mealsVm = _mealRepository.GetAllMeals().
                 Where(i => i.MealDate.Date == date.Date).
-                ProjectTo<MealForListVm>(_mapper.ConfigurationProvider).
-                ToList();
+                ProjectTo<MealForListVm>(_mapper.ConfigurationProvider)
+                .ToList();
 
             return new ListMealForListVm
             {

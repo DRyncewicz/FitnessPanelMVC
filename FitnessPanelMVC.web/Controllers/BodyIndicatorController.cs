@@ -20,6 +20,7 @@ namespace FitnessPanelMVC.web.Controllers
         {
             return View();
         }
+
         [HttpPost]
         public IActionResult CreateBodyIndicator(NewBodyIndicatorVm BMIFormVm)
         {
@@ -27,7 +28,6 @@ namespace FitnessPanelMVC.web.Controllers
             var bodyIndicator = _bodyIndicatorService.GetBodyIndicatorById(id);
             var report = _fileService.GenerateBodyMetricsReport(bodyIndicator);
             return File(report, "application/pdf", "Raport.pdf");
-
         }
     }
 }
