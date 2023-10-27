@@ -17,7 +17,6 @@ namespace FitnessPanelMVC.web.Controllers
             _productService = productService;
             _validator = validator;
             _fileService = fileService;
-
         }
 
         [HttpGet]

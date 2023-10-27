@@ -1,0 +1,70 @@
+﻿@model FitnessPanelMVC.Application.ViewModels.BMI.BMIFormVm
+
+@{
+    ViewData["Title"] = "CreateBMIProfile";
+    var PALSelectList = new SelectList(Enum.GetValues(typeof(FitnessPanelMVC.Domain.Enums.PAL)));
+    var sexOptions = new List<SelectListItem>
+{
+    new SelectListItem { Value = "male", Text = "Male" },
+    new SelectListItem { Value = "female", Text = "Female" }
+};
+
+    var sexSelectList = new SelectList(sexOptions, "Value", "Text");
+}
+
+<h1>CreateBMIProfile</h1>
+
+<h4>BMIFormVm</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CreateBMIProfile">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+
+            <div class="form-group">
+                <label asp-for="Sex" class="control-label"></label>
+                @Html.DropDownListFor(model => model.PAL, sexSelectList, "Chose your sex", new { @class = "form-control" })
+                <span asp-validation-for="Sex" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Mass" class="control-label"></label>
+                <input asp-for="Mass" class="form-control" />
+                <span asp-validation-for="Mass" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Height" class="control-label"></label>
+                <input asp-for="Height" class="form-control" />
+                <span asp-validation-for="Height" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Age" class="control-label"></label>
+                <input asp-for="Age" class="form-control" />
+                <span asp-validation-for="Age" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PAL" class="control-label"></label>
+                @Html.DropDownListFor(model => model.PAL, PALSelectList, "Chose your activity", new { @class = "form-control" })
+                <span asp-validation-for="PAL" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HipCircumference" class="control-label"></label>
+                <input asp-for="HipCircumference" class="form-control" />
+                <span asp-validation-for="HipCircumference" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AbdominalCircumference" class="control-label"></label>
+                <input asp-for="AbdominalCircumference" class="form-control" />
+                <span asp-validation-for="AbdominalCircumference" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

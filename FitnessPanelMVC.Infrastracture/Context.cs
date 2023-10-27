@@ -19,6 +19,7 @@ namespace FitnessPanelMVC.Infrastructure
         public DbSet<Workout> Workouts { get; set; }
         public DbSet<WorkoutExercise> WorkoutExercise { get; set; }
         public DbSet<Exercise> Exercises { get; set; }
+        public DbSet<BMI> BMIs { get; set; }
 
 
         public Context(DbContextOptions options) : base(options)
