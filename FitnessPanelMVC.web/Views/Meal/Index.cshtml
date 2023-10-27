@@ -5,24 +5,45 @@
 }
 
 <h1>Meal Overview</h1>
+<p>Here you can view and manage your daily meals.</p>
 
 <div class="row">
     <div class="col-md-12">
         <form method="post" class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="date" id="date" name="date" placeholder="Select Date" aria-label="Select Date">
+            <input class="form-control mr-sm-2" type="date" id="date" name="date" placeholder="Select Date" aria-label="Select Date" style="max-width: 200px;">
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Load Meals</button>
             <a asp-action="AddMeal" class="btn btn-primary ml-2">Add New Meal</a>
         </form>
     </div>
 </div>
 
+<div class="total-nutrition-values d-flex justify-content-end" style="margin-top: -90px;">
+    <div class="nutrition-card" style="background-color: white; border: 1px solid #ddd; padding: 10px; margin-left: 10px; ">
+        <div class="nutrition-title">Calories</div>
+        <div class="nutrition-value">@Model.Meals.SelectMany(m => m.MealProducts).Sum(mp => mp.Calories).ToString("F2")</div>
+    </div>
+    <div class="nutrition-card" style="background-color: white; border: 1px solid #ddd; padding: 10px; margin-left: 10px;">
+        <div class="nutrition-title">Proteins</div>
+        <div class="nutrition-value">@Model.Meals.SelectMany(m => m.MealProducts).Sum(mp => mp.Protein).ToString("F2")</div>
+    </div>
+    <div class="nutrition-card" style="background-color: white; border: 1px solid #ddd; padding: 10px; margin-left: 10px;">
+        <div class="nutrition-title">Carbs</div>
+        <div class="nutrition-value">@Model.Meals.SelectMany(m => m.MealProducts).Sum(mp => mp.Carbs).ToString("F2")</div>
+    </div>
+    <div class="nutrition-card" style="background-color: white; border: 1px solid #ddd; padding: 10px; margin-left: 10px;">
+        <div class="nutrition-title">Fat</div>
+        <div class="nutrition-value">@Model.Meals.SelectMany(m => m.MealProducts).Sum(mp => mp.Fat).ToString("F2")</div>
+    </div>
+</div>
+
 <div class="row mt-4">
     <div class="col-md-12">
-        <table class="table table-responsive table-bordered table-hover">
+        <table class="table table-responsive table-hover">
             <thead class="thead-dark">
                 <tr>
-                    <th>Meal informations</th>
-                    <th>Actions</th>
+                    <th>Meal Information</th>
+                    <th>Ingredients</th>
+                    <th width="300">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -30,24 +51,29 @@
                 {
                     <tr>
                         <td>
-                            <strong>@meal.MealType</strong>
-                            <ul>Calories: @meal.TotalCalories
-                                Proteins: @meal.TotalProtein
-                                Carbs: @meal.TotalCarbs
-                                Fat: @meal.TotalFat</ul>
+                            <div>
+                                <strong>@meal.MealType</strong>
+                                <span class="text-muted" style="font-size: small;"> (@meal.MealDate.ToString("HH:mm"))</span>
+                            </div>
+                            <table class="table table-sm mt-2">
+                                <tr><td>Calories:</td><td>@meal.TotalCalories</td></tr>
+                                <tr><td>Proteins:</td><td>@meal.TotalProtein</td></tr>
+                                <tr><td>Carbs:</td><td>@meal.TotalCarbs</td></tr>
+                                <tr><td>Fat:</td><td>@meal.TotalFat</td></tr>
+                            </table>
+                        </td>
+                        <td>
                             <ul>
                                 @foreach (var product in meal.MealProducts)
                                 {
-                                    <li>
-                                        @product.ProductName: @product.Weight g,
-                                    </li>
+                                    <li>@product.ProductName: @product.Weight g</li>
                                 }
                             </ul>
                         </td>
-                        <td>
-                            @Html.ActionLink("Edit", "Edit", new { id = meal.Id }, new { @class = "btn btn-warning btn-sm" })
-                            @Html.ActionLink("Details", "Details", new { id = meal.Id }, new { @class = "btn btn-info btn-sm" })
-                            @Html.ActionLink("Delete", "Delete", new { id = meal.Id }, new { @class = "btn btn-danger btn-sm" })
+                        <td class="align-middle">
+                            @Html.ActionLink("Edit", "Edit", new { id = meal.Id }, new { @class = "btn btn-warning btn-sm m-1" })
+                            @Html.ActionLink("Details", "Details", new { id = meal.Id }, new { @class = "btn btn-info btn-sm m-1" })
+                            @Html.ActionLink("Delete", "Delete", new { id = meal.Id }, new { @class = "btn btn-danger btn-sm m-1" })
                         </td>
                     </tr>
                 }
