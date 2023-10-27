@@ -23,9 +23,9 @@ namespace FitnessPanelMVC.Infrastructure.Repositories
             _dbContext.SaveChanges();
         }
 
-        public void DeleteMealProduct(int mealId, int productId)
+        public void DeleteMealProduct(int productId, int mealId)
         {
-            var mealProduct = _dbContext.MealProduct.Find(mealId, productId);
+            var mealProduct = _dbContext.MealProduct.FirstOrDefault(mp => mp.MealId == mealId && mp.ProductId == productId);
             if (mealProduct != null)
             {
                 _dbContext.MealProduct.Remove(mealProduct);

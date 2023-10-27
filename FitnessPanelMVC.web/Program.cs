@@ -2,6 +2,7 @@
 using FitnessPanelMVC.Application;
 using FitnessPanelMVC.Application.Validators;
 using FitnessPanelMVC.Application.ViewModels.Product;
+using FitnessPanelMVC.Domain.Model;
 using FitnessPanelMVC.Infrastructure;
 using FluentValidation;
 using FluentValidation.AspNetCore;

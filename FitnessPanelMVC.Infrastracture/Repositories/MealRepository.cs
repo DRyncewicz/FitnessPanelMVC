@@ -38,7 +38,8 @@ namespace FitnessPanelMVC.Infrastructure.Repositories
 
         public IQueryable<Meal> GetAllMeals()
         {
-            var meals = _dbContext.Meals.Include(m => m.MealProducts);
+            var meals = _dbContext.Meals.Include(m => m.MealProducts)
+                .ThenInclude(mp => mp.Product);
             return meals;
         }
 

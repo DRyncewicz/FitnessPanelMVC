@@ -4,5 +4,50 @@
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+    <div class="links-container">
+        <a href="@Url.Action("Index", "Product")" class="link-box">
+            <div class="link-content">
+                <h2>Manage products</h2>
+            </div>
+        </a>
+        <a href="@Url.Action("Index", "Meal")" class="link-box">
+            <div class="link-content">
+                <h2>Manage meals</h2>
+            </div>
+        </a>
+    </div>
 </div>
+
+@section Styles {
+    <style>
+        .links-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .link-box {
+            width: 200px;
+            height: 100px;
+            border: 2px solid #007bff;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+            color: #007bff;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+            .link-box:hover {
+                transform: scale(1.05);
+                box-shadow: 0px 4px 8px rgba(0, 123, 255, 0.5);
+            }
+
+        .link-content h2 {
+            text-align: center;
+        }
+    </style>
+}

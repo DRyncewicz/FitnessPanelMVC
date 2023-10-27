@@ -3,6 +3,7 @@ using FitnessPanelMVC.Application.Services;
 using FitnessPanelMVC.Application.ViewModels.Meal;
 using FitnessPanelMVC.Application.ViewModels.MealProduct.TransferModel;
 using FitnessPanelMVC.Application.ViewModels.Product;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -12,6 +13,7 @@ namespace FitnessPanelMVC.web.Controllers
     {
         private readonly IMealService _mealService;
         private readonly IProductService _productService;
+
         public MealController(IMealService mealService, IProductService productService)
         {
             _mealService = mealService;
@@ -72,6 +74,25 @@ namespace FitnessPanelMVC.web.Controllers
             int mealId = HttpContext.Session.GetInt32("CurrentMealId") ?? default;
             _mealService.AddProductToMeal(model.ProductId, mealId, model.Weight);
             return Json(new { success = true, message = "Product added successfully" });
+        }
+
+        public IActionResult DeleteMeal(int id)
+        {
+            _mealService.DeleteMealById(id);
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult MealDetails(int id)
+        {
+            HttpContext.Session.SetInt32("CurrentMealId", id);
+            var model = _mealService.GetMealDetailsById(id);
+            return View(model);
+        }
+
+        public IActionResult DeleteProductFromMeal(int id, int mealId)
+        {
+            _mealService.DeleteProductFromMealById(id, mealId);
+            return RedirectToAction("Index");
         }
     }
 }

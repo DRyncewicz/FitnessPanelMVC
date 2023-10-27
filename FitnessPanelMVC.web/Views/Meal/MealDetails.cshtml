@@ -1,0 +1,55 @@
+﻿@model FitnessPanelMVC.Application.ViewModels.Meal.MealForListVm
+
+@{
+    ViewData["Title"] = "Meal Details";
+}
+
+<h1>Meal Details</h1>
+
+<div class="card">
+    <div class="card-body">
+        <h4 class="card-title">@Model.MealType</h4>
+        <p class="card-text">
+            <strong>Date:</strong> @Model.MealDate.ToString("dd-MM-yyyy HH:mm") <br>
+            <strong>Total Calories:</strong> @Model.TotalCalories.ToString("F2") <br>
+            <strong>Total Carbs:</strong> @Model.TotalCarbs.ToString("F2") g<br>
+            <strong>Total Fat:</strong> @Model.TotalFat.ToString("F2") g<br>
+            <strong>Total Protein:</strong> @Model.TotalProtein.ToString("F2") g
+        </p>
+    </div>
+</div>
+
+<h3 class="mt-4">Products in this Meal</h3>
+
+<table class="table table-striped mt-3">
+    <thead>
+        <tr>
+            <th>Product Name</th>
+            <th>Weight (g)</th>
+            <th>Proteins</th>
+            <th>Carbs</th>
+            <th>Fat</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var product in Model.MealProducts)
+        {
+            <tr>
+                <td>@product.ProductName</td>
+                <td>@product.Weight</td>
+                <td>@product.Protein g</td>
+                <td>@product.Carbs g</td>
+                <td>@product.Fat g</td>
+                <td>
+                    <a href="@Url.Action("DeleteProductFromMeal", new { id = product.ProductId, mealId = Model.Id })" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="mt-4">
+    <a href="@Url.Action("AddProductsToMealList")"  class="btn btn-primary">Add products</a>
+    <a href="@Url.Action("Index")" class="btn btn-secondary">Back to List</a>
+</div>

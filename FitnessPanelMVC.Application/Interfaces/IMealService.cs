@@ -12,6 +12,8 @@ namespace FitnessPanelMVC.Application.Interfaces
     {
         int AddNewMeal(NewMealVm newMealVm);
         int AddProductToMeal(int productId, int mealId, double weight);
+        void DeleteMealById(int mealId);
+        void DeleteProductFromMealById(int productId, int mealId);
         MealForListVm GetMealDetailsById(int mealId);
         ListMealForListVm GetMealsForListByDate(DateTime date);
     }

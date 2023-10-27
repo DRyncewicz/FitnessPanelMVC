@@ -83,7 +83,7 @@ namespace FitnessPanelMVC.Application.Services
                 _mealProductRepository.CreateMealProduct(mealProduct);
             }
 
-            UpdateMealInformationsAfterAddedProduct(mealId);
+            UpdateMealInformationsAfterProductChange(mealId);
             return mealId;
         }
         public MealForListVm GetMealDetailsById(int mealId)
@@ -95,7 +95,19 @@ namespace FitnessPanelMVC.Application.Services
             return mealForListVm;
         }
 
-        private void UpdateMealInformationsAfterAddedProduct(int mealId)
+        public void DeleteMealById(int mealId)
+        {
+            _mealRepository.DeleteMeal(mealId);
+        }
+
+        public void DeleteProductFromMealById(int productId, int mealId)
+        {
+            _mealProductRepository.DeleteMealProduct(productId, mealId);
+            UpdateMealInformationsAfterProductChange(mealId);
+        }
+
+
+        private void UpdateMealInformationsAfterProductChange(int mealId)
         {
 
             var meal = _mealRepository.GetAllMeals()
