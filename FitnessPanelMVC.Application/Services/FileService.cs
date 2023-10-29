@@ -27,7 +27,7 @@ namespace FitnessPanelMVC.Application.Services
 
 
 
-        public void AddProductsFromFile(string? filePath)
+        public void AddProductsFromFile(string? filePath, string userId)
         {
             var workbook = new XLWorkbook(filePath);
             var worksheet = workbook.Worksheet(1);
@@ -50,7 +50,7 @@ namespace FitnessPanelMVC.Application.Services
                     ProteinPer100g = productProtein,
                     FatPer100g = productFat
                 };
-                _productService.AddNewProduct(newProductVm, "");
+                _productService.AddNewProduct(newProductVm, userId);
 
             }
         }

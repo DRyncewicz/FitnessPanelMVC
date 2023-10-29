@@ -112,6 +112,7 @@ namespace FitnessPanelMVC.web.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult GetProductsFromExcel(IFormFile file)
         {
+            var userId = _userManager.GetUserId(User);
             if (file != null && file.Length > 0)
             {
                 var filePath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString() + ".xlsx");
@@ -121,7 +122,7 @@ namespace FitnessPanelMVC.web.Controllers
                 {
                     file.CopyTo(stream);
                 }
-                _fileService.AddProductsFromFile(filePath);
+                _fileService.AddProductsFromFile(filePath, userId);
                 if (System.IO.File.Exists(filePath))
                 {
                     System.IO.File.Delete(filePath);

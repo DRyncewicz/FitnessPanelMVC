@@ -9,7 +9,7 @@ namespace FitnessPanelMVC.Application.Interfaces
 {
     public interface IFileService
     {
-        void AddProductsFromFile(string? filePath);
+        void AddProductsFromFile(string? filePath, string userId);
         byte[] GenerateBodyMetricsReport(BodyIndicator bodyIndicators);
     }
 }
