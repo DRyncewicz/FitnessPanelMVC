@@ -28,9 +28,9 @@ namespace FitnessPanelMVC.Application.Services
             _mapper = mapper;
         }
 
-        public ListRecipeForListVm GetRecipesForList(int pageSize, int pageNo, string searchString)
+        public ListRecipeForListVm GetRecipesForList(int pageSize, int pageNo, string searchString, string userId)
         {
-            var recipesVm = _recipeRepository.GetAllRecipes().Where(p => p.Name.Contains(searchString))
+            var recipesVm = _recipeRepository.GetAllRecipes().Where(p => p.Name.Contains(searchString) && p.UserId == userId)
                 .ProjectTo<RecipeForListVm>(_mapper.ConfigurationProvider)
                 .Skip(pageSize * (pageNo - 1)).Take(pageSize).ToList();
             var listRecipesVm = new ListRecipeForListVm()
@@ -50,12 +50,17 @@ namespace FitnessPanelMVC.Application.Services
             _recipeRepository.RemoveRecipe(recipeId);
         }
 
-        public int AddNewRecipe(NewRecipeVm newRecipeVm)
+        public int AddNewRecipe(NewRecipeVm newRecipeVm,string userId)
         {
-            int id = _recipeRepository.CreateRecipe(_mapper.Map<Recipe>(newRecipeVm));
+            var recipe = _mapper.Map<Recipe>(newRecipeVm);
+            recipe.UserId = userId;
+            int id = _recipeRepository.CreateRecipe(recipe);
             Product product = new Product()
             {
                 Name = newRecipeVm.Name,
+                IsConfirmed = false,
+                IsUserAdded = true,
+                UserId = userId,
             };
             _productRepository.CreateProduct(product);
             return id;

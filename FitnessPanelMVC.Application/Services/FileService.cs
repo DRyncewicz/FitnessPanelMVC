@@ -50,7 +50,7 @@ namespace FitnessPanelMVC.Application.Services
                     ProteinPer100g = productProtein,
                     FatPer100g = productFat
                 };
-                _productService.AddNewProduct(newProductVm);
+                _productService.AddNewProduct(newProductVm, "");
 
             }
         }

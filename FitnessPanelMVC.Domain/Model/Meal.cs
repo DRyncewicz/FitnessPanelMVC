@@ -1,4 +1,5 @@
 ﻿using FitnessPanelMVC.Domain.Enums;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,8 @@ namespace FitnessPanelMVC.Domain.Model
     public class Meal
     {
         public int Id { get; set; }
+        public string UserId { get; set; }
+        public virtual IdentityUser User { get; set; }
         public MealType MealType { get; set; }
         public DateTime MealDate { get; set; }
         public ICollection<MealProduct> MealProducts { get; set; }

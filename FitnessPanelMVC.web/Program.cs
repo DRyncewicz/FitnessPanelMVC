@@ -20,6 +20,7 @@ builder.Services.AddDbContext<FitnessPanelMVC.Infrastructure.DbContext>(options 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<FitnessPanelMVC.Infrastructure.DbContext>();
 
 builder.Services.AddApplication();

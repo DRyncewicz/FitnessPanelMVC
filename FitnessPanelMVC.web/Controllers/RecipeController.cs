@@ -3,6 +3,7 @@ using FitnessPanelMVC.Application.Services;
 using FitnessPanelMVC.Application.ViewModels.MealProduct.TransferModel;
 using FitnessPanelMVC.Application.ViewModels.Recipe;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FitnessPanelMVC.web.Controllers
@@ -12,20 +13,27 @@ namespace FitnessPanelMVC.web.Controllers
     {
         private readonly IRecipeService _recipeService;
         private readonly IProductService _productService;
-        public RecipeController(IRecipeService recipeService, IProductService productService)
+        private readonly UserManager<IdentityUser> _userManager;
+        public RecipeController(
+            IRecipeService recipeService,
+            IProductService productService,
+            UserManager<IdentityUser> userManager)
         {
             _recipeService = recipeService;
             _productService = productService;
+            _userManager = userManager;
         }
         public IActionResult Index()
         {
-            var model = _recipeService.GetRecipesForList(10, 1, "");
+            var userId = _userManager.GetUserId(User);
+            var model = _recipeService.GetRecipesForList(10, 1, "", userId);
             return View(model);
         }
 
         [HttpPost]
         public IActionResult Index(int pageSize, int? pageNo, string searchString)
         {
+            var userId = _userManager.GetUserId(User);
             if (!pageNo.HasValue)
             {
                 pageNo = 1;
@@ -34,7 +42,7 @@ namespace FitnessPanelMVC.web.Controllers
             {
                 searchString = String.Empty;
             }
-            var model = _recipeService.GetRecipesForList(pageSize, pageNo.Value, searchString);
+            var model = _recipeService.GetRecipesForList(pageSize, pageNo.Value, searchString, userId);
             return View(model);
         }
 
@@ -52,7 +60,8 @@ namespace FitnessPanelMVC.web.Controllers
         [HttpPost]
         public IActionResult AddRecipe(NewRecipeVm newRecipeVm)
         {
-            int id = _recipeService.AddNewRecipe(newRecipeVm);
+            var userId = _userManager.GetUserId(User);
+            int id = _recipeService.AddNewRecipe(newRecipeVm, userId);
             HttpContext.Session.SetInt32("CurrentRecipeId", id);
             return RedirectToAction("AddProductsToRecipeList");
         }
@@ -60,13 +69,15 @@ namespace FitnessPanelMVC.web.Controllers
         [HttpGet]
         public IActionResult AddProductsToRecipeList()
         {
-            var model = _productService.GetAllProductsForList(20, 1, "");
+            var userId = _userManager.GetUserId(User);
+            var model = _productService.GetAllProductsForList(20, 1, "", userId);
             return View(model);
         }
 
         [HttpPost]
         public IActionResult AddProductsToRecipeList(int pageSize, int? pageNo, string searchString)
         {
+            var userId = _userManager.GetUserId(User);
             if (!pageNo.HasValue)
             {
                 pageNo = 1;
@@ -75,7 +86,7 @@ namespace FitnessPanelMVC.web.Controllers
             {
                 searchString = String.Empty;
             }
-            var model = _productService.GetAllProductsForList(pageSize, pageNo.Value, searchString);
+            var model = _productService.GetAllProductsForList(pageSize, pageNo.Value, searchString, userId);
             return View(model);
         }
 

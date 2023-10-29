@@ -30,10 +30,10 @@ namespace FitnessPanelMVC.Application.Services
 
         }
 
-        public ListMealForListVm GetMealsForListByDate(DateTime date)
+        public ListMealForListVm GetMealsForListByDate(DateTime date, string userId)
         {
             var mealsVm = _mealRepository.GetAllMeals().
-                Where(i => i.MealDate.Date == date.Date).
+                Where(i => i.MealDate.Date == date.Date && i.UserId == userId).
                 ProjectTo<MealForListVm>(_mapper.ConfigurationProvider)
                 .ToList();
 
@@ -44,10 +44,11 @@ namespace FitnessPanelMVC.Application.Services
             };
         }
 
-        public int AddNewMeal(NewMealVm newMealVm)
+        public int AddNewMeal(NewMealVm newMealVm, string userId)
         {
 
             var meal = _mapper.Map<Meal>(newMealVm);
+            meal.UserId = userId;
             int mealId = _mealRepository.CreateMeal(meal);
 
             return mealId;

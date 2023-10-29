@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FitnessPanelMVC.Application.Mapping;
 using FitnessPanelMVC.Domain.Model;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,8 @@ namespace FitnessPanelMVC.Application.ViewModels.Product
     public class NewProductVm : IMapFrom<FitnessPanelMVC.Domain.Model.Product>
     {
         public int Id { get; set; }
+        public string? UserId { get; set; }
+        public virtual IdentityUser? User { get; set; }
         public string Name { get; set; }
         public string? Restaurant { get; set; }
         public string? Barcode { get; set; }

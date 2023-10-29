@@ -24,9 +24,11 @@ namespace FitnessPanelMVC.Application.Services
             _mapper = mapper;
         }
 
-        public ListProductForListVm GetAllProductsForList(int pageSize, int pageNo, string searchString)
+        public ListProductForListVm GetAllProductsForList(int pageSize, int pageNo, string searchString, string userId)
         {
-            var products = _productRepository.GetAllProducts().Where(p => p.Name.StartsWith(searchString))
+            var products = _productRepository.GetAllProducts().
+                Where(p => p.Name.StartsWith(searchString) && p.IsConfirmed == true ||
+                p.Name.StartsWith(searchString) && p.UserId == userId)
                 .ProjectTo<ProductForListVm>(_mapper.ConfigurationProvider).ToList();
             var productsToShow = products.Skip(pageSize * (pageNo - 1)).Take(pageSize).ToList();
             var productList = new ListProductForListVm()
@@ -42,9 +44,10 @@ namespace FitnessPanelMVC.Application.Services
         }
 
 
-        public int AddNewProduct(NewProductVm newProductVm)
+        public int AddNewProduct(NewProductVm newProductVm, string userId)
         {
             var product = _mapper.Map<Product>(newProductVm);
+            product.UserId = userId;
             int productId = _productRepository.CreateProduct(product);
             return productId;
         }

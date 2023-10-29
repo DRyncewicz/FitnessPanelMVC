@@ -5,6 +5,7 @@ using FitnessPanelMVC.Application.ViewModels.MealProduct.TransferModel;
 using FitnessPanelMVC.Application.ViewModels.Product;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -15,24 +16,28 @@ namespace FitnessPanelMVC.web.Controllers
     {
         private readonly IMealService _mealService;
         private readonly IProductService _productService;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public MealController(IMealService mealService, IProductService productService)
+        public MealController(IMealService mealService, IProductService productService, UserManager<IdentityUser> userManager)
         {
             _mealService = mealService;
             _productService = productService;
+            _userManager = userManager;
         }
 
         [HttpGet]
         public IActionResult Index()
         {
-            var model = _mealService.GetMealsForListByDate(DateTime.Now);
+            var userId = _userManager.GetUserId(User);
+            var model = _mealService.GetMealsForListByDate(DateTime.Now, userId);
             return View(model);
         }
 
         [HttpPost]
         public IActionResult Index(DateTime date)
         {
-            var model = _mealService.GetMealsForListByDate(date);
+            var userId = _userManager.GetUserId(User);
+            var model = _mealService.GetMealsForListByDate(date, userId);
             return View(model);
         }
 
@@ -45,7 +50,8 @@ namespace FitnessPanelMVC.web.Controllers
         [HttpPost]
         public IActionResult AddMeal(NewMealVm newMealVm)
         {
-            int id = _mealService.AddNewMeal(newMealVm);
+            var userId = _userManager.GetUserId(User);
+            int id = _mealService.AddNewMeal(newMealVm, userId);
             HttpContext.Session.SetInt32("CurrentMealId", id);
             return RedirectToAction("AddProductsToMealList");
         }
@@ -53,13 +59,15 @@ namespace FitnessPanelMVC.web.Controllers
         [HttpGet]
         public IActionResult AddProductsToMealList()
         {
-            var model = _productService.GetAllProductsForList(20, 1, "");
+            var userId = _userManager.GetUserId(User);
+            var model = _productService.GetAllProductsForList(20, 1, "", userId);
             return View(model);
         }
 
         [HttpPost]
         public IActionResult AddProductsToMealList(int pageSize, int? pageNo, string searchString)
         {
+            var userId = _userManager.GetUserId(User);
             if (!pageNo.HasValue)
             {
                 pageNo = 1;
@@ -68,7 +76,7 @@ namespace FitnessPanelMVC.web.Controllers
             {
                 searchString = String.Empty;
             }
-            var model = _productService.GetAllProductsForList(pageSize, pageNo.Value, searchString);
+            var model = _productService.GetAllProductsForList(pageSize, pageNo.Value, searchString, userId);
             return View(model);
         }
 

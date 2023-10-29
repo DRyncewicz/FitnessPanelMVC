@@ -4,6 +4,7 @@ using FitnessPanelMVC.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FitnessPanelMVC.Infrastructure.Migrations
 {
     [DbContext(typeof(DbContext))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20231029195333_AddedForeignKeyForMealFromIAspNetUsers")]
+    partial class AddedForeignKeyForMealFromIAspNetUsers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -204,12 +207,7 @@ namespace FitnessPanelMVC.Infrastructure.Migrations
                     b.Property<string>("Restaurant")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Products");
                 });
@@ -565,15 +563,6 @@ namespace FitnessPanelMVC.Infrastructure.Migrations
                     b.Navigation("Meal");
 
                     b.Navigation("Product");
-                });
-
-            modelBuilder.Entity("FitnessPanelMVC.Domain.Model.Product", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("FitnessPanelMVC.Domain.Model.Recipe", b =>

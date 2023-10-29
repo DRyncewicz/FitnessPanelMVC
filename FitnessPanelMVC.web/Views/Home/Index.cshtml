@@ -1,4 +1,7 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -8,31 +11,41 @@
 <main role="main" class="pb-3">
     <div class="container text-center">
         <h1 class="display-4">Welcome to FitnessPanel</h1>
-        <p class="lead">Your personal fitness management system.</p>
 
-        <div class="row justify-content-center mt-5">
+        @if (SignInManager.IsSignedIn(User))
+        {
+            <p class="lead">Explore your personal fitness dashboard.</p>
 
-            <div class="col-md-5 mb-3">
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        <h2 class="card-title">Login</h2>
-                        <p class="card-text">Already have an account? Log in to access your dashboard.</p>
-                        <a asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="@Url.Action("Index", "Home")" class="btn btn-primary">Log In</a>
 
+            <a asp-controller="Dashboard" asp-action="Index" class="btn btn-primary">Go to Dashboard</a>
+        }
+        else
+        {
+            <p class="lead">Your personal fitness management system.</p>
+
+            <div class="row justify-content-center mt-5">
+
+                <div class="col-md-5 mb-3">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h2 class="card-title">Login</h2>
+                            <p class="card-text">Already have an account? Log in to access your dashboard.</p>
+                            <a asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="@Url.Action("Index", "Home")" class="btn btn-primary">Log In</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-5 mb-3">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h2 class="card-title">Sign Up</h2>
+                            <p class="card-text">New to FitnessPanel? Create an account to get started.</p>
+                            <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-success">Sign Up</a>
+                        </div>
                     </div>
                 </div>
             </div>
-
-            <div class="col-md-5 mb-3">
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        <h2 class="card-title">Sign Up</h2>
-                        <p class="card-text">New to FitnessPanel? Create an account to get started.</p>
-                        <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-success">Sign Up</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+        }
     </div>
 </main>
 

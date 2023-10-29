@@ -1,4 +1,5 @@
 ﻿using FitnessPanelMVC.Domain.Model;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -68,6 +69,22 @@ namespace FitnessPanelMVC.Infrastructure
                 .HasOne<Exercise>(it => it.Exercise)
                 .WithMany(i => i.WorkoutExercises)
                 .HasForeignKey(IT => IT.ExerciseId);
+
+            builder.Entity<Recipe>()
+                .HasOne<IdentityUser>(it => it.User)
+                .WithMany()
+                .HasForeignKey(it => it.UserId);
+
+            builder.Entity<Meal>()
+                .HasOne<IdentityUser>(it => it.User)
+                .WithMany()
+                .HasForeignKey(it => it.UserId);
+
+            builder.Entity<Product>()
+                .HasOne<IdentityUser>(it => it.User)
+                .WithMany()
+                .HasForeignKey(it => it.UserId)
+                .IsRequired(false);
         }
     }
 }
