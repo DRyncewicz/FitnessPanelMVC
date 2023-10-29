@@ -1,0 +1,188 @@
+﻿@model FitnessPanelMVC.Application.ViewModels.Product.ListProductForListVm
+
+@{
+    ViewData["Title"] = "AddProductsToRecipeList";
+}
+
+<div class="container mt-5">
+    <h1 class="mb-4">Add products to your recipe</h1>
+
+    <p>
+        <a asp-action="AddProductsToRecipeList" class="btn btn-primary">Create New</a>
+    </p>
+
+    <form asp-action="AddProductsToRecipeList" asp-controller="Recipe" method="post">
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" asp-for="SearchString" name="searchString" id="searchString" placeholder="Search for products...">
+            <button class="btn btn-outline-secondary" type="submit">Search</button>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>CaloriesPer100g</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Products)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => item.Id)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                            <td>@Html.DisplayFor(modelItem => item.CaloriesPer100g)</td>
+                            <td>
+                                <a href="javascript:void(0);" onclick="showPopup('@item.Id')" class="btn btn-warning btn-sm">Add</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        @{
+            int currentPage = Model.CurrentPage;
+            int totalPages = (int)Math.Ceiling(Model.Count / (double)Model.PageSize);
+            int startPage = currentPage - 2;
+            int endPage = currentPage + 2;
+
+            if (startPage <= 0)
+            {
+                endPage -= (startPage - 1);
+                startPage = 1;
+            }
+
+            if (endPage > totalPages)
+            {
+                endPage = totalPages;
+                if (endPage > 5)
+                {
+                    startPage = endPage - 4;
+                }
+            }
+        }
+
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                @for (int i = startPage; i <= endPage; i++)
+                {
+                    <li class="page-item @(i == currentPage ? "active" : "")">
+                        <a href="javascript:PagerClick(@i)" class="page-link">@i</a>
+                    </li>
+                }
+            </ul>
+        </nav>
+
+
+        <input type="hidden" name="pageNo" id="pageNo" />
+        <input type="hidden" name="pageSize" id="pageSize" value="20" />
+    </form>
+</div>
+<div class="mt-4">
+    <a href="@Url.Action("Index")" class="btn btn-secondary">Back to List</a>
+</div>
+
+<!-- Popup Modal -->
+<div id="popupModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <form id="addProductForm">
+            <h2>Add Product</h2>
+            <input type="hidden" id="selectedProductId" name="productId" />
+            <label for="weight">Weight:</label>
+            <input type="number" id="weight" name="weight" required />
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</div>
+
+<style>
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgb(0,0,0);
+        background-color: rgba(0,0,0,0.4);
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+    }
+
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+        .close:hover, .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+</style>
+
+@section Scripts
+    {
+    <script type="text/javascript">
+        function PagerClick(index) {
+            document.getElementById("pageNo").value = index;
+            document.forms[0].submit();
+        }
+
+        var modal = document.getElementById("popupModal");
+        var span = document.getElementsByClassName("close")[0];
+
+        span.onclick = function () {
+            modal.style.display = "none";
+        }
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        function showPopup(productId) {
+            document.getElementById("selectedProductId").value = productId;
+            modal.style.display = "block";
+        }
+        document.getElementById("addProductForm").onsubmit = function (event) {
+            event.preventDefault();
+
+            var productId = document.getElementById("selectedProductId").value;
+            var weight = document.getElementById("weight").value;
+
+            fetch('/Recipe/AddProductToRecipe', {
+                method: 'POST',
+                body: JSON.stringify({ productId: productId, weight: weight }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw new Error('Something went wrong');
+            })
+                .then(data => {
+                    console.log(data);
+                    modal.style.display = "none";
+                }).catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+    </script>
+}

@@ -1,4 +1,5 @@
-﻿using FitnessPanelMVC.Application.ViewModels.Recipe;
+﻿using FitnessPanelMVC.Application.ViewModels.Product;
+using FitnessPanelMVC.Application.ViewModels.Recipe;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,10 @@ namespace FitnessPanelMVC.Application.Interfaces
 {
     public interface IRecipeService
     {
+        int AddNewRecipe(NewRecipeVm newRecipeVm);
+        int AddProductToRecipe(int productId, int recipeId, double weight);
+        void DeleteRecipe(int recipeId);
         ListRecipeForListVm GetRecipesForList(int pageSize, int pageNo, string searchString);
+        NewProductVm UpdateProductOnRecipeChange(int recipeId);
     }
 }

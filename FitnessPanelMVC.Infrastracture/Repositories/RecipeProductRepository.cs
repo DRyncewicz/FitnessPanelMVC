@@ -44,9 +44,9 @@ namespace FitnessPanelMVC.Infrastructure.Repositories
             }
             return 0;
         }
-        public IQueryable<RecipeProduct> GetRecipeProductsByRecipeId(int recipeId)
+        public IQueryable<RecipeProduct> GetAllRecipeProducts()
         {
-            var recipeProducts = _dbCotenxt.RecipeProduct.Where(x => x.RecipeId == recipeId);
+            var recipeProducts = _dbCotenxt.RecipeProduct;
             return recipeProducts.AsQueryable(); ;
         }
     }

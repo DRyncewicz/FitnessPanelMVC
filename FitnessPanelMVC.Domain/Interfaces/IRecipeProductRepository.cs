@@ -11,7 +11,7 @@ namespace FitnessPanelMVC.Domain.Interface
     {
         public int CreateRecipeProduct(RecipeProduct recipeProduct);
         public void DeleteRecipeProduct(int id);
-        public IQueryable<RecipeProduct> GetRecipeProductsByRecipeId(int recipeId);
+        public IQueryable<RecipeProduct> GetAllRecipeProducts();
         public int UpdateRecipeProduct(RecipeProduct recipeProduct);
     }
 }

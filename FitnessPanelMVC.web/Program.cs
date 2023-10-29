@@ -1,6 +1,7 @@
 
 using FitnessPanelMVC.Application;
 using FitnessPanelMVC.Application.Validators;
+using FitnessPanelMVC.Application.ViewModels.BodyIndicator;
 using FitnessPanelMVC.Application.ViewModels.Product;
 using FitnessPanelMVC.Domain.Model;
 using FitnessPanelMVC.Infrastructure;
@@ -26,7 +27,7 @@ builder.Services.AddInfrastructure();
 builder.Services.AddControllersWithViews().AddFluentValidation();
 
 builder.Services.AddTransient<IValidator<NewProductVm>, NewProductValidation>();
-
+builder.Services.AddTransient<IValidator<NewBodyIndicatorVm>, NewBodyIndicatorValidation>();
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(15); 

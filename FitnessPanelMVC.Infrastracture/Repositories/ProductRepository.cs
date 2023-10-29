@@ -1,5 +1,6 @@
 ﻿using FitnessPanelMVC.Domain.Interface;
 using FitnessPanelMVC.Domain.Model;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -52,15 +53,12 @@ namespace FitnessPanelMVC.Infrastructure.Repositories
 
         public void UpdateProduct(Product product)
         {
-            _dbContext.Attach(product);
-            _dbContext.Entry(product).Property("Name").IsModified = true;
-            _dbContext.Entry(product).Property("Restaurant").IsModified = true;
-            _dbContext.Entry(product).Property("Barcode").IsModified = true;
-            _dbContext.Entry(product).Property("CaloriesPer100g").IsModified = true;
-            _dbContext.Entry(product).Property("CarbsPer100g").IsModified = true;
-            _dbContext.Entry(product).Property("FatPer100g").IsModified = true;
-            _dbContext.Entry(product).Property("ProteinPer100g").IsModified = true;
-            _dbContext.SaveChanges();
+            var existingProduct = _dbContext.Products.Find(product.Id);
+            if (existingProduct != null)
+            {
+                _dbContext.Entry(existingProduct).CurrentValues.SetValues(product);
+                _dbContext.SaveChanges();
+            }
         }
     }
 }

@@ -54,6 +54,7 @@ namespace FitnessPanelMVC.web.Controllers
             var model = _productService.GetAllProductsForList(20, 1, "");
             return View(model);
         }
+
         [HttpPost]
         public IActionResult AddProductsToMealList(int pageSize, int? pageNo, string searchString)
         {
@@ -68,6 +69,7 @@ namespace FitnessPanelMVC.web.Controllers
             var model = _productService.GetAllProductsForList(pageSize, pageNo.Value, searchString);
             return View(model);
         }
+
         [HttpPost]
         public IActionResult AddProductToMeal([FromBody] ProductMealModel model)
         {

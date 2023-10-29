@@ -76,6 +76,7 @@ namespace FitnessPanelMVC.Application.Services
             return productDetailsVm;
         }
 
+
         private ProductDetailsVm ProductDetailsReflection(ProductDetailsVm productDetailsVm)
         {
             Type type = productDetailsVm.GetType();
