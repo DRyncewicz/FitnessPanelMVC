@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace FitnessPanelMVC.Infrastructure
 {
-    public class Context : IdentityDbContext
+    public class DbContext : IdentityDbContext
     {
         public DbSet<Meal> Meals { get; set; }
         public DbSet<MealProduct> MealProduct { get; set; }
@@ -22,7 +22,7 @@ namespace FitnessPanelMVC.Infrastructure
         public DbSet<BodyIndicator> BodyIndicators { get; set; }
 
 
-        public Context(DbContextOptions options) : base(options)
+        public DbContext(DbContextOptions options) : base(options)
         {
         }
 

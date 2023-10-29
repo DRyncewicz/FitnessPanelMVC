@@ -10,8 +10,8 @@ namespace FitnessPanelMVC.Infrastructure.Repositories
 {
     public class BodyIndicatorRepository : IBodyIndicatorsRepository
     {
-        private readonly Context _dbContext;
-            public BodyIndicatorRepository(Context dbContext)
+        private readonly DbContext _dbContext;
+            public BodyIndicatorRepository(DbContext dbContext)
         {
             _dbContext = dbContext;
         }

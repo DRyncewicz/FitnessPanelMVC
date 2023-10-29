@@ -10,8 +10,8 @@ namespace FitnessPanelMVC.Infrastructure.Repositories
 {
     public class ExerciseRepository : IExerciseRepository
     {
-        private readonly Context _dbCotenxt;
-        public ExerciseRepository(Context dbContext)
+        private readonly DbContext _dbCotenxt;
+        public ExerciseRepository(DbContext dbContext)
         {
             _dbCotenxt = dbContext;
         }

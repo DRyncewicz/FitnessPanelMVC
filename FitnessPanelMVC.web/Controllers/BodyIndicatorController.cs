@@ -4,10 +4,12 @@ using FitnessPanelMVC.Application.Validators;
 using FitnessPanelMVC.Application.ViewModels.BodyIndicator;
 using FitnessPanelMVC.Application.ViewModels.Product;
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FitnessPanelMVC.web.Controllers
 {
+    [Authorize]
     public class BodyIndicatorController : Controller
     {
         private readonly IBodyIndicatorService _bodyIndicatorService;

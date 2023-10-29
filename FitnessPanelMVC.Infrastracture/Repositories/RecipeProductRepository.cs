@@ -10,9 +10,9 @@ namespace FitnessPanelMVC.Infrastructure.Repositories
 {
     public class RecipeProductRepository : IRecipeProductRepository
     {
-        private readonly Context _dbCotenxt;
+        private readonly DbContext _dbCotenxt;
 
-        public RecipeProductRepository(Context dbContext)
+        public RecipeProductRepository(DbContext dbContext)
         {
             _dbCotenxt = dbContext;
         }

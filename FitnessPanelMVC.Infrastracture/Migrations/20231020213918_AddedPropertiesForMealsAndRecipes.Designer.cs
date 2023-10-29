@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FitnessPanelMVC.Infrastructure.Migrations
 {
-    [DbContext(typeof(Context))]
+    [DbContext(typeof(DbContext))]
     [Migration("20231020213918_AddedPropertiesForMealsAndRecipes")]
     partial class AddedPropertiesForMealsAndRecipes
     {

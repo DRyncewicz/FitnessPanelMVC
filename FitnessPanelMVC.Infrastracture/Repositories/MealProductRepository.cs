@@ -11,8 +11,8 @@ namespace FitnessPanelMVC.Infrastructure.Repositories
 {
     public class MealProductRepository : IMealProductRepository
     {
-        private readonly Context _dbContext;
-        public MealProductRepository(Context dbContext)
+        private readonly DbContext _dbContext;
+        public MealProductRepository(DbContext dbContext)
         {
             _dbContext = dbContext;
         }

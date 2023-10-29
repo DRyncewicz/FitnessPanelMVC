@@ -2,10 +2,12 @@
 using FitnessPanelMVC.Application.Services;
 using FitnessPanelMVC.Application.ViewModels.MealProduct.TransferModel;
 using FitnessPanelMVC.Application.ViewModels.Recipe;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FitnessPanelMVC.web.Controllers
 {
+    [Authorize]
     public class RecipeController : Controller
     {
         private readonly IRecipeService _recipeService;

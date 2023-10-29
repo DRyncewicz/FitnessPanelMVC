@@ -12,9 +12,9 @@ namespace FitnessPanelMVC.Infrastructure.Repositories
 {
     public class MealRepository : IMealRepository
     {
-        private readonly Context _dbContext;
+        private readonly DbContext _dbContext;
 
-        public MealRepository(Context dbContext)
+        public MealRepository(DbContext dbContext)
         {
             _dbContext = dbContext;
         }

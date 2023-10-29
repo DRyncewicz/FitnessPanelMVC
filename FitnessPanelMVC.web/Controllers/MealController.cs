@@ -4,11 +4,13 @@ using FitnessPanelMVC.Application.ViewModels.Meal;
 using FitnessPanelMVC.Application.ViewModels.MealProduct.TransferModel;
 using FitnessPanelMVC.Application.ViewModels.Product;
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 
 namespace FitnessPanelMVC.web.Controllers
 {
+    [Authorize]
     public class MealController : Controller
     {
         private readonly IMealService _mealService;

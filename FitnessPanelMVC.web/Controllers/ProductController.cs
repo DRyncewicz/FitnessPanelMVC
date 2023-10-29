@@ -1,11 +1,13 @@
 ﻿using FitnessPanelMVC.Application.Interfaces;
 using FitnessPanelMVC.Application.ViewModels.Product;
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
 namespace FitnessPanelMVC.web.Controllers
 {
+    [Authorize]
     public class ProductController : Controller
     {
         private readonly IProductService _productService;

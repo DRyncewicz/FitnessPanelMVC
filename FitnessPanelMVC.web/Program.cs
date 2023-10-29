@@ -9,22 +9,36 @@ using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.Google;
 
 var builder = WebApplication.CreateBuilder(args);
-
+var Configuration = builder.Configuration;
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-builder.Services.AddDbContext<Context>(options =>
+builder.Services.AddDbContext<FitnessPanelMVC.Infrastructure.DbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<Context>();
+    .AddEntityFrameworkStores<FitnessPanelMVC.Infrastructure.DbContext>();
 
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure();
 
 builder.Services.AddControllersWithViews().AddFluentValidation();
+
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    options.Password.RequireDigit = true;
+    options.Password.RequiredLength = 8;
+    options.SignIn.RequireConfirmedAccount = false; 
+});
+builder.Services.AddAuthentication().AddGoogle(options =>
+{
+    IConfigurationSection googleAuthNSection = Configuration.GetSection("Authentication:Google");
+    options.ClientId = googleAuthNSection["ClientId"];
+    options.ClientSecret = googleAuthNSection["ClientSecret"];
+});
 
 builder.Services.AddTransient<IValidator<NewProductVm>, NewProductValidation>();
 builder.Services.AddTransient<IValidator<NewBodyIndicatorVm>, NewBodyIndicatorValidation>();
