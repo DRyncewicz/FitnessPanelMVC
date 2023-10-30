@@ -1,5 +1,6 @@
 ﻿using FitnessPanelMVC.Domain.Interface;
 using FitnessPanelMVC.Domain.Model;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -47,7 +48,9 @@ namespace FitnessPanelMVC.Infrastructure.Repositories
 
         public IQueryable<Workout> GetAllWorkouts()
         {
-            var workouts = _dbContext.Workouts;
+            var workouts = _dbContext.Workouts
+                .Include(w => w.WorkoutExercises)
+                .ThenInclude(w => w.Exercise);
             return workouts.AsQueryable();
         }
     }

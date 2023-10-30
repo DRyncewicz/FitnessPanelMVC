@@ -1,0 +1,61 @@
+﻿@model IEnumerable<FitnessPanelMVC.Application.ViewModels.Workout.WorkoutForListVm>
+
+@{
+    ViewData["Title"] = "Workout manager";
+}
+<h1>Workout manager</h1>
+<p>Here you can view your workouts and start new one.</p>
+
+<div class="row">
+    <div class="col-md-12">
+        <form method="post" class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="date" id="date" name="date" placeholder="Select Date" aria-label="Select Date" style="max-width: 200px;">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Load Workouts</button>
+            <a asp-action="AddWorkout" class="btn btn-primary ml-2">Start new workout</a>
+        </form>
+    </div>
+</div>
+<div class="row mt-4">
+    <div class="col-md-12">
+        <table class="table table-responsive table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Meal Information</th>
+                    <th>Products</th>
+                    <th width="300">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var workout in Model)
+                {
+                    <tr>
+                        <td>
+                            <div>
+                                <strong>@workout.Name</strong>
+                                <span class="text-muted" style="font-size: small;"> (@workout.Date.ToString("HH:mm"))</span>
+                            </div>
+                            <table class="table table-sm mt-2">
+                                <tr><td>Date:</td><td>@workout.Date.ToString("F2")</td></tr>
+                                <tr><td>Duration:</td><td>@workout.Duration.ToString("F2")</td></tr>
+                                <tr><td>Burned calories:</td><td>@workout.TotalCaloriesBurned.ToString("F2")</td></tr>
+                                <tr><td>Description:</td><td>@workout.Description</td></tr>
+                            </table>
+                        </td>
+                        <td>
+                            <ul>
+                                @foreach (var exercise in workout.workoutExerciseForListVms)
+                                {
+                                    <li>Duration: @exercise.Duration Burned calories: @exercise.CaloriesBurned </li>
+                                }
+                            </ul>
+                        </td>
+                        <td class="align-middle">
+                            <a asp-action="MealDetails" asp-route-id="@workout.Id" class="btn btn-info btn-sm">Manage</a>
+                            <a asp-action="DeleteMeal" asp-route-id="@workout.Id" class="btn btn-danger btn-sm">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

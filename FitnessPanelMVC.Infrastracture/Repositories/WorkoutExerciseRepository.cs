@@ -16,16 +16,15 @@ namespace FitnessPanelMVC.Infrastructure.Repositories
             _dbContext = dbContext;
         }
 
-        public int CreateWorkoutExercise(WorkoutExercise workoutExercise)
+        public void CreateWorkoutExercise(WorkoutExercise workoutExercise)
         {
             _dbContext.WorkoutExercise.Add(workoutExercise);
             _dbContext.SaveChanges();
-            return workoutExercise.Id;
         }
 
-        public void DeleteWorkoutExercise(int id)
+        public void DeleteWorkoutExercise(int workoutId, int exerciseId)
         {
-            var workoutExercise = _dbContext.WorkoutExercise.Find(id);
+            var workoutExercise = _dbContext.WorkoutExercise.FirstOrDefault(we => we.WorkoutId == workoutId && we.ExerciseId == exerciseId);
             if (workoutExercise != null) 
             {
                 _dbContext.WorkoutExercise.Remove(workoutExercise);
@@ -33,19 +32,17 @@ namespace FitnessPanelMVC.Infrastructure.Repositories
             }
         }
 
-        public int UpdateWorkoutExercise(WorkoutExercise workoutExercise)
+        public void UpdateWorkoutExercise(WorkoutExercise workoutExercise)
         {
-            if (_dbContext.WorkoutExercise.Find(workoutExercise.Id) != null)
+            if (_dbContext.WorkoutExercise.Find(workoutExercise.WorkoutId, workoutExercise.ExerciseId) != null)
             {
                 _dbContext.WorkoutExercise.Update(workoutExercise);
                 _dbContext.SaveChanges();
-                return workoutExercise.Id;
             }
-            return 0;
         }
-        public IQueryable<WorkoutExercise> GetWorkoutExercisesByWorkoutId(int workoutId)
+        public IQueryable<WorkoutExercise> GetAllWorkoutExercises()
         {
-            var workoutExercises = _dbContext.WorkoutExercise.Where(x  => x.WorkoutId == workoutId);
+            var workoutExercises = _dbContext.WorkoutExercise;
             return workoutExercises.AsQueryable();
         }
     }
