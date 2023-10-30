@@ -85,6 +85,12 @@ namespace FitnessPanelMVC.Infrastructure
                 .WithMany()
                 .HasForeignKey(it => it.UserId)
                 .IsRequired(false);
+
+            builder.Entity<Workout>()
+                .HasOne<IdentityUser>(it => it.User)
+                .WithMany()
+                .HasForeignKey(it => it.UserId);
+
         }
     }
 }
