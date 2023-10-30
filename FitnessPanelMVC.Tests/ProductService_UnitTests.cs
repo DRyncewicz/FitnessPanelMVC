@@ -5,11 +5,13 @@ using FitnessPanelMVC.Application.Services;
 using Moq;
 using FitnessPanelMVC.Application.ViewModels.Product;
 using System.Collections.ObjectModel;
+using Org.BouncyCastle.Bcpg;
 
 namespace FitnessPanelMVC.Tests
 {
     public class ProductService_UnitTests
     {
+        private readonly string userId = "userid2312312542345";
         [Fact]
         public void AddNewProduct_AddsProductAndReturnsProductId()
         {
@@ -34,7 +36,7 @@ namespace FitnessPanelMVC.Tests
             mockRepository.Setup(r => r.CreateProduct(It.IsAny<Product>())).Returns(expectedProductId);
 
             // Act
-            var result = service.AddNewProduct(newProductVm);
+            var result = service.AddNewProduct(newProductVm, userId);
 
             // Assert
             Assert.Equal(expectedProductId, result);
