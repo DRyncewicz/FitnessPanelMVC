@@ -1,10 +1,12 @@
 ﻿using FitnessPanelMVC.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Org.BouncyCastle.Bcpg;
 
 namespace FitnessPanelMVC.web.Controllers
 {
+    [Authorize]
     public class WorkoutController : Controller
     {
         private readonly IWorkoutService _workoutService;
@@ -31,6 +33,11 @@ namespace FitnessPanelMVC.web.Controllers
             var userId = _userManager.GetUserId(User);
             var model = _workoutService.GetAllUserWorkoutsForList(date, userId);
             return View(model);
+        }
+        [HttpGet]
+        public IActionResult AddWorkout()
+        {
+            return View();
         }
     }
 }

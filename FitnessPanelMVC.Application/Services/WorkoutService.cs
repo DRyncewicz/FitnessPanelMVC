@@ -4,6 +4,7 @@ using FitnessPanelMVC.Application.Interfaces;
 using FitnessPanelMVC.Application.ViewModels.Product;
 using FitnessPanelMVC.Application.ViewModels.Workout;
 using FitnessPanelMVC.Domain.Interface;
+using FitnessPanelMVC.Domain.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,6 +39,13 @@ namespace FitnessPanelMVC.Application.Services
             return workouts;
         }
 
+        public int AddNewWorkout(NewWorkoutVm workoutVm, string userId)
+        {
+            var workout = _mapper.Map<Workout>(workoutVm);
+            workout.UserId = userId;
+            _workoutRepository.CreateWorkout(workout);
 
+            return workout.Id;
+        }
     }
 }
