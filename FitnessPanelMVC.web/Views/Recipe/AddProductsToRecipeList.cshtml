@@ -11,7 +11,8 @@
         <a asp-action="AddProductsToRecipeList" class="btn btn-primary">Create New</a>
     </p>
 
-    <form asp-action="AddProductsToRecipeList" asp-controller="Recipe" method="post">
+    <form asp-action="AddProductsToRecipeList" asp-controller="Recipe" method="post" id="searchForm">
+        
         <div class="input-group mb-3">
             <input type="text" class="form-control" asp-for="SearchString" name="searchString" id="searchString" placeholder="Search for products...">
             <button class="btn btn-outline-secondary" type="submit">Search</button>
@@ -140,7 +141,7 @@
     <script type="text/javascript">
         function PagerClick(index) {
             document.getElementById("pageNo").value = index;
-            document.forms[0].submit();
+            document.getElementById("searchForm").submit()
         }
 
         var modal = document.getElementById("popupModal");

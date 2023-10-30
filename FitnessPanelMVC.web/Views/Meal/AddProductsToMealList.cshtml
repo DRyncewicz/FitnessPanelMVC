@@ -5,13 +5,12 @@
 }
 
 <div class="container mt-5">
-    <h1 class="mb-4">Index</h1>
+    <h1 class="mb-4">Products list</h1>
 
-    <p>
-        <a asp-action="AddProductsToMealList" class="btn btn-primary">Create New</a>
-    </p>
 
-    <form asp-action="AddProductsToMealList" asp-controller="Meal" method="post">
+
+    <form asp-action="AddProductsToMealList" asp-controller="Meal" method="post" id="searchForm">
+        
         <div class="input-group mb-3">
             <input type="text" class="form-control" asp-for="SearchString" name="searchString" id="searchString" placeholder="Search for products...">
             <button class="btn btn-outline-secondary" type="submit">Search</button>
@@ -111,7 +110,7 @@
     <script type="text/javascript">
         function PagerClick(index) {
             document.getElementById("pageNo").value = index;
-            document.forms[0].submit();
+            document.getElementById("searchForm").submit();
         }
 
         var modal = document.getElementById("popupModal");
