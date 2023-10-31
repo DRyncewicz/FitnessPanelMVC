@@ -18,9 +18,9 @@ namespace FitnessPanelMVC.Application.ViewModels.Workout
         public string Name { get; set; }
         public string? Description { get; set; }
         public double TotalCaloriesBurned { get; set; }
-        public DateTime Duration { get; set; }
+        public TimeSpan Duration { get; set; }
         public DateTime Date { get; set; }
-        public List<WorkoutExerciseForListVm> workoutExerciseForListVms { get; set; }
+        public List<WorkoutExerciseForListVm> WorkoutExercises { get; set; }
 
 
         public void Mapping(Profile profile)

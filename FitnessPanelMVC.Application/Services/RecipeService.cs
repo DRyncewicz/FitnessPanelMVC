@@ -50,7 +50,7 @@ namespace FitnessPanelMVC.Application.Services
             _recipeRepository.RemoveRecipe(recipeId);
         }
 
-        public int AddNewRecipe(NewRecipeVm newRecipeVm,string userId)
+        public int AddNewRecipe(NewRecipeVm newRecipeVm, string userId)
         {
             var recipe = _mapper.Map<Recipe>(newRecipeVm);
             recipe.UserId = userId;
@@ -131,6 +131,14 @@ namespace FitnessPanelMVC.Application.Services
 
 
             return newProductVm;
+        }
+
+        public RecipeForListVm GetRecipeDetailsById(int recipeId)
+        {
+            var recipe = _recipeRepository.GetAllRecipes().FirstOrDefault(r => r.Id == recipeId);
+            var recipeVm = _mapper.Map<RecipeForListVm>(recipe);
+
+            return recipeVm;
         }
     }
 }

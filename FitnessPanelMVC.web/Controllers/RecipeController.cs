@@ -99,5 +99,10 @@ namespace FitnessPanelMVC.web.Controllers
             _productService.UpdateProduct(productVm);
             return Json(new { success = true, message = "Product added successfully" });
         }
+
+        public IActionResult RecipeDetails(int id)
+        {
+            return View();
+        }
     }
 }

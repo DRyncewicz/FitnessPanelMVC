@@ -34,8 +34,7 @@ namespace FitnessPanelMVC.Application.Services
         {
             var mealsVm = _mealRepository.GetAllMeals().
                 Where(i => i.MealDate.Date == date.Date && i.UserId == userId).
-                ProjectTo<MealForListVm>(_mapper.ConfigurationProvider)
-                .ToList();
+                ProjectTo<MealForListVm>(_mapper.ConfigurationProvider).ToList();
 
             return new ListMealForListVm
             {
@@ -56,9 +55,11 @@ namespace FitnessPanelMVC.Application.Services
         public int AddProductToMeal(int productId, int mealId, double weight)
         {
             var product = _productRepository.GetProductById(productId);
-            if (_mealProductRepository.GetAllMealProducts().Any(e => e.ProductId == productId && e.MealId == mealId))
+            if (_mealProductRepository.GetAllMealProducts()
+                .Any(e => e.ProductId == productId && e.MealId == mealId))
             {
-                var mealProduct = _mealProductRepository.GetAllMealProducts().First(e => e.ProductId == productId && e.MealId == mealId);
+                var mealProduct = _mealProductRepository.GetAllMealProducts()
+                    .First(e => e.ProductId == productId && e.MealId == mealId);
                 mealProduct.Weight += Math.Round(weight, 2);
                 mealProduct.Calories += Math.Round(product.CaloriesPer100g * weight / 100, 2);
                 mealProduct.Fat += Math.Round(product.FatPer100g * weight / 100, 2);

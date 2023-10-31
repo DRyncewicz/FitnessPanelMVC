@@ -12,7 +12,7 @@ namespace FitnessPanelMVC.Application.ViewModels.WorkoutExercise
     {
         public int WorkoutId { get; set; }
         public int ExerciseId { get; set; }
-        public DateTime Duration { get; set; }
+        public TimeSpan Duration { get; set; }
         public double CaloriesBurned { get; set; }
 
         public void Mapping(Profile profile)
