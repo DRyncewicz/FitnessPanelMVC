@@ -1,4 +1,6 @@
 ﻿using FitnessPanelMVC.Application.Interfaces;
+using FitnessPanelMVC.Application.ViewModels.Workout;
+using FitnessPanelMVC.Application.ViewModels.WorkoutExercise.TransferModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -38,6 +40,33 @@ namespace FitnessPanelMVC.web.Controllers
         public IActionResult AddWorkout()
         {
             return View();
+        }
+        [HttpPost]
+        public IActionResult AddWorkout(NewWorkoutVm newWorkoutVm)
+        {
+            var userId = _userManager.GetUserId(User);
+            int id = _workoutService.AddNewWorkout(newWorkoutVm, userId);
+            HttpContext.Session.SetInt32("CurrentWorkoutId", id);
+            return RedirectToAction("AddExercisesToWorkoutList");
+        }
+        [HttpGet]
+        public IActionResult AddExercisesToWorkoutList()
+        {
+            var model = _exerciseService.GetExercisesForLists();
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult FinishExercise([FromBody] WorkoutExerciseModel model)
+        {
+            int workoutId = HttpContext.Session.GetInt32("CurrentWorkoutId") ?? default;
+            _workoutService.AddExerciseToWorkout(model.ExerciseId, workoutId, model.DurationSeconds, model.BurnedCalories);
+            return Json(new { success = true, message = "Exercise added successfully." });
+        }
+        public IActionResult DeleteWorkout(int id)
+        {
+            _workoutService.DeleteWorkoutById(id);
+            return RedirectToAction("Index");
         }
     }
 }

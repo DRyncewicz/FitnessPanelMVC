@@ -12,7 +12,7 @@ namespace FitnessPanelMVC.Domain.Model
         public Workout Workout { get; set; }
         public int ExerciseId { get; set; }
         public Exercise Exercise { get; set; }
-        public DateTime Duration { get; set; }
+        public TimeSpan Duration { get; set; }
         public double CaloriesBurned { get; set; }
     }
 }

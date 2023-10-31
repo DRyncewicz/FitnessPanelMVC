@@ -5,6 +5,7 @@ using FitnessPanelMVC.Application.ViewModels.Product;
 using FitnessPanelMVC.Application.ViewModels.Workout;
 using FitnessPanelMVC.Domain.Interface;
 using FitnessPanelMVC.Domain.Model;
+using Irony.Parsing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +20,7 @@ namespace FitnessPanelMVC.Application.Services
         private readonly IExerciseRepository _exerciseRepository;
         private readonly IMapper _mapper;
         private readonly IWorkoutExerciseRepository _workoutExerciseRepository;
+
         public WorkoutService(IExerciseRepository exerciseRepository,
             IMapper mapper,
             IWorkoutRepository workoutRepository,
@@ -33,7 +35,7 @@ namespace FitnessPanelMVC.Application.Services
         public List<WorkoutForListVm> GetAllUserWorkoutsForList(DateTime Date, string userId)
         {
             var workouts = _workoutRepository.GetAllWorkouts().
-                Where(i => i.Date == Date && i.UserId ==  userId)
+                Where(i => i.Date.Date == Date.Date && i.UserId == userId)
                 .ProjectTo<WorkoutForListVm>(_mapper.ConfigurationProvider).ToList();
 
             return workouts;
@@ -46,6 +48,55 @@ namespace FitnessPanelMVC.Application.Services
             _workoutRepository.CreateWorkout(workout);
 
             return workout.Id;
+        }
+        public int AddExerciseToWorkout(int exerciseId, int workoutId, int durationSeconds, double burnedCalories)
+        {
+            TimeSpan  duration = TimeSpan.FromSeconds(durationSeconds);
+            var exercise = _exerciseRepository.GetExercises()
+                .FirstOrDefault(i => i.Id == exerciseId);
+            if (_workoutExerciseRepository.GetAllWorkoutExercises()
+                .Any(e => e.WorkoutId == workoutId && e.ExerciseId == exerciseId))
+            {
+                var workoutExercise  = _workoutExerciseRepository.GetAllWorkoutExercises()
+                    .First(e => e.WorkoutId == workoutId && e.ExerciseId == exerciseId);
+                workoutExercise.Duration += duration;
+                workoutExercise.CaloriesBurned += burnedCalories;
+
+                _workoutExerciseRepository.UpdateWorkoutExercise(workoutExercise);
+            }
+            else
+            {
+                var workoutExercise = new WorkoutExercise
+                {
+                    WorkoutId = workoutId,
+                    ExerciseId = exerciseId,
+                    Duration = duration,
+                    CaloriesBurned = burnedCalories
+                };
+
+                _workoutExerciseRepository.CreateWorkoutExercise(workoutExercise);
+            }
+
+            UpdateWorkoutInformationsAfterProductChange(workoutId);
+            return workoutId;
+        }
+
+        public void DeleteWorkoutById(int workoutId)
+        {
+            _workoutRepository.DeleteWorkout(workoutId);
+        }
+
+        private void UpdateWorkoutInformationsAfterProductChange(int workoutId)
+        {
+            var workout = _workoutRepository.GetAllWorkouts().FirstOrDefault(w => w.Id == workoutId);
+            var workoutExercises = workout.WorkoutExercises.ToList();
+            workout.TotalCaloriesBurned = workoutExercises.Select(w => w.CaloriesBurned).Sum();
+            TimeSpan totalDuration = workoutExercises
+                .Select(w => w.Duration)
+                .Aggregate(TimeSpan.Zero, (subtotal, t) => subtotal + t);
+
+            workout.Duration = totalDuration;
+            _workoutRepository.UpdateWorkout(workout);
         }
     }
 }

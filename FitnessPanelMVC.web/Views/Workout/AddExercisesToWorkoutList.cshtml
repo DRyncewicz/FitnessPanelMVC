@@ -1,0 +1,193 @@
+﻿@model IEnumerable<FitnessPanelMVC.Application.ViewModels.Exercise.ExerciseForListAndNewVm>
+
+@{
+    ViewData["Title"] = "Add Exercises To Workout List";
+}
+
+<h1>Exercises:</h1>
+
+<div class="container">
+    <div class="row">
+        @foreach (var item in Model.Select((value, index) => new { Value = value, Index = index }))
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 exercise-card" data-exercise="@item.Value.Id">
+                    <div class="card-body">
+                        <h5 class="card-title">@item.Value.Name</h5>
+                        <p class="card-text">
+                            @item.Value.Description
+                            <br>
+                            Calories Burned/Min: @item.Value.AverageCaloriesBurnedPerMinute
+                        </p>
+                        <button class="btn btn-primary start-btn">Start Exercise</button>
+                        <div class="timer-controls d-none">
+                            <button class="btn btn-warning stop-btn">Stop</button>
+                            <button class="btn btn-success resume-btn d-none">Resume</button>
+                            <button class="btn btn-danger finish-btn">Finish</button>
+                        </div>
+                        <div class="timer">00:00:00</div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+<div class="mt-4">
+    <a href="@Url.Action("Index")" class="btn btn-secondary">Back to List</a>
+</div>
+
+@section Scripts {
+    <script>
+        var timers = {};
+
+        document.querySelectorAll('.exercise-card').forEach(card => {
+            let startBtn = card.querySelector('.start-btn');
+            let stopBtn = card.querySelector('.stop-btn');
+            let resumeBtn = card.querySelector('.resume-btn');
+            let finishBtn = card.querySelector('.finish-btn');
+            let exerciseId = card.getAttribute('data-exercise');
+
+            startBtn.addEventListener('click', function () {
+                startTimer(exerciseId);
+                toggleButtons(card, true);
+                setCardActiveState(exerciseId, true);
+            });
+
+            stopBtn.addEventListener('click', function () {
+                stopTimer(exerciseId);
+                resumeBtn.classList.remove('d-none');
+                stopBtn.classList.add('d-none');
+            });
+
+            resumeBtn.addEventListener('click', function () {
+                startTimer(exerciseId);
+                resumeBtn.classList.add('d-none');
+                stopBtn.classList.remove('d-none');
+            });
+
+
+            let averageCaloriesBurnedPerMinute = parseFloat(card.querySelector('.card-text').textContent.split('Calories Burned/Min: ')[1]);
+            finishBtn.addEventListener('click', function () {
+                console.log('Exercise ID:', exerciseId);
+                console.log('Average Calories Burned Per Minute:', averageCaloriesBurnedPerMinute);
+
+                stopTimer(exerciseId);
+                finishExercise(exerciseId, averageCaloriesBurnedPerMinute);
+                resetTimer(exerciseId);
+                toggleButtons(card, false);
+            });
+        });
+
+        function startTimer(exerciseId) {
+            if (!timers[exerciseId]) {
+                timers[exerciseId] = { seconds: 0, interval: null };
+            }
+            timers[exerciseId].interval = setInterval(function () {
+                timers[exerciseId].seconds++;
+                displayTime(exerciseId);
+            }, 1000);
+        }
+
+        function stopTimer(exerciseId) {
+            clearInterval(timers[exerciseId].interval);
+        }
+
+        function resetTimer(exerciseId) {
+            stopTimer(exerciseId);
+            timers[exerciseId].seconds = 0;
+            displayTime(exerciseId);
+        }
+
+        function toggleButtons(card, isTiming) {
+            let startBtn = card.querySelector('.start-btn');
+            let timerControls = card.querySelector('.timer-controls');
+
+            if (isTiming) {
+                startBtn.classList.add('d-none');
+                timerControls.classList.remove('d-none');
+            } else {
+                startBtn.classList.remove('d-none');
+                timerControls.classList.add('d-none');
+            }
+        }
+
+        function displayTime(exerciseId) {
+            var timerElement = document.querySelector('.exercise-card[data-exercise="' + exerciseId + '"] .timer');
+            var timer = timers[exerciseId] || { seconds: 0 };
+            var hours = Math.floor(timer.seconds / 3600);
+            var minutes = Math.floor((timer.seconds - (hours * 3600)) / 60);
+            var seconds = timer.seconds - (hours * 3600) - (minutes * 60);
+
+            timerElement.textContent =
+                (hours < 10 ? "0" + hours : hours) + ":" +
+                (minutes < 10 ? "0" + minutes : minutes) + ":" +
+                (seconds < 10 ? "0" + seconds : seconds);
+        }
+
+        function finishExercise(exerciseId, averageCaloriesBurnedPerMinute) {
+            var timer = timers[exerciseId] || { seconds: 0 };
+
+            var durationSeconds = timer.seconds;
+            console.log('Duration in Seconds:', durationSeconds);
+            var duration = new Date(durationSeconds * 1000).toISOString().substr(11, 8);
+
+            var burnedCalories = (averageCaloriesBurnedPerMinute / 60) * durationSeconds;
+
+            fetch('/Workout/FinishExercise', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest' 
+                },
+                body: JSON.stringify({
+                    exerciseId: exerciseId,
+                    durationSeconds: durationSeconds,
+                    burnedCalories: burnedCalories.toFixed(2)
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert("Exercise finished successfully");
+                        resetTimer(exerciseId);
+                        let card = document.querySelector('.exercise-card[data-exercise="' + exerciseId + '"]');
+                        toggleButtons(card, false);
+                    } else {
+                        alert("Error finishing exercise");
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert("Error finishing exercise");
+                });
+            setCardActiveState(exerciseId, false);
+        }
+
+        function setCardActiveState(exerciseId, isActive) {
+            document.querySelectorAll('.exercise-card').forEach(card => {
+                if (isActive) {
+                    if (card.getAttribute('data-exercise') === exerciseId) {
+                        card.classList.add('active-exercise'); 
+                    } else {
+                        card.classList.add('inactive-exercise'); 
+                    }
+                } else {
+                    card.classList.remove('active-exercise', 'inactive-exercise');
+                }
+            });
+        }
+    </script>
+}
+@section Styles {
+    <style>
+        .active-exercise {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .inactive-exercise {
+            pointer-events: none;
+            opacity: 0.6;
+        }
+    </style>
+}

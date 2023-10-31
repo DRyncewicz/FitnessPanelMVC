@@ -35,23 +35,29 @@
                                 <span class="text-muted" style="font-size: small;"> (@workout.Date.ToString("HH:mm"))</span>
                             </div>
                             <table class="table table-sm mt-2">
-                                <tr><td>Date:</td><td>@workout.Date.ToString("F2")</td></tr>
-                                <tr><td>Duration:</td><td>@workout.Duration.ToString("F2")</td></tr>
+                                <tr><td>Duration:</td><td>@workout.Duration</td></tr>
                                 <tr><td>Burned calories:</td><td>@workout.TotalCaloriesBurned.ToString("F2")</td></tr>
                                 <tr><td>Description:</td><td>@workout.Description</td></tr>
                             </table>
                         </td>
                         <td>
                             <ul>
-                                @foreach (var exercise in workout.workoutExerciseForListVms)
+                                @if (workout.WorkoutExercises != null)
                                 {
-                                    <li>Duration: @exercise.Duration Burned calories: @exercise.CaloriesBurned </li>
+                                    foreach (var exercise in workout.WorkoutExercises)
+                                    {
+                                        <li>Duration: @exercise.Duration Burned calories: @exercise.CaloriesBurned.ToString("F2") </li>
+                                    }
+                                }
+                                else
+                                {
+                                    <li>No exercises recorded</li>
                                 }
                             </ul>
                         </td>
                         <td class="align-middle">
-                            <a asp-action="MealDetails" asp-route-id="@workout.Id" class="btn btn-info btn-sm">Manage</a>
-                            <a asp-action="DeleteMeal" asp-route-id="@workout.Id" class="btn btn-danger btn-sm">Delete</a>
+                            <a asp-action="WorkoutDetails" asp-route-id="@workout.Id" class="btn btn-info btn-sm">Manage</a>
+                            <a asp-action="DeleteWorkout" asp-route-id="@workout.Id" class="btn btn-danger btn-sm">Delete</a>
                         </td>
                     </tr>
                 }
