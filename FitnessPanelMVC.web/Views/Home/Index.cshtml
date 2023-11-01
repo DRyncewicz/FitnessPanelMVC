@@ -1,5 +1,6 @@
-﻿@using Microsoft.AspNetCore.Identity
-@inject SignInManager<IdentityUser> SignInManager
+﻿@using FitnessPanelMVC.Domain.Model;
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
 
 @{
     ViewData["Title"] = "Home Page";
@@ -48,9 +49,3 @@
         }
     </div>
 </main>
-
-<footer class="border-top footer text-muted">
-    <div class="container">
-        &copy; 2023 - FitnessPanelMVC - <a asp-area="" asp-controller="Home" asp-action="index">Privacy</a>
-    </div>
-</footer>

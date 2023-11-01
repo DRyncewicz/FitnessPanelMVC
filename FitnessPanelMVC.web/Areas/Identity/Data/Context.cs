@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using FitnessPanelMVC.Domain.Model;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace FitnessPanelMVC.Infrastructure;
 
-public class Context : IdentityDbContext<IdentityUser>
+public class Context : IdentityDbContext<ApplicationUser>
 {
     public Context(DbContextOptions<Context> options)
         : base(options)

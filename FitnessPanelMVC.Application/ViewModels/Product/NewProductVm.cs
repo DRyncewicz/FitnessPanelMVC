@@ -13,14 +13,23 @@ namespace FitnessPanelMVC.Application.ViewModels.Product
     public class NewProductVm : IMapFrom<FitnessPanelMVC.Domain.Model.Product>
     {
         public int Id { get; set; }
+
         public string? UserId { get; set; }
-        public virtual IdentityUser? User { get; set; }
+
+        public virtual ApplicationUser? User { get; set; }
+
         public string Name { get; set; }
+
         public string? Restaurant { get; set; }
+
         public string? Barcode { get; set; }
+
         public double CaloriesPer100g { get; set; }
+
         public double CarbsPer100g { get; set; }
+
         public double FatPer100g { get; set; }
+
         public double ProteinPer100g { get; set; }
 
         public void Mapping(Profile profile)

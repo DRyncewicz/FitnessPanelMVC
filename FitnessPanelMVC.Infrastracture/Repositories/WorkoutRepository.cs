@@ -18,14 +18,14 @@ namespace FitnessPanelMVC.Infrastructure.Repositories
             _dbContext = dbContext;
         }
 
-        public int CreateWorkout(Workout workout)
+        public int Create(Workout workout)
         {
             _dbContext.Workouts.Add(workout);
             _dbContext.SaveChanges();
             return workout.Id;
         }
 
-        public void DeleteWorkout(int id)
+        public void Delete(int id)
         {
             var workout = _dbContext.Workouts.Find(id);
             if (workout != null)
@@ -35,7 +35,7 @@ namespace FitnessPanelMVC.Infrastructure.Repositories
             }
         }
 
-        public int UpdateWorkout(Workout workout)
+        public int Update(Workout workout)
         {
             if (_dbContext.Workouts.Find(workout.Id) != null)
             {
@@ -46,7 +46,7 @@ namespace FitnessPanelMVC.Infrastructure.Repositories
             return 0;
         }
 
-        public IQueryable<Workout> GetAllWorkouts()
+        public IQueryable<Workout> GetAll()
         {
             var workouts = _dbContext.Workouts
                 .Include(w => w.WorkoutExercises)

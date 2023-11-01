@@ -10,7 +10,8 @@ namespace FitnessPanelMVC.Application.Interfaces
 {
     public interface IBodyIndicatorService
     {
-        int AddNewBodyIndicator(NewBodyIndicatorVm bMIFormVm);
-        BodyIndicator GetBodyIndicatorById(int bodyIndicatorId);
+        int AddNew(NewBodyIndicatorVm bMIFormVm);
+
+        BodyIndicator GetById(int bodyIndicatorId);
     }
 }

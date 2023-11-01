@@ -17,14 +17,14 @@ namespace FitnessPanelMVC.Infrastructure.Repositories
             _dbCotenxt = dbContext;
         }
 
-        public int CreateRecipeProduct(RecipeProduct recipeProduct)
+        public int Create(RecipeProduct recipeProduct)
         {
             _dbCotenxt.RecipeProduct.Add(recipeProduct);
             _dbCotenxt.SaveChanges();
             return recipeProduct.Id;
         }
 
-        public void DeleteRecipeProduct (int productId, int recipeId)
+        public void Delete (int productId, int recipeId)
         {
             var recipeProduct = _dbCotenxt.RecipeProduct.First(rp => rp.ProductId == productId &&
             rp.RecipeId == recipeId);
@@ -35,7 +35,7 @@ namespace FitnessPanelMVC.Infrastructure.Repositories
             }
         }
 
-        public int UpdateRecipeProduct (RecipeProduct recipeProduct)
+        public int Update (RecipeProduct recipeProduct)
         {
             if (_dbCotenxt.RecipeProduct.Find(recipeProduct.Id) != null)
             {
@@ -45,7 +45,8 @@ namespace FitnessPanelMVC.Infrastructure.Repositories
             }
             return 0;
         }
-        public IQueryable<RecipeProduct> GetAllRecipeProducts()
+
+        public IQueryable<RecipeProduct> GetAll()
         {
             var recipeProducts = _dbCotenxt.RecipeProduct;
             return recipeProducts.AsQueryable(); ;

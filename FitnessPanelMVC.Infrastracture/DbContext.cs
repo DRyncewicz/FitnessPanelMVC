@@ -10,18 +10,25 @@ using System.Threading.Tasks;
 
 namespace FitnessPanelMVC.Infrastructure
 {
-    public class DbContext : IdentityDbContext
+    public class DbContext : IdentityDbContext<ApplicationUser>
     {
         public DbSet<Meal> Meals { get; set; }
-        public DbSet<MealProduct> MealProduct { get; set; }
-        public DbSet<Product> Products { get; set; }
-        public DbSet<Recipe> Recipes { get; set; }
-        public DbSet<RecipeProduct> RecipeProduct { get; set; }
-        public DbSet<Workout> Workouts { get; set; }
-        public DbSet<WorkoutExercise> WorkoutExercise { get; set; }
-        public DbSet<Exercise> Exercises { get; set; }
-        public DbSet<BodyIndicator> BodyIndicators { get; set; }
 
+        public DbSet<MealProduct> MealProduct { get; set; }
+
+        public DbSet<Product> Products { get; set; }
+
+        public DbSet<Recipe> Recipes { get; set; }
+
+        public DbSet<RecipeProduct> RecipeProduct { get; set; }
+
+        public DbSet<Workout> Workouts { get; set; }
+
+        public DbSet<WorkoutExercise> WorkoutExercise { get; set; }
+
+        public DbSet<Exercise> Exercises { get; set; }
+
+        public DbSet<BodyIndicator> BodyIndicators { get; set; }
 
         public DbContext(DbContextOptions options) : base(options)
         {
@@ -71,23 +78,23 @@ namespace FitnessPanelMVC.Infrastructure
                 .HasForeignKey(IT => IT.ExerciseId);
 
             builder.Entity<Recipe>()
-                .HasOne<IdentityUser>(it => it.User)
+                .HasOne<ApplicationUser>(it => it.User)
                 .WithMany()
                 .HasForeignKey(it => it.UserId);
 
             builder.Entity<Meal>()
-                .HasOne<IdentityUser>(it => it.User)
+                .HasOne<ApplicationUser>(it => it.User)
                 .WithMany()
                 .HasForeignKey(it => it.UserId);
 
             builder.Entity<Product>()
-                .HasOne<IdentityUser>(it => it.User)
+                .HasOne<ApplicationUser>(it => it.User)
                 .WithMany()
                 .HasForeignKey(it => it.UserId)
                 .IsRequired(false);
 
             builder.Entity<Workout>()
-                .HasOne<IdentityUser>(it => it.User)
+                .HasOne<ApplicationUser>(it => it.User)
                 .WithMany()
                 .HasForeignKey(it => it.UserId);
 

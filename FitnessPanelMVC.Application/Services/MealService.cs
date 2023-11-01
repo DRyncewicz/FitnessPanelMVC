@@ -17,8 +17,11 @@ namespace FitnessPanelMVC.Application.Services
     public class MealService : IMealService
     {
         private readonly IMealRepository _mealRepository;
+
         private readonly IMealProductRepository _mealProductRepository;
+
         private readonly IProductRepository _productRepository;
+
         private readonly IMapper _mapper;
 
         public MealService(IMealRepository mealRepository, IMapper mapper, IMealProductRepository mealProductRepository, IProductRepository productRepository)
@@ -30,9 +33,9 @@ namespace FitnessPanelMVC.Application.Services
 
         }
 
-        public ListMealForListVm GetMealsForListByDate(DateTime date, string userId)
+        public ListMealForListVm GetForListByDate(DateTime date, string userId)
         {
-            var mealsVm = _mealRepository.GetAllMeals().
+            var mealsVm = _mealRepository.GetAll().
                 Where(i => i.MealDate.Date == date.Date && i.UserId == userId).
                 ProjectTo<MealForListVm>(_mapper.ConfigurationProvider).ToList();
 
@@ -43,22 +46,23 @@ namespace FitnessPanelMVC.Application.Services
             };
         }
 
-        public int AddNewMeal(NewMealVm newMealVm, string userId)
+        public int AddNew(NewMealVm newMealVm, string userId)
         {
 
             var meal = _mapper.Map<Meal>(newMealVm);
             meal.UserId = userId;
-            int mealId = _mealRepository.CreateMeal(meal);
+            int mealId = _mealRepository.Create(meal);
 
             return mealId;
         }
+
         public int AddProductToMeal(int productId, int mealId, double weight)
         {
-            var product = _productRepository.GetProductById(productId);
-            if (_mealProductRepository.GetAllMealProducts()
+            var product = _productRepository.GetById(productId);
+            if (_mealProductRepository.GetAll()
                 .Any(e => e.ProductId == productId && e.MealId == mealId))
             {
-                var mealProduct = _mealProductRepository.GetAllMealProducts()
+                var mealProduct = _mealProductRepository.GetAll()
                     .First(e => e.ProductId == productId && e.MealId == mealId);
                 mealProduct.Weight += Math.Round(weight, 2);
                 mealProduct.Calories += Math.Round(product.CaloriesPer100g * weight / 100, 2);
@@ -66,7 +70,7 @@ namespace FitnessPanelMVC.Application.Services
                 mealProduct.Carbs += Math.Round(product.CarbsPer100g * weight / 100, 2);
                 mealProduct.Protein += Math.Round(product.ProteinPer100g * weight / 100, 2);
 
-                _mealProductRepository.UpdateMealProduct(mealProduct);
+                _mealProductRepository.Update(mealProduct);
             }
             else
             {
@@ -81,37 +85,36 @@ namespace FitnessPanelMVC.Application.Services
                     Protein = Math.Round(product.ProteinPer100g * weight / 100, 2),
                 };
 
-                _mealProductRepository.CreateMealProduct(mealProduct);
+                _mealProductRepository.Create(mealProduct);
             }
 
             UpdateMealInformationsAfterProductChange(mealId);
             return mealId;
         }
-        public MealForListVm GetMealDetailsById(int mealId)
+
+        public MealForListVm GetDetailsById(int mealId)
         {
-            var meal = _mealRepository.GetAllMeals().
+            var meal = _mealRepository.GetAll().
                 FirstOrDefault(m => m.Id == mealId);
             var mealForListVm = _mapper.Map<MealForListVm>(meal);
 
             return mealForListVm;
         }
 
-        public void DeleteMealById(int mealId)
+        public void DeleteById(int mealId)
         {
-            _mealRepository.DeleteMeal(mealId);
+            _mealRepository.Delete(mealId);
         }
 
         public void DeleteProductFromMealById(int productId, int mealId)
         {
-            _mealProductRepository.DeleteMealProduct(productId, mealId);
+            _mealProductRepository.Delete(productId, mealId);
             UpdateMealInformationsAfterProductChange(mealId);
         }
 
-
         private void UpdateMealInformationsAfterProductChange(int mealId)
         {
-
-            var meal = _mealRepository.GetAllMeals()
+            var meal = _mealRepository.GetAll()
                           .FirstOrDefault(m => m.Id == mealId);
             var mealProducts = meal.MealProducts.ToList();
             meal.TotalCalories = mealProducts
@@ -123,7 +126,7 @@ namespace FitnessPanelMVC.Application.Services
             meal.TotalProtein = mealProducts
                 .Select(m => m.Protein).Sum();
 
-            _mealRepository.UpdateMeal(meal);
+            _mealRepository.Update(meal);
         }
     }
 }

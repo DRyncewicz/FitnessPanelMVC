@@ -25,8 +25,6 @@ namespace FitnessPanelMVC.Application.Services
             _productService = productService;
         }
 
-
-
         public void AddProductsFromFile(string? filePath, string userId)
         {
             var workbook = new XLWorkbook(filePath);
@@ -41,7 +39,6 @@ namespace FitnessPanelMVC.Application.Services
                 var productFat = ((double)row.Cell(9).Value);
                 var productCarbs = ((double)row.Cell(39).Value);
 
-
                 NewProductVm newProductVm = new NewProductVm()
                 {
                     Name = productName,
@@ -50,10 +47,11 @@ namespace FitnessPanelMVC.Application.Services
                     ProteinPer100g = productProtein,
                     FatPer100g = productFat
                 };
-                _productService.AddNewProduct(newProductVm, userId);
 
+                _productService.AddNew(newProductVm, userId);
             }
         }
+
         public byte[] GenerateBodyMetricsReport(BodyIndicator bodyIndicators)
         {
             using (var stream = new MemoryStream())
@@ -63,12 +61,9 @@ namespace FitnessPanelMVC.Application.Services
                     using (var pdf = new PdfDocument(writer))
                     {
                         var document = new Document(pdf);
-
-
                         document.Add(new Paragraph("Body indicator report")
                             .SetTextAlignment(TextAlignment.CENTER)
                             .SetFontSize(14));
-
 
                         document.Add(new Paragraph($"BMI: {bodyIndicators.BMI}"));
                         document.Add(new Paragraph($"PPM: {bodyIndicators.PPM}"));

@@ -11,7 +11,7 @@ namespace FitnessPanelMVC.Application.Validators
             RuleFor(x => x.Id).NotNull();
             RuleFor(x => x.Name).MaximumLength(255);
             RuleFor(x => x.Name).Must((product, name) => 
-                !productRepository.GetAllProducts()
+                !productRepository.GetAll()
                 .Any(p => p.Name == name && p.Id != product.Id))
                 .WithMessage("Product name must be unique.");
         }

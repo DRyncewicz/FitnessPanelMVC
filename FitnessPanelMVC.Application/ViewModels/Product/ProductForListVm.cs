@@ -11,9 +11,10 @@ namespace FitnessPanelMVC.Application.ViewModels.Product
     public class ProductForListVm : IMapFrom<FitnessPanelMVC.Domain.Model.Product>
     {
         public int Id { get; set; }
-        public string Name { get; set; }
-        public double CaloriesPer100g { get; set; }
 
+        public string Name { get; set; }
+
+        public double CaloriesPer100g { get; set; }
 
         public void Mapping(Profile profile)
         {

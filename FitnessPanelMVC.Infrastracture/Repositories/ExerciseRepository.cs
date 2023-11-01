@@ -11,19 +11,20 @@ namespace FitnessPanelMVC.Infrastructure.Repositories
     public class ExerciseRepository : IExerciseRepository
     {
         private readonly DbContext _dbCotenxt;
+
         public ExerciseRepository(DbContext dbContext)
         {
             _dbCotenxt = dbContext;
         }
 
-        public int CreateExercise(Exercise exercise)
+        public int Create(Exercise exercise)
         {
             _dbCotenxt.Exercises.Add(exercise);
             _dbCotenxt.SaveChanges();
             return exercise.Id;
         }
 
-        public void DeleteExercise(int id) 
+        public void Delete(int id) 
         {
             var exercise = _dbCotenxt.Exercises.Find(id);
             if (exercise != null)
@@ -44,18 +45,10 @@ namespace FitnessPanelMVC.Infrastructure.Repositories
             return 0;
         }
 
-        public IQueryable<Exercise> GetExercises()
+        public IQueryable<Exercise> GetAll()
         {
             var exercises = _dbCotenxt.Exercises;
             return exercises;
         }
-
-        public IQueryable<Exercise> GetExercisesByNameContains(string name)
-        {
-            var exercises = _dbCotenxt.Exercises.Where(x => x.Name.Contains(name));
-            return exercises;
-        }
-
-
     }
 }

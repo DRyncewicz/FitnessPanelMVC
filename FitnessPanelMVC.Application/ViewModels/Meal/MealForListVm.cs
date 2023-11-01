@@ -14,14 +14,20 @@ namespace FitnessPanelMVC.Application.ViewModels.Meal
     public class MealForListVm : IMapFrom<FitnessPanelMVC.Domain.Model.Meal>
     {
         public int Id { get; set; }
+
         public MealType MealType { get; set; }
+
         public DateTime MealDate { get; set; }
+
         public double TotalCalories { get; set; }
+
         public double TotalCarbs { get; set; }
+
         public double TotalFat { get; set; }
+
         public double TotalProtein { get; set; }
+
         public List<MealProductForListVm> MealProducts { get; set; }
-      
         
         public void Mapping(Profile profile)
         {

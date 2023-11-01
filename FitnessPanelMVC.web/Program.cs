@@ -18,23 +18,21 @@ var Configuration = builder.Configuration;
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnectionString") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<FitnessPanelMVC.Infrastructure.DbContext>(options =>
     options.UseSqlServer(connectionString));
-builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<FitnessPanelMVC.Infrastructure.DbContext>();
-
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure();
-
 builder.Services.AddControllersWithViews().AddFluentValidation();
-
 builder.Services.Configure<IdentityOptions>(options =>
 {
     options.Password.RequireDigit = true;
     options.Password.RequiredLength = 8;
     options.SignIn.RequireConfirmedAccount = false; 
 });
+
 builder.Services.AddAuthentication().AddGoogle(options =>
 {
     IConfigurationSection googleAuthNSection = Configuration.GetSection("Authentication:Google");
@@ -51,8 +49,6 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
-
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -66,6 +62,7 @@ else
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -73,6 +70,7 @@ using (var scope = app.Services.CreateScope())
     var dbContext = services.GetRequiredService<FitnessPanelMVC.Infrastructure.DbContext>();
     dbContext.Database.Migrate();
 }
+
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();
@@ -86,6 +84,7 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
 app.MapRazorPages();
 
 app.Run();

@@ -17,8 +17,11 @@ namespace FitnessPanelMVC.Application.Services
     public class WorkoutService : IWorkoutService
     {
         private readonly IWorkoutRepository _workoutRepository;
+
         private readonly IExerciseRepository _exerciseRepository;
+
         private readonly IMapper _mapper;
+
         private readonly IWorkoutExerciseRepository _workoutExerciseRepository;
 
         public WorkoutService(IExerciseRepository exerciseRepository,
@@ -32,37 +35,38 @@ namespace FitnessPanelMVC.Application.Services
             _exerciseRepository = exerciseRepository;
         }
 
-        public List<WorkoutForListVm> GetAllUserWorkoutsForList(DateTime Date, string userId)
+        public List<WorkoutForListVm> GetAllForList(DateTime Date, string userId)
         {
-            var workouts = _workoutRepository.GetAllWorkouts().
+            var workouts = _workoutRepository.GetAll().
                 Where(i => i.Date.Date == Date.Date && i.UserId == userId)
                 .ProjectTo<WorkoutForListVm>(_mapper.ConfigurationProvider).ToList();
 
             return workouts;
         }
 
-        public int AddNewWorkout(NewWorkoutVm workoutVm, string userId)
+        public int AddNew(NewWorkoutVm workoutVm, string userId)
         {
             var workout = _mapper.Map<Workout>(workoutVm);
             workout.UserId = userId;
-            _workoutRepository.CreateWorkout(workout);
+            _workoutRepository.Create(workout);
 
             return workout.Id;
         }
+
         public int AddExerciseToWorkout(int exerciseId, int workoutId, int durationSeconds, double burnedCalories)
         {
             TimeSpan duration = TimeSpan.FromSeconds(durationSeconds);
-            var exercise = _exerciseRepository.GetExercises()
+            var exercise = _exerciseRepository.GetAll()
                 .FirstOrDefault(i => i.Id == exerciseId);
-            if (_workoutExerciseRepository.GetAllWorkoutExercises()
+            if (_workoutExerciseRepository.GetAll()
                 .Any(e => e.WorkoutId == workoutId && e.ExerciseId == exerciseId))
             {
-                var workoutExercise = _workoutExerciseRepository.GetAllWorkoutExercises()
+                var workoutExercise = _workoutExerciseRepository.GetAll()
                     .First(e => e.WorkoutId == workoutId && e.ExerciseId == exerciseId);
                 workoutExercise.Duration += duration;
                 workoutExercise.CaloriesBurned += burnedCalories;
 
-                _workoutExerciseRepository.UpdateWorkoutExercise(workoutExercise);
+                _workoutExerciseRepository.Update(workoutExercise);
             }
             else
             {
@@ -74,21 +78,21 @@ namespace FitnessPanelMVC.Application.Services
                     CaloriesBurned = burnedCalories
                 };
 
-                _workoutExerciseRepository.CreateWorkoutExercise(workoutExercise);
+                _workoutExerciseRepository.Create(workoutExercise);
             }
 
             UpdateWorkoutInformationsAfterProductChange(workoutId);
             return workoutId;
         }
 
-        public void DeleteWorkoutById(int workoutId)
+        public void DeleteById(int workoutId)
         {
-            _workoutRepository.DeleteWorkout(workoutId);
+            _workoutRepository.Delete(workoutId);
         }
 
-        public WorkoutForListVm GetWorkoutDetailsById(int workoutId)
+        public WorkoutForListVm GetDetailsById(int workoutId)
         {
-            var workout = _workoutRepository.GetAllWorkouts().FirstOrDefault(w => w.Id == workoutId);
+            var workout = _workoutRepository.GetAll().FirstOrDefault(w => w.Id == workoutId);
             var workoutVm = _mapper.Map<WorkoutForListVm>(workout);
 
             return workoutVm;
@@ -96,12 +100,12 @@ namespace FitnessPanelMVC.Application.Services
 
         public void DeleteExerciseFromWorkoutByIds(int workoutId, int exerciseId)
         {
-            _workoutExerciseRepository.DeleteWorkoutExercise(workoutId, exerciseId);
+            _workoutExerciseRepository.Delete(workoutId, exerciseId);
         }
 
         private void UpdateWorkoutInformationsAfterProductChange(int workoutId)
         {
-            var workout = _workoutRepository.GetAllWorkouts().FirstOrDefault(w => w.Id == workoutId);
+            var workout = _workoutRepository.GetAll().FirstOrDefault(w => w.Id == workoutId);
             var workoutExercises = workout.WorkoutExercises.ToList();
             workout.TotalCaloriesBurned = workoutExercises.Select(w => w.CaloriesBurned).Sum();
             TimeSpan totalDuration = workoutExercises
@@ -109,7 +113,7 @@ namespace FitnessPanelMVC.Application.Services
                 .Aggregate(TimeSpan.Zero, (subtotal, t) => subtotal + t);
 
             workout.Duration = totalDuration;
-            _workoutRepository.UpdateWorkout(workout);
+            _workoutRepository.Update(workout);
         }
     }
 }

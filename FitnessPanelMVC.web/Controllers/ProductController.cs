@@ -1,5 +1,6 @@
 ﻿using FitnessPanelMVC.Application.Interfaces;
 using FitnessPanelMVC.Application.ViewModels.Product;
+using FitnessPanelMVC.Domain.Model;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -13,14 +14,17 @@ namespace FitnessPanelMVC.web.Controllers
     public class ProductController : Controller
     {
         private readonly IProductService _productService;
+
         private readonly IValidator<NewProductVm> _validator;
+
         private readonly IFileService _fileService;
-        private readonly UserManager<IdentityUser> _userManager;
+
+        private readonly UserManager<ApplicationUser> _userManager;
 
         public ProductController(IProductService productService,
             IValidator<NewProductVm> validator,
             IFileService fileService,
-            UserManager<IdentityUser> userManager)
+            UserManager<ApplicationUser> userManager)
         {
             _productService = productService;
             _validator = validator;
@@ -32,7 +36,7 @@ namespace FitnessPanelMVC.web.Controllers
         public IActionResult Index()
         {
             var userId = _userManager.GetUserId(User);
-            var model = _productService.GetAllProductsForList(20, 1, "", userId);
+            var model = _productService.GetAllForList(20, 1, "", userId);
             return View(model);
         }
 
@@ -48,7 +52,7 @@ namespace FitnessPanelMVC.web.Controllers
             {
                 searchString = String.Empty;
             }
-            var model = _productService.GetAllProductsForList(pageSize, pageNo.Value, searchString, userId);
+            var model = _productService.GetAllForList(pageSize, pageNo.Value, searchString, userId);
             return View(model);
         }
 
@@ -65,7 +69,7 @@ namespace FitnessPanelMVC.web.Controllers
             var result = _validator.Validate(newProduct);
             if (result.IsValid)
             {
-                _productService.AddNewProduct(newProduct, userId);
+                _productService.AddNew(newProduct, userId);
                 return RedirectToAction("Index");
             }
 
@@ -76,7 +80,7 @@ namespace FitnessPanelMVC.web.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult EditProduct(int id)
         {
-            var product = _productService.GetProductForEdit(id);
+            var product = _productService.GetForEdit(id);
             return View(product);
         }
 
@@ -87,26 +91,26 @@ namespace FitnessPanelMVC.web.Controllers
             var result = _validator.Validate(editedProduct);
             if (result.IsValid)
             {
-                _productService.UpdateProduct(editedProduct);
+                _productService.Update(editedProduct);
                 return RedirectToAction("Index");
             }
 
             return View();
         }
+
         [Authorize(Roles = "Admin")]
         public IActionResult DeleteProduct(int id)
         {
-            _productService.DeleteProduct(id);
+            _productService.DeleteById(id);
             return RedirectToAction("Index");
         }
 
         public IActionResult ProductDetails(int id)
         {
 
-            var productDetails = _productService.GetProductDetailsById(id);
+            var productDetails = _productService.GetDetailsById(id);
             return View(productDetails);
         }
-
 
         [HttpPost]
         [Authorize(Roles = "Admin")]

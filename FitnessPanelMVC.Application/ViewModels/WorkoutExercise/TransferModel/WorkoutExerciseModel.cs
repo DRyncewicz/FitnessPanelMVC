@@ -9,7 +9,9 @@ namespace FitnessPanelMVC.Application.ViewModels.WorkoutExercise.TransferModel
     public class WorkoutExerciseModel
     {
         public int ExerciseId { get; set; }
+
         public int DurationSeconds { get; set; }
+
         public double BurnedCalories { get; set; }
     }
 }

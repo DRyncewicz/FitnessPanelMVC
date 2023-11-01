@@ -9,9 +9,12 @@ namespace FitnessPanelMVC.Domain.Interface
 {
     public interface IWorkoutExerciseRepository
     {
-        public void CreateWorkoutExercise(WorkoutExercise workoutExercise);
-        public void DeleteWorkoutExercise(int workoutId, int exerciseId);
-        public IQueryable<WorkoutExercise> GetAllWorkoutExercises();
-        public void UpdateWorkoutExercise(WorkoutExercise workoutExercise);
+        public void Create(WorkoutExercise workoutExercise);
+
+        public void Delete(int workoutId, int exerciseId);
+
+        public IQueryable<WorkoutExercise> GetAll();
+
+        public void Update(WorkoutExercise workoutExercise);
     }
 }

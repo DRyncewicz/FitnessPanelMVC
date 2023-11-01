@@ -13,21 +13,25 @@ namespace FitnessPanelMVC.web.Controllers
     public class RecipeController : Controller
     {
         private readonly IRecipeService _recipeService;
+
         private readonly IProductService _productService;
-        private readonly UserManager<IdentityUser> _userManager;
+
+        private readonly UserManager<ApplicationUser> _userManager;
+
         public RecipeController(
             IRecipeService recipeService,
             IProductService productService,
-            UserManager<IdentityUser> userManager)
+            UserManager<ApplicationUser> userManager)
         {
             _recipeService = recipeService;
             _productService = productService;
             _userManager = userManager;
         }
+
         public IActionResult Index()
         {
             var userId = _userManager.GetUserId(User);
-            var model = _recipeService.GetRecipesForList(10, 1, "", userId);
+            var model = _recipeService.GetForList(10, 1, "", userId);
             return View(model);
         }
 
@@ -43,15 +47,16 @@ namespace FitnessPanelMVC.web.Controllers
             {
                 searchString = String.Empty;
             }
-            var model = _recipeService.GetRecipesForList(pageSize, pageNo.Value, searchString, userId);
+            var model = _recipeService.GetForList(pageSize, pageNo.Value, searchString, userId);
             return View(model);
         }
 
         public IActionResult DeleteRecipe(int id)
         {
-            _recipeService.DeleteRecipe(id);
+            _recipeService.Delete(id);
             return RedirectToAction("Index");
         }
+
         [HttpGet]
         public IActionResult AddRecipe()
         {
@@ -62,7 +67,7 @@ namespace FitnessPanelMVC.web.Controllers
         public IActionResult AddRecipe(NewRecipeVm newRecipeVm)
         {
             var userId = _userManager.GetUserId(User);
-            int id = _recipeService.AddNewRecipe(newRecipeVm, userId);
+            int id = _recipeService.AddNew(newRecipeVm, userId);
             HttpContext.Session.SetInt32("CurrentRecipeId", id);
             return RedirectToAction("AddProductsToRecipeList");
         }
@@ -71,7 +76,7 @@ namespace FitnessPanelMVC.web.Controllers
         public IActionResult AddProductsToRecipeList()
         {
             var userId = _userManager.GetUserId(User);
-            var model = _productService.GetAllProductsForList(20, 1, "", userId);
+            var model = _productService.GetAllForList(20, 1, "", userId);
             return View(model);
         }
 
@@ -88,7 +93,7 @@ namespace FitnessPanelMVC.web.Controllers
             {
                 searchString = String.Empty;
             }
-            var model = _productService.GetAllProductsForList(pageSize, pageNo.Value, searchString, userId);
+            var model = _productService.GetAllForList(pageSize, pageNo.Value, searchString, userId);
             return View(model);
         }
 
@@ -98,14 +103,14 @@ namespace FitnessPanelMVC.web.Controllers
             int recipeId = HttpContext.Session.GetInt32("CurrentRecipeId") ?? default;
             _recipeService.AddProductToRecipe(model.ProductId, recipeId, model.Weight);
             var productVm = _recipeService.UpdateProductOnRecipeChange(recipeId);
-            _productService.UpdateProduct(productVm);
+            _productService.Update(productVm);
             return Json(new { success = true, message = "Product added successfully" });
         }
 
         public IActionResult RecipeDetails(int id)
         {
             HttpContext.Session.SetInt32("CurrentRecipeId", id);
-            var model = _recipeService.GetRecipeDetailsById(id);
+            var model = _recipeService.GetDetailsById(id);
             return View(model);
         }
 

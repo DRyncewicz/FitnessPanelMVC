@@ -16,6 +16,7 @@ namespace FitnessPanelMVC.Application.Services
     public class ProductService : IProductService
     {
         private readonly IProductRepository _productRepository;
+
         private readonly IMapper _mapper;
 
         public ProductService(IProductRepository productRepository, IMapper mapper)
@@ -24,9 +25,9 @@ namespace FitnessPanelMVC.Application.Services
             _mapper = mapper;
         }
 
-        public ListProductForListVm GetAllProductsForList(int pageSize, int pageNo, string searchString, string userId)
+        public ListProductForListVm GetAllForList(int pageSize, int pageNo, string searchString, string userId)
         {
-            var products = _productRepository.GetAllProducts().
+            var products = _productRepository.GetAll().
                 Where(p => p.Name.StartsWith(searchString) && p.IsConfirmed == true ||
                 p.Name.StartsWith(searchString) && p.UserId == userId)
                 .ProjectTo<ProductForListVm>(_mapper.ConfigurationProvider).ToList();
@@ -43,42 +44,40 @@ namespace FitnessPanelMVC.Application.Services
             return productList;
         }
 
-
-        public int AddNewProduct(NewProductVm newProductVm, string userId)
+        public int AddNew(NewProductVm newProductVm, string userId)
         {
             var product = _mapper.Map<Product>(newProductVm);
             product.UserId = userId;
-            int productId = _productRepository.CreateProduct(product);
+            int productId = _productRepository.Create(product);
             return productId;
         }
 
-        public NewProductVm GetProductForEdit(int productId)
+        public NewProductVm GetForEdit(int productId)
         {
-            var product = _productRepository.GetProductById(productId);
+            var product = _productRepository.GetById(productId);
             var productVm = _mapper.Map<NewProductVm>(product);
             return productVm;
         }
 
-        public void UpdateProduct(NewProductVm editedProduct)
+        public void Update(NewProductVm editedProduct)
         {
             var product = _mapper.Map<Product>(editedProduct);
-            _productRepository.UpdateProduct(product);
+            _productRepository.Update(product);
         }
 
-        public void DeleteProduct(int productId)
+        public void DeleteById(int productId)
         {
-            _productRepository.DeleteProduct(productId);
+            _productRepository.Delete(productId);
         }
 
-        public ProductDetailsVm GetProductDetailsById(int productId)
+        public ProductDetailsVm GetDetailsById(int productId)
         {
-            var product = _productRepository.GetProductById(productId);
+            var product = _productRepository.GetById(productId);
             var productDetailsVm = _mapper.Map<ProductDetailsVm>(product);
             productDetailsVm = ProductDetailsReflection(productDetailsVm);
 
             return productDetailsVm;
         }
-
 
         private ProductDetailsVm ProductDetailsReflection(ProductDetailsVm productDetailsVm)
         {

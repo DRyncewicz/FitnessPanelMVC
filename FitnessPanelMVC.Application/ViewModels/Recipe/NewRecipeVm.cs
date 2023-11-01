@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FitnessPanelMVC.Application.Mapping;
 using FitnessPanelMVC.Application.ViewModels.RecipeProduct;
+using FitnessPanelMVC.Domain.Model;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -13,13 +14,21 @@ namespace FitnessPanelMVC.Application.ViewModels.Recipe
     public class NewRecipeVm : IMapFrom<FitnessPanelMVC.Domain.Model.Recipe>
     {
         public int Id { get; set; }
+
         public int UserId {  get; set; }
-        public virtual IdentityUser User { get; set; }
+
+        public virtual ApplicationUser User { get; set; }
+
         public string Name { get; set; }
+
         public double TotalCalories { get; set; }
+
         public double TotalCarbs { get; set; }
+
         public double TotalFat { get; set; }
+
         public double TotalProtein { get; set; }
+
         public List<RecipeProductForListVm> RecipeProducts { get; set; }
 
         public void Mapping(Profile profile)

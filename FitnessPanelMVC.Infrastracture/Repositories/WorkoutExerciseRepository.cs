@@ -11,18 +11,19 @@ namespace FitnessPanelMVC.Infrastructure.Repositories
     public class WorkoutExerciseRepository : IWorkoutExerciseRepository
     {
         private readonly DbContext _dbContext;
+
         public WorkoutExerciseRepository(DbContext dbContext)
         {
             _dbContext = dbContext;
         }
 
-        public void CreateWorkoutExercise(WorkoutExercise workoutExercise)
+        public void Create(WorkoutExercise workoutExercise)
         {
             _dbContext.WorkoutExercise.Add(workoutExercise);
             _dbContext.SaveChanges();
         }
 
-        public void DeleteWorkoutExercise(int workoutId, int exerciseId)
+        public void Delete(int workoutId, int exerciseId)
         {
             var workoutExercise = _dbContext.WorkoutExercise.FirstOrDefault(we => we.WorkoutId == workoutId && we.ExerciseId == exerciseId);
             if (workoutExercise != null) 
@@ -32,7 +33,7 @@ namespace FitnessPanelMVC.Infrastructure.Repositories
             }
         }
 
-        public void UpdateWorkoutExercise(WorkoutExercise workoutExercise)
+        public void Update(WorkoutExercise workoutExercise)
         {
             if (_dbContext.WorkoutExercise.Find(workoutExercise.WorkoutId, workoutExercise.ExerciseId) != null)
             {
@@ -40,7 +41,8 @@ namespace FitnessPanelMVC.Infrastructure.Repositories
                 _dbContext.SaveChanges();
             }
         }
-        public IQueryable<WorkoutExercise> GetAllWorkoutExercises()
+
+        public IQueryable<WorkoutExercise> GetAll()
         {
             var workoutExercises = _dbContext.WorkoutExercise;
             return workoutExercises.AsQueryable();

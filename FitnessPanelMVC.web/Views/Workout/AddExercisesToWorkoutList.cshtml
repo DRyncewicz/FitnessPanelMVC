@@ -117,13 +117,16 @@
 
         function toggleButtons(card, isTiming) {
             let startBtn = card.querySelector('.start-btn');
+            let addWithTimeBtn = card.querySelector('.add-with-time-btn'); 
             let timerControls = card.querySelector('.timer-controls');
 
             if (isTiming) {
                 startBtn.classList.add('d-none');
+                addWithTimeBtn.classList.add('d-none'); 
                 timerControls.classList.remove('d-none');
             } else {
                 startBtn.classList.remove('d-none');
+                addWithTimeBtn.classList.remove('d-none');
                 timerControls.classList.add('d-none');
             }
         }

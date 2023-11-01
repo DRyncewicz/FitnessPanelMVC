@@ -9,6 +9,7 @@ namespace FitnessPanelMVC.Application.ViewModels.Meal
     public class ListMealForListVm
     {
         public List<MealForListVm> Meals { get; set; }
+
         public int Count { get; set; }
     }
 }

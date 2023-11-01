@@ -9,9 +9,12 @@ namespace FitnessPanelMVC.Domain.Interface
 {
     public interface IRecipeRepository
     {
-        public int CreateRecipe(Recipe recipe);
-        public IQueryable<Recipe> GetAllRecipes();
-        public void RemoveRecipe(int id);
-        public int UpdateRecipe(Recipe recipe);
+        public int Create(Recipe recipe);
+
+        public IQueryable<Recipe> GetAll();
+
+        public void Remove(int id);
+
+        public int Update(Recipe recipe);
     }
 }

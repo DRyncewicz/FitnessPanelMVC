@@ -9,7 +9,8 @@ namespace FitnessPanelMVC.Application.Interfaces
 {
     public interface IExerciseService
     {
-        int AddNewExercise(ExerciseForListAndNewVm exerciseVm, string userId);
-        List<ExerciseForListAndNewVm> GetExercisesForLists();
+        int AddNew(ExerciseForListAndNewVm exerciseVm, string userId);
+
+        List<ExerciseForListAndNewVm> GetForList();
     }
 }

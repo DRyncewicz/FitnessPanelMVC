@@ -11,18 +11,20 @@ namespace FitnessPanelMVC.Infrastructure.Repositories
     public class BodyIndicatorRepository : IBodyIndicatorsRepository
     {
         private readonly DbContext _dbContext;
+
             public BodyIndicatorRepository(DbContext dbContext)
         {
             _dbContext = dbContext;
         }
-        public int CreateBodyIndicator(BodyIndicator bodyIndicator)
+
+        public int Create(BodyIndicator bodyIndicator)
         {
             _dbContext.BodyIndicators.Add(bodyIndicator);
             _dbContext.SaveChanges();
             return bodyIndicator.Id;
         }
 
-        public IQueryable<BodyIndicator> GetAllBodyIndicators()
+        public IQueryable<BodyIndicator> GetAll()
         {
             var bodyIndicators = _dbContext.BodyIndicators;
             return bodyIndicators;

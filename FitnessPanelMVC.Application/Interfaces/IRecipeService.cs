@@ -10,12 +10,18 @@ namespace FitnessPanelMVC.Application.Interfaces
 {
     public interface IRecipeService
     {
-        int AddNewRecipe(NewRecipeVm newRecipeVm, string userId);
+        int AddNew(NewRecipeVm newRecipeVm, string userId);
+
         int AddProductToRecipe(int productId, int recipeId, double weight);
+
         void DeleteProductFromMealById(int productId, int recipeId);
-        void DeleteRecipe(int recipeId);
-        RecipeForListVm GetRecipeDetailsById(int recipeId);
-        ListRecipeForListVm GetRecipesForList(int pageSize, int pageNo, string searchString, string userId);
+
+        void Delete(int recipeId);
+
+        RecipeForListVm GetDetailsById(int recipeId);
+
+        ListRecipeForListVm GetForList(int pageSize, int pageNo, string searchString, string userId);
+
         NewProductVm UpdateProductOnRecipeChange(int recipeId);
     }
 }

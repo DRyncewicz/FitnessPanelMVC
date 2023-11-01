@@ -33,10 +33,10 @@ namespace FitnessPanelMVC.Tests
             var expectedProductId = 1;
 
             mockMapper.Setup(m => m.Map<Product>(It.IsAny<NewProductVm>())).Returns(new Product());
-            mockRepository.Setup(r => r.CreateProduct(It.IsAny<Product>())).Returns(expectedProductId);
+            mockRepository.Setup(r => r.Create(It.IsAny<Product>())).Returns(expectedProductId);
 
             // Act
-            var result = service.AddNewProduct(newProductVm, userId);
+            var result = service.AddNew(newProductVm, userId);
 
             // Assert
             Assert.Equal(expectedProductId, result);
@@ -62,13 +62,13 @@ namespace FitnessPanelMVC.Tests
             };
 
             mockMapper.Setup(m => m.Map<Product>(It.IsAny<NewProductVm>())).Returns(new Product());
-            mockRepository.Setup(r => r.UpdateProduct(It.IsAny<Product>()));
+            mockRepository.Setup(r => r.Update(It.IsAny<Product>()));
 
             // Act
-            service.UpdateProduct(editedProductVm);
+            service.Update(editedProductVm);
 
             // Assert
-            mockRepository.Verify(r => r.UpdateProduct(It.IsAny<Product>()), Times.Once);
+            mockRepository.Verify(r => r.Update(It.IsAny<Product>()), Times.Once);
         }
 
         [Fact]
@@ -79,13 +79,13 @@ namespace FitnessPanelMVC.Tests
             var service = new ProductService(mockRepository.Object, null); 
             var productId = 1;
 
-            mockRepository.Setup(r => r.DeleteProduct(productId));
+            mockRepository.Setup(r => r.Delete(productId));
 
             // Act
-            service.DeleteProduct(productId);
+            service.DeleteById(productId);
 
             // Assert
-            mockRepository.Verify(r => r.DeleteProduct(productId), Times.Once);
+            mockRepository.Verify(r => r.Delete(productId), Times.Once);
         }
 
         [Fact]
@@ -119,11 +119,11 @@ namespace FitnessPanelMVC.Tests
                 Restaurant = "Test"
             }; 
 
-            mockRepository.Setup(r => r.GetProductById(productId)).Returns(product);
+            mockRepository.Setup(r => r.GetById(productId)).Returns(product);
             mockMapper.Setup(m => m.Map<NewProductVm>(It.IsAny<Product>())).Returns(productVm);
 
             // Act
-            var result = service.GetProductForEdit(productId);
+            var result = service.GetForEdit(productId);
 
             // Assert
             Assert.Equal(productVm, result);

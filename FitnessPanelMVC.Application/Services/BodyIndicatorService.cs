@@ -13,16 +13,19 @@ using System.Threading.Tasks;
 namespace FitnessPanelMVC.Application.Services
 {
     public class BodyIndicatorService : IBodyIndicatorService
+
     {
         private readonly IBodyIndicatorsRepository _bodyIndicatorRepository;
+
         private readonly IMapper _mapper;
+
         public BodyIndicatorService(IBodyIndicatorsRepository bodyIndicatorRepository, IMapper mapper)
         {
             _bodyIndicatorRepository = bodyIndicatorRepository;
             _mapper = mapper;
         }
 
-        public int AddNewBodyIndicator(NewBodyIndicatorVm newBodyIndicatorVm)
+        public int AddNew(NewBodyIndicatorVm newBodyIndicatorVm)
         {
             var bodyIndicator = _mapper.Map<BodyIndicator>(newBodyIndicatorVm);
             bodyIndicator.BMI = bodyIndicator.Mass / Math.Pow(((double)bodyIndicator.Height/100), 2);
@@ -41,17 +44,14 @@ namespace FitnessPanelMVC.Application.Services
             bodyIndicator.WHtR = ((double)bodyIndicator.HipCircumference / (double)bodyIndicator.Height) * 100.0;
             bodyIndicator.NMC = bodyIndicator.Height - 100;
 
-            _bodyIndicatorRepository.CreateBodyIndicator(bodyIndicator);
+            _bodyIndicatorRepository.Create(bodyIndicator);
             return bodyIndicator.Id;
         }
 
-
-        public BodyIndicator GetBodyIndicatorById(int bodyIndicatorId)
+        public BodyIndicator GetById(int bodyIndicatorId)
         {
-            var bodyIndicator = _bodyIndicatorRepository.GetAllBodyIndicators().FirstOrDefault(b => b.Id == bodyIndicatorId);
+            var bodyIndicator = _bodyIndicatorRepository.GetAll().FirstOrDefault(b => b.Id == bodyIndicatorId);
             return bodyIndicator;
         }
-
-
     }
 }

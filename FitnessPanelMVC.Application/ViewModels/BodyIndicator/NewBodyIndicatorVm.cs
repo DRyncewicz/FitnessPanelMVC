@@ -12,15 +12,20 @@ namespace FitnessPanelMVC.Application.ViewModels.BodyIndicator
     public class NewBodyIndicatorVm : IMapFrom<FitnessPanelMVC.Domain.Model.BodyIndicator>
     {
         public int Id { get; set; }
+
         public string Sex { get; set; }
+
         public double Mass { get; set; }
+
         public int Height { get; set; }
+
         public int Age { get; set; }
+
         public PAL PAL { get; set; }
+
         public int HipCircumference { get; set; }
+
         public int AbdominalCircumference { get; set; }
-
-
 
         public void Mapping(Profile profile)
         {

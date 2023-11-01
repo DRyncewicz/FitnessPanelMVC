@@ -16,24 +16,26 @@ namespace FitnessPanelMVC.Application.Services
     public class ExerciseService : IExerciseService
     {
         private readonly IExerciseRepository _exerciseRepository;
+
         private readonly IMapper _mapper;
+
         public ExerciseService(IExerciseRepository exerciseRepository, IMapper mapper)
         {
             _exerciseRepository = exerciseRepository;
             _mapper = mapper;
         }
 
-        public List<ExerciseForListAndNewVm> GetExercisesForLists()
+        public List<ExerciseForListAndNewVm> GetForList()
         {
-            var exercisesVm = _exerciseRepository.GetExercises()
+            var exercisesVm = _exerciseRepository.GetAll()
                 .ProjectTo<ExerciseForListAndNewVm>(_mapper.ConfigurationProvider).ToList();
             return exercisesVm;
         }
 
-        public int AddNewExercise(ExerciseForListAndNewVm exerciseVm,string userId)
+        public int AddNew(ExerciseForListAndNewVm exerciseVm,string userId)
         {
             var exercise = _mapper.Map<Exercise>(exerciseVm);
-            _exerciseRepository.CreateExercise(exercise);
+            _exerciseRepository.Create(exercise);
             return exercise.Id;
         }
     }

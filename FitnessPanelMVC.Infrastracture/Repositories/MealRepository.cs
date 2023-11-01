@@ -18,7 +18,8 @@ namespace FitnessPanelMVC.Infrastructure.Repositories
         {
             _dbContext = dbContext;
         }
-        public int CreateMeal(Meal meal)
+
+        public int Create(Meal meal)
         {
             _dbContext.Meals.Add(meal);
             _dbContext.SaveChanges();
@@ -26,7 +27,7 @@ namespace FitnessPanelMVC.Infrastructure.Repositories
 
         }
 
-        public void DeleteMeal(int id)
+        public void Delete(int id)
         {
             var meal = _dbContext.Meals.Find(id);
             if (meal != null)
@@ -36,14 +37,14 @@ namespace FitnessPanelMVC.Infrastructure.Repositories
             }
         }
 
-        public IQueryable<Meal> GetAllMeals()
+        public IQueryable<Meal> GetAll()
         {
             var meals = _dbContext.Meals.Include(m => m.MealProducts)
                 .ThenInclude(mp => mp.Product);
             return meals;
         }
 
-        public int UpdateMeal(Meal meal)
+        public int Update(Meal meal)
         {
             if (_dbContext.Meals.Find(meal.Id) != null)
             {

@@ -12,19 +12,20 @@ namespace FitnessPanelMVC.Infrastructure.Repositories
     internal class RecipeRepository : IRecipeRepository
     {
         private readonly DbContext _dbContext;
+
         public RecipeRepository(DbContext dbContext)
         {
             _dbContext = dbContext;
         }
 
-        public int CreateRecipe(Recipe recipe)
+        public int Create(Recipe recipe)
         {
             _dbContext.Recipes.Add(recipe);
             _dbContext.SaveChanges();
             return recipe.Id;
         }
 
-        public void RemoveRecipe(int id)
+        public void Remove(int id)
         {
             var recipe = _dbContext.Recipes.Find(id);
             if (recipe != null)
@@ -34,7 +35,7 @@ namespace FitnessPanelMVC.Infrastructure.Repositories
             }
         }
 
-        public int UpdateRecipe(Recipe recipe)
+        public int Update(Recipe recipe)
         {
             if(_dbContext.Recipes.Find(recipe.Id) != null)
             {
@@ -45,7 +46,7 @@ namespace FitnessPanelMVC.Infrastructure.Repositories
             return 0;
         }
 
-        public IQueryable<Recipe> GetAllRecipes()
+        public IQueryable<Recipe> GetAll()
         {
             var recipes = _dbContext.Recipes
                 .Include(m => m.RecipeProducts)

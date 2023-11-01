@@ -13,8 +13,11 @@ namespace FitnessPanelMVC.web.Controllers
     public class BodyIndicatorController : Controller
     {
         private readonly IBodyIndicatorService _bodyIndicatorService;
+
         private readonly IFileService _fileService;
+
         private readonly IValidator<NewBodyIndicatorVm> _validator;
+
         public BodyIndicatorController(IBodyIndicatorService bodyIndicatorService, IFileService fileService, IValidator<NewBodyIndicatorVm> validator)
         {
             _bodyIndicatorService = bodyIndicatorService;
@@ -34,8 +37,8 @@ namespace FitnessPanelMVC.web.Controllers
             var result = _validator.Validate(BMIFormVm);
             if (result.IsValid)
             {
-                int id = _bodyIndicatorService.AddNewBodyIndicator(BMIFormVm);
-                var bodyIndicator = _bodyIndicatorService.GetBodyIndicatorById(id);
+                int id = _bodyIndicatorService.AddNew(BMIFormVm);
+                var bodyIndicator = _bodyIndicatorService.GetById(id);
                 var report = _fileService.GenerateBodyMetricsReport(bodyIndicator);
                 return File(report, "application/pdf", "Raport.pdf");
             }

@@ -10,11 +10,16 @@ namespace FitnessPanelMVC.Application.Interfaces
 {
     public interface IMealService
     {
-        int AddNewMeal(NewMealVm newMealVm, string userId);
+        int AddNew(NewMealVm newMealVm, string userId);
+
         int AddProductToMeal(int productId, int mealId, double weight);
-        void DeleteMealById(int mealId);
+
+        void DeleteById(int mealId);
+
         void DeleteProductFromMealById(int productId, int mealId);
-        MealForListVm GetMealDetailsById(int mealId);
-        ListMealForListVm GetMealsForListByDate(DateTime date, string userId);
+
+        MealForListVm GetDetailsById(int mealId);
+
+        ListMealForListVm GetForListByDate(DateTime date, string userId);
     }
 }

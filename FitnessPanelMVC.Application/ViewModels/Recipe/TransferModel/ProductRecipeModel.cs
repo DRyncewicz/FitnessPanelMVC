@@ -9,6 +9,7 @@ namespace FitnessPanelMVC.Application.ViewModels.Recipe.TransferModel
     public class ProductRecipeModel
     {
         public int ProductId { get; set; }
+
         public double Weight { get; set; }
     }
 }

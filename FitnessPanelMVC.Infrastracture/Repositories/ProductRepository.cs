@@ -12,19 +12,20 @@ namespace FitnessPanelMVC.Infrastructure.Repositories
     public class ProductRepository : IProductRepository
     {
         private readonly DbContext _dbContext;
+
         public ProductRepository(DbContext dbContext)
         {
             _dbContext = dbContext;
         }
 
-        public int CreateProduct(Product product)
+        public int Create(Product product)
         {
             _dbContext.Products.Add(product);
             _dbContext.SaveChanges();
             return product.Id;
         }
 
-        public void DeleteProduct(int id)
+        public void Delete(int id)
         {
             var product = _dbContext.Products.Find(id);
             if (product != null)
@@ -34,13 +35,13 @@ namespace FitnessPanelMVC.Infrastructure.Repositories
             }
         }
 
-        public IQueryable<Product> GetAllProducts()
+        public IQueryable<Product> GetAll()
         {
             var products = _dbContext.Products;
             return products.AsQueryable();
         }
 
-        public Product GetProductById(int id)
+        public Product GetById(int id)
         {
             var product = _dbContext.Products.FirstOrDefault(x => x.Id == id);
             if (product == null)
@@ -50,8 +51,7 @@ namespace FitnessPanelMVC.Infrastructure.Repositories
             return product;
         }
 
-
-        public void UpdateProduct(Product product)
+        public void Update(Product product)
         {
             var existingProduct = _dbContext.Products.Find(product.Id);
             if (existingProduct != null)
