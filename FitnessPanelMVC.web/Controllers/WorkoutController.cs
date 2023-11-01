@@ -1,6 +1,7 @@
 ﻿using FitnessPanelMVC.Application.Interfaces;
 using FitnessPanelMVC.Application.ViewModels.Workout;
 using FitnessPanelMVC.Application.ViewModels.WorkoutExercise.TransferModel;
+using Humanizer.Localisation.DateToOrdinalWords;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -63,9 +64,23 @@ namespace FitnessPanelMVC.web.Controllers
             _workoutService.AddExerciseToWorkout(model.ExerciseId, workoutId, model.DurationSeconds, model.BurnedCalories);
             return Json(new { success = true, message = "Exercise added successfully." });
         }
+
         public IActionResult DeleteWorkout(int id)
         {
             _workoutService.DeleteWorkoutById(id);
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult WorkoutDetails(int id)
+        {
+            HttpContext.Session.SetInt32("CurrentWorkoutId", id);
+            var  model = _workoutService.GetWorkoutDetailsById(id);
+            return View(model);
+        }
+
+        public IActionResult DeleteExerciseFromWorkout(int workoutId, int exerciseId)
+        {
+            _workoutService.DeleteExerciseFromWorkoutByIds(workoutId, exerciseId);
             return RedirectToAction("Index");
         }
     }

@@ -12,7 +12,9 @@ namespace FitnessPanelMVC.Application.Interfaces
     {
         int AddNewRecipe(NewRecipeVm newRecipeVm, string userId);
         int AddProductToRecipe(int productId, int recipeId, double weight);
+        void DeleteProductFromMealById(int productId, int recipeId);
         void DeleteRecipe(int recipeId);
+        RecipeForListVm GetRecipeDetailsById(int recipeId);
         ListRecipeForListVm GetRecipesForList(int pageSize, int pageNo, string searchString, string userId);
         NewProductVm UpdateProductOnRecipeChange(int recipeId);
     }

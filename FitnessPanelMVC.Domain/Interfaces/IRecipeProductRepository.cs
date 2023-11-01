@@ -10,7 +10,7 @@ namespace FitnessPanelMVC.Domain.Interface
     public interface IRecipeProductRepository
     {
         public int CreateRecipeProduct(RecipeProduct recipeProduct);
-        public void DeleteRecipeProduct(int id);
+        public void DeleteRecipeProduct(int productId, int recipeId);
         public IQueryable<RecipeProduct> GetAllRecipeProducts();
         public int UpdateRecipeProduct(RecipeProduct recipeProduct);
     }

@@ -2,6 +2,7 @@
 using FitnessPanelMVC.Application.Services;
 using FitnessPanelMVC.Application.ViewModels.MealProduct.TransferModel;
 using FitnessPanelMVC.Application.ViewModels.Recipe;
+using FitnessPanelMVC.Domain.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -77,6 +78,7 @@ namespace FitnessPanelMVC.web.Controllers
         [HttpPost]
         public IActionResult AddProductsToRecipeList(int pageSize, int? pageNo, string searchString)
         {
+            
             var userId = _userManager.GetUserId(User);
             if (!pageNo.HasValue)
             {
@@ -102,7 +104,15 @@ namespace FitnessPanelMVC.web.Controllers
 
         public IActionResult RecipeDetails(int id)
         {
-            return View();
+            HttpContext.Session.SetInt32("CurrentRecipeId", id);
+            var model = _recipeService.GetRecipeDetailsById(id);
+            return View(model);
+        }
+
+        public IActionResult DeleteProductFromRecipe (int productId, int recipeId)
+        {
+            _recipeService.DeleteProductFromMealById(productId, recipeId);
+            return RedirectToAction("Index");
         }
     }
 }

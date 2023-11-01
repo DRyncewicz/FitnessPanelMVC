@@ -24,9 +24,10 @@ namespace FitnessPanelMVC.Infrastructure.Repositories
             return recipeProduct.Id;
         }
 
-        public void DeleteRecipeProduct (int id)
+        public void DeleteRecipeProduct (int productId, int recipeId)
         {
-            var recipeProduct = _dbCotenxt.RecipeProduct.Find(id);
+            var recipeProduct = _dbCotenxt.RecipeProduct.First(rp => rp.ProductId == productId &&
+            rp.RecipeId == recipeId);
             if (recipeProduct != null)
             {
                 _dbCotenxt.RecipeProduct.Remove(recipeProduct);

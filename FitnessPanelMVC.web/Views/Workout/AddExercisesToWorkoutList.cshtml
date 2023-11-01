@@ -20,6 +20,7 @@
                             Calories Burned/Min: @item.Value.AverageCaloriesBurnedPerMinute
                         </p>
                         <button class="btn btn-primary start-btn">Start Exercise</button>
+                        <button class="btn btn-info add-with-time-btn">Add with Known Time</button>
                         <div class="timer-controls d-none">
                             <button class="btn btn-warning stop-btn">Stop</button>
                             <button class="btn btn-success resume-btn d-none">Resume</button>
@@ -35,6 +36,18 @@
 <div class="mt-4">
     <a href="@Url.Action("Index")" class="btn btn-secondary">Back to List</a>
 </div>
+<div id="knownTimeModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <form id="knownTimeForm">
+            <label for="timeInput">Enter Time (in seconds):</label>
+            <input type="number" id="timeInput" name="time" min="1">
+            <input type="hidden" id="exerciseIdInput" name="exerciseId">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</div>
+
 
 @section Scripts {
     <script>
@@ -89,13 +102,17 @@
         }
 
         function stopTimer(exerciseId) {
-            clearInterval(timers[exerciseId].interval);
+            if (timers[exerciseId]) {
+                clearInterval(timers[exerciseId].interval);
+            }
         }
 
         function resetTimer(exerciseId) {
-            stopTimer(exerciseId);
-            timers[exerciseId].seconds = 0;
-            displayTime(exerciseId);
+            if (timers[exerciseId]) {
+                stopTimer(exerciseId);
+                timers[exerciseId].seconds = 0;
+                displayTime(exerciseId);
+            }
         }
 
         function toggleButtons(card, isTiming) {
@@ -176,6 +193,71 @@
                 }
             });
         }
+
+        document.querySelectorAll('.add-with-time-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                var exerciseId = btn.closest('.exercise-card').getAttribute('data-exercise');
+                document.getElementById('exerciseIdInput').value = exerciseId;
+                document.getElementById('knownTimeModal').style.display = 'block';
+            });
+        });
+        var modal = document.getElementById('knownTimeModal');
+        var span = document.getElementsByClassName("close")[0];
+
+        span.onclick = function () {
+            modal.style.display = "none";
+        }
+
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        document.getElementById('knownTimeForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            var exerciseId = document.getElementById('exerciseIdInput').value;
+            var timeInMinutes = parseInt(document.getElementById('timeInput').value, 10) / 60;
+            var averageCaloriesBurnedPerMinute = parseFloat(document.querySelector('.exercise-card[data-exercise="' + exerciseId + '"] .card-text').textContent.split('Calories Burned/Min: ')[1]);
+
+
+            var durationSeconds = timeInMinutes * 60;
+            var burnedCalories = timeInMinutes * averageCaloriesBurnedPerMinute;
+
+
+            fetch('/Workout/FinishExercise', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: JSON.stringify({
+                    exerciseId: exerciseId,
+                    durationSeconds: durationSeconds,
+                    burnedCalories: burnedCalories.toFixed(2)
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert("Exercise finished successfully");
+                        resetTimer(exerciseId);
+                        let card = document.querySelector('.exercise-card[data-exercise="' + exerciseId + '"]');
+                        toggleButtons(card, false);
+                    } else {
+                        alert("Error finishing exercise");
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert("Error finishing exercise");
+                });
+            setCardActiveState(exerciseId, false);
+            console.log('Exercise ID:', exerciseId, 'Time:', durationSeconds);
+
+            modal.style.display = "none";
+        });
+
     </script>
 }
 @section Styles {
@@ -188,6 +270,41 @@
         .inactive-exercise {
             pointer-events: none;
             opacity: 0.6;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
         }
     </style>
 }

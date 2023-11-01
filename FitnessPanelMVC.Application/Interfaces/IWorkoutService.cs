@@ -12,7 +12,9 @@ namespace FitnessPanelMVC.Application.Interfaces
     {
         int AddExerciseToWorkout(int exerciseId, int workoutId, int durationSeconds, double burnedCalories);
         int AddNewWorkout(NewWorkoutVm newWorkoutVm, string userId);
+        void DeleteExerciseFromWorkoutByIds(int workoutId, int exerciseId);
         void DeleteWorkoutById(int workoutId);
         List<WorkoutForListVm> GetAllUserWorkoutsForList(DateTime Date, string userId);
+        WorkoutForListVm GetWorkoutDetailsById(int workoutId);
     }
 }

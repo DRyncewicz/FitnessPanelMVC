@@ -25,7 +25,7 @@ namespace FitnessPanelMVC.Application.ViewModels.Workout
 
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<FitnessPanelMVC.Domain.Model.Workout, WorkoutForListVm>();
+            profile.CreateMap<FitnessPanelMVC.Domain.Model.Workout, WorkoutForListVm>().ReverseMap();
         }
     }
 }

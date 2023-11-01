@@ -140,5 +140,12 @@ namespace FitnessPanelMVC.Application.Services
 
             return recipeVm;
         }
+
+        public void DeleteProductFromMealById(int productId, int recipeId)
+        {
+            _recipeProductRepository.DeleteRecipeProduct(productId, recipeId);
+            UpdateRecipeInformationsAfterProductChange(recipeId);
+            UpdateProductOnRecipeChange(recipeId);
+        }
     }
 }

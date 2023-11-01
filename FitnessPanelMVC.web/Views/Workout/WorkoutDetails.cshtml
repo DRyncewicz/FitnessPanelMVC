@@ -1,0 +1,53 @@
+﻿@model FitnessPanelMVC.Application.ViewModels.Workout.WorkoutForListVm
+
+@{
+    ViewData["Title"] = "WorkoutDetails";
+}
+
+<h1>Workout Details</h1>
+
+
+
+<div class="card">
+    <div class="card-body">
+        <h4 class="card-title">@Model.Name</h4>
+        <p class="card-text">
+            <strong>Total Calories:</strong> @Model.Date <br>
+            <strong>Total Carbs:</strong> @Model.Description<br>
+            <strong>Total Fat:</strong> @Model.Duration<br>
+            <strong>Total Protein:</strong> @Model.TotalCaloriesBurned 
+        </p>
+    </div>
+</div>
+
+<h3 class="mt-4">Products in this recipe</h3>
+
+<table class="table table-striped mt-3">
+    <thead>
+        <tr>
+            <th>Exercuse name</th>
+            <th>Exercise duration</th>
+            <th>Calories burned</th>
+
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var workoutExercise in Model.WorkoutExercises)
+        {
+            <tr>
+                <Td>@workoutExercise.ExerciseName</Td>
+                <td>@workoutExercise.Duration</td>
+                <td>@workoutExercise.CaloriesBurned</td>
+                <td>
+                    <a href="@Url.Action("DeleteExerciseFromWorkout", new { exerciseId = workoutExercise.ExerciseId, workoutId = Model.Id })" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="mt-4">
+    <a href="@Url.Action("AddExercisesToWorkoutList")" class="btn btn-primary">Add exercise</a>
+    <a href="@Url.Action("Index")" class="btn btn-secondary">Back to List</a>
+</div>

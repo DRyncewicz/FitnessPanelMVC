@@ -1,0 +1,54 @@
+﻿@model FitnessPanelMVC.Application.ViewModels.Recipe.RecipeForListVm
+
+@{
+    ViewData["Title"] = "RecipeDetails";
+}
+
+<h1>Recipe details</h1>
+
+<div class="card">
+    <div class="card-body">
+        <h4 class="card-title">@Model.Name</h4>
+        <p class="card-text">
+            <strong>Total Calories:</strong> @Model.TotalCalories.ToString("F2") <br>
+            <strong>Total Carbs:</strong> @Model.TotalCarbs.ToString("F2") g<br>
+            <strong>Total Fat:</strong> @Model.TotalFat.ToString("F2") g<br>
+            <strong>Total Protein:</strong> @Model.TotalProtein.ToString("F2") g
+        </p>
+    </div>
+</div>
+
+<h3 class="mt-4">Products in this recipe</h3>
+
+<table class="table table-striped mt-3">
+    <thead>
+        <tr>
+            <th>Product Name</th>
+            <th>Weight (g)</th>
+            <th>Proteins</th>
+            <th>Carbs</th>
+            <th>Fat</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var recipeProduct in Model.RecipeProducts)
+        {
+            <tr>
+                <td>@recipeProduct.ProductName</td>
+                <td>@recipeProduct.Weight</td>
+                <td>@recipeProduct.Protein g</td>
+                <td>@recipeProduct.Carbs g</td>
+                <td>@recipeProduct.Fat g</td>
+                <td>
+                    <a href="@Url.Action("DeleteProductFromRecipe", new { productId = recipeProduct.ProductId, recipeId = Model.Id })" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="mt-4">
+    <a href="@Url.Action("AddProductsToRecipeList")" class="btn btn-primary">Add products</a>
+    <a href="@Url.Action("Index")" class="btn btn-secondary">Back to List</a>
+</div>
