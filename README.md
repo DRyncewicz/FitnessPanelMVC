@@ -2,14 +2,14 @@
 The application was created to manage meals and workouts by the user. It has a database of products and exercises from which users create their own plans.
 
 # Table of Contents
-[Database strucutre][#Database structure]
-[Technologies][#Technologies]
+[Database strucutre][#database structure]
+[Technologies][#technologies]
 
 
-##Database structure
+#Database structure
 ![image](https://github.com/DRyncewicz/FitnessPanelMVC/assets/97690111/49d2e1d7-9593-434d-a72e-7783d6ab7c9b)
 
-##Technologies
+#Technologies
  <PackageReference Include="ClosedXML" Version="0.102.1" />
  <PackageReference Include="itext7" Version="8.0.2" />
  <PackageReference Include="itext7.bouncy-castle-adapter" Version="8.0.2" />
