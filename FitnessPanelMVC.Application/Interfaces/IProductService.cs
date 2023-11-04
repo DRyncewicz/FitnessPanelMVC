@@ -10,7 +10,7 @@ namespace FitnessPanelMVC.Application.Interfaces
     public interface IProductService
     {
         int AddNew(NewProductVm newProductVm, string userId);
-
+        Task AddFromXmlFile(string filePath, string userId);
         void DeleteById(int productId);
 
         public ListProductForListVm GetAllForList(int pageSize, int pageNo, string searchString, string userId);

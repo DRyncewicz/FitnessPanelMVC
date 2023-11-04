@@ -3,6 +3,7 @@ using AutoMapper.QueryableExtensions;
 using FitnessPanelMVC.Application.Interfaces;
 using FitnessPanelMVC.Application.ViewModels.Product;
 using FitnessPanelMVC.Domain.Interface;
+using FitnessPanelMVC.Domain.Interfaces;
 using FitnessPanelMVC.Domain.Model;
 using System;
 using System.Collections.Generic;
@@ -19,10 +20,13 @@ namespace FitnessPanelMVC.Application.Services
 
         private readonly IMapper _mapper;
 
-        public ProductService(IProductRepository productRepository, IMapper mapper)
+        private readonly IXmlProductReader _xmlProductReader;
+
+        public ProductService(IProductRepository productRepository, IMapper mapper, IXmlProductReader xmlProductReader)
         {
             _productRepository = productRepository;
             _mapper = mapper;
+            _xmlProductReader = xmlProductReader;
         }
 
         public ListProductForListVm GetAllForList(int pageSize, int pageNo, string searchString, string userId)
@@ -79,6 +83,13 @@ namespace FitnessPanelMVC.Application.Services
             return productDetailsVm;
         }
 
+        public async Task AddFromXmlFile(string filePath, string userId)
+        {
+            List<Product> products = await _xmlProductReader.ReadFromFile(filePath, userId);
+            await _productRepository.CreateRangeAsync(products);
+        }
+
+
         private ProductDetailsVm ProductDetailsReflection(ProductDetailsVm productDetailsVm)
         {
             Type type = productDetailsVm.GetType();
@@ -94,5 +105,7 @@ namespace FitnessPanelMVC.Application.Services
 
             return productDetailsVm;
         }
+
+
     }
 }

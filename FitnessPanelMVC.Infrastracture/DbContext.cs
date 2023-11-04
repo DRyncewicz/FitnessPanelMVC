@@ -30,6 +30,8 @@ namespace FitnessPanelMVC.Infrastructure
 
         public DbSet<BodyIndicator> BodyIndicators { get; set; }
 
+        public DbSet<UserReportFile> UserReportFiles { get; set; }
+
         public DbContext(DbContextOptions options) : base(options)
         {
         }

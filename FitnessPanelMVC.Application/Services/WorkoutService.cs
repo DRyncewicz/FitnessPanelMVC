@@ -5,7 +5,6 @@ using FitnessPanelMVC.Application.ViewModels.Product;
 using FitnessPanelMVC.Application.ViewModels.Workout;
 using FitnessPanelMVC.Domain.Interface;
 using FitnessPanelMVC.Domain.Model;
-using Irony.Parsing;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,0 +1,47 @@
+﻿@model IEnumerable<FitnessPanelMVC.Application.ViewModels.UserReportFile.UserReportForListVm>
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="container">
+
+    <div class="row">
+        <div class="col-6" style="min-height: 300px; border: 1px solid #ddd;">
+            <h2>Recent Reports</h2>
+            @if (Model != null && Model.Any())
+            {
+                <ul>
+                    @foreach (var report in Model)
+                    {
+                        <li>
+                            <a href="@Url.Action("DownloadReport", "BodyIndicator", new { filePath = report.Path })" target="_blank">
+                                <i class="fa-solid fa-file-pdf"></i> @report.CreationDate.ToShortDateString()
+                            </a>
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p>No reports to display.</p>
+            }
+            <a href="@Url.Action("CreateBodyIndicator", "BodyIndicator")" class="btn btn-primary">Add New Report</a>
+        </div>
+        <div class="col-6" style="min-height: 300px; border: 1px solid #ddd;">
+            <h2>Section 2</h2>
+
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-6" style="min-height: 300px; border: 1px solid #ddd;">
+            <h2>Section 3</h2>
+
+        </div>
+        <div class="col-6" style="min-height: 300px; border: 1px solid #ddd;">
+            <h2>Section 4</h2>
+
+        </div>
+    </div>
+</div>

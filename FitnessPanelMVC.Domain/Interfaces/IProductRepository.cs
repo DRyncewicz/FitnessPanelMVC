@@ -18,6 +18,6 @@ namespace FitnessPanelMVC.Domain.Interface
         public Product GetById(int id);
 
         public IQueryable<Product> GetAll();
-
+        Task CreateRangeAsync(List<Product> products);
     }
 }

@@ -1,5 +1,7 @@
 ﻿using FitnessPanelMVC.Domain.Interface;
 using FitnessPanelMVC.Domain.Interfaces;
+using FitnessPanelMVC.Infrastructure.FileGenerators;
+using FitnessPanelMVC.Infrastructure.FileReaders;
 using FitnessPanelMVC.Infrastructure.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -23,6 +25,10 @@ namespace FitnessPanelMVC.Infrastructure
             services.AddTransient<IWorkoutExerciseRepository, WorkoutExerciseRepository>();
             services.AddTransient<IWorkoutRepository, WorkoutRepository>();
             services.AddTransient<IBodyIndicatorsRepository, BodyIndicatorRepository>();
+            services.AddTransient<IPdfReportGenerator, PdfReportGenerator>();
+            services.AddTransient<IUserReportFileRepository, UserReportFileRepository>();
+            services.AddTransient<IXmlProductReader, XmlProductReader>();
+
             return services;
         }
     }

@@ -60,5 +60,11 @@ namespace FitnessPanelMVC.Infrastructure.Repositories
                 _dbContext.SaveChanges();
             }
         }
+
+        public async Task CreateRangeAsync(List<Product> products)
+        {
+            await _dbContext.Products.AddRangeAsync(products);
+            _dbContext.SaveChanges();
+        }
     }
 }

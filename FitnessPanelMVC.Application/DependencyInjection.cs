@@ -17,7 +17,7 @@ namespace FitnessPanelMVC.Application
         {
             services.AddTransient<IMealService, MealService>();
             services.AddTransient<IProductService, ProductService>();
-            services.AddTransient<IFileService, FileService>();
+            services.AddTransient<IUserReportService, UserReportService>();
             services.AddTransient<IBodyIndicatorService, BodyIndicatorService>();
             services.AddTransient<IRecipeService, RecipeService>();
             services.AddTransient<IWorkoutService, WorkoutService>();

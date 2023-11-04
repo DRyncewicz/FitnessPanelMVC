@@ -18,5 +18,7 @@ namespace FitnessPanelMVC.Domain.Model
         public double? Weight { get; set; }
 
         public string? Sex { get; set; }
+
+        public virtual ICollection<UserReportFile> UserReportFiles { get; set; }
     }
 }

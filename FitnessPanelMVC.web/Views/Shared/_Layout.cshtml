@@ -7,9 +7,11 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/FitnessPanelMVC.web.styles.css" asp-append-version="true" />
+    <script src="https://kit.fontawesome.com/45733236d9.js" crossorigin="anonymous"></script>
     @RenderSection("Styles", required: false)
 </head>
 <body>
+    
 
     <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -23,19 +25,19 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link" href="@Url.Action("Index", "Product")">Products base</a>
+                            <a class="nav-link" href="@Url.Action("Index", "Product")">Products</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="@Url.Action("Index", "Meal")">Your meals</a>
+                            <a class="nav-link" href="@Url.Action("Index", "Meal")">Meals</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="@Url.Action("CreateBodyIndicator", "BodyIndicator")">Generate metric report</a>
+                            <a class="nav-link" href="@Url.Action("Index", "BodyIndicator")">Body metrics</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="@Url.Action("Index", "Recipe")">Your recipes</a>
+                            <a class="nav-link" href="@Url.Action("Index", "Recipe")">Recipies</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="@Url.Action("Index", "Workout")">Workout manager</a>
+                            <a class="nav-link" href="@Url.Action("Index", "Workout")">Workouts</a>
                         </li>
                     </ul>
                     <ul class="navbar-nav ms-auto">
@@ -47,7 +49,7 @@
     </header>
 
 
-    <div class="container">
+    <div class="main-content">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>

@@ -10,36 +10,36 @@ namespace FitnessPanelMVC.Infrastructure.Repositories
 {
     public class ExerciseRepository : IExerciseRepository
     {
-        private readonly DbContext _dbCotenxt;
+        private readonly DbContext _dbContext;
 
         public ExerciseRepository(DbContext dbContext)
         {
-            _dbCotenxt = dbContext;
+            _dbContext = dbContext;
         }
 
         public int Create(Exercise exercise)
         {
-            _dbCotenxt.Exercises.Add(exercise);
-            _dbCotenxt.SaveChanges();
+            _dbContext.Exercises.Add(exercise);
+            _dbContext.SaveChanges();
             return exercise.Id;
         }
 
         public void Delete(int id) 
         {
-            var exercise = _dbCotenxt.Exercises.Find(id);
+            var exercise = _dbContext.Exercises.Find(id);
             if (exercise != null)
             {
-                _dbCotenxt.Exercises.Remove(exercise);
-                _dbCotenxt.SaveChanges();
+                _dbContext.Exercises.Remove(exercise);
+                _dbContext.SaveChanges();
             }
         }
 
         public int UpdateExercise(Exercise exercise)
         {
-            if (_dbCotenxt.Exercises.Find(exercise.Id) != null)
+            if (_dbContext.Exercises.Find(exercise.Id) != null)
             {
-                _dbCotenxt.Exercises.Update(exercise);
-                _dbCotenxt.SaveChanges();
+                _dbContext.Exercises.Update(exercise);
+                _dbContext.SaveChanges();
                 return exercise.Id;
             }
             return 0;
@@ -47,7 +47,7 @@ namespace FitnessPanelMVC.Infrastructure.Repositories
 
         public IQueryable<Exercise> GetAll()
         {
-            var exercises = _dbCotenxt.Exercises;
+            var exercises = _dbContext.Exercises;
             return exercises;
         }
     }

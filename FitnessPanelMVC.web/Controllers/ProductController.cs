@@ -5,7 +5,6 @@ using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Org.BouncyCastle.Bcpg;
 using System.ComponentModel.DataAnnotations;
 
 namespace FitnessPanelMVC.web.Controllers
@@ -17,13 +16,13 @@ namespace FitnessPanelMVC.web.Controllers
 
         private readonly IValidator<NewProductVm> _validator;
 
-        private readonly IFileService _fileService;
+        private readonly IUserReportService _fileService;
 
         private readonly UserManager<ApplicationUser> _userManager;
 
         public ProductController(IProductService productService,
             IValidator<NewProductVm> validator,
-            IFileService fileService,
+            IUserReportService fileService,
             UserManager<ApplicationUser> userManager)
         {
             _productService = productService;
@@ -126,7 +125,7 @@ namespace FitnessPanelMVC.web.Controllers
                 {
                     file.CopyTo(stream);
                 }
-                _fileService.AddProductsFromFile(filePath, userId);
+                _productService.AddFromXmlFile(filePath, userId);
                 if (System.IO.File.Exists(filePath))
                 {
                     System.IO.File.Delete(filePath);
