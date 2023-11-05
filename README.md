@@ -66,3 +66,15 @@ with possibility to add or delete products
   
 ![image](https://github.com/DRyncewicz/FitnessPanelMVC/assets/97690111/9ecaa3f3-a246-4d81-9c17-b2872ffc7f91)
 ![image](https://github.com/DRyncewicz/FitnessPanelMVC/assets/97690111/a9f3a928-6f41-4b0a-a191-e3dcb34cd139)
+
+- Health and Statistics
+![image](https://github.com/DRyncewicz/FitnessPanelMVC/assets/97690111/825fb8c2-4b49-4ad8-8d3b-85717acd4df1)
+- Health and Statistics (Activity calendar)
+![image](https://github.com/DRyncewicz/FitnessPanelMVC/assets/97690111/07909752-fe27-47bb-839e-dcf01f829aee)
+
+- Body metrics
+![image](https://github.com/DRyncewicz/FitnessPanelMVC/assets/97690111/d166e4d4-87c9-4a35-b397-42767b5c9e6e)
+![image](https://github.com/DRyncewicz/FitnessPanelMVC/assets/97690111/c28a86b8-7084-4409-a15f-b7eb352e7231)
+
+
+
