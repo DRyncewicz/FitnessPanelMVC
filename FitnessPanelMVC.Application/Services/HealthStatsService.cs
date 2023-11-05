@@ -52,11 +52,14 @@ namespace FitnessPanelMVC.Application.Services
             var lastSevenDaysMealsCalories = new List<double>();
             var lastSevenDaysWorkoutCaloriesBurned = new List<double>();
 
-            for (int i = 0; i <= 6; i++)
+            for (int i = -6; i <= 0; i++)
             {
-                var mealKcal = _mealRepository.GetAll().Where(m => m.MealDate.Day == DateTime.Now.Day - 6 + i)
+                var currentDate = DateTime.Now.Date.AddDays(i);
+                var mealKcal = _mealRepository.GetAll()
+                    .Where(m => m.MealDate.Date == currentDate)
                     .Select(m => m.TotalCalories).Sum();
-                var workoutKcal = _workoutRepository.GetAll().Where(m => m.Date.Day == DateTime.Now.Day - 6 + i)
+                var workoutKcal = _workoutRepository.GetAll()
+                    .Where(m => m.Date.Date == currentDate)
                     .Select(m => m.TotalCaloriesBurned).Sum();
                 lastSevenDaysMealsCalories.Add(mealKcal);
                 lastSevenDaysWorkoutCaloriesBurned.Add(workoutKcal);
