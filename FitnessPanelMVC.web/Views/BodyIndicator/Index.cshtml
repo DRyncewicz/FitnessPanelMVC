@@ -1,59 +1,60 @@
-﻿
-@model FitnessPanelMVC.Application.ViewModels.UserHealthDashboard.ReportDashboardVm
+﻿@using FitnessPanelMVC.Application.ViewModels.BodyIndicator;
+@model ICollection<FitnessPanelMVC.Application.ViewModels.UserReportFile.UserReportForListVm>
 
 @{
     ViewData["Title"] = "Dashboard";
 }
 
-<div class="container">
+<div class="container mt-4">
 
     <div class="row">
-        <div class="col-6" style="min-height: 300px; border: 1px solid #ddd;">
+        <div class="col-md-6">
             <h2>Recent Reports</h2>
-            @if (Model != null && Model.Reports.Any())
-            {
-                <ul>
-                    @foreach (var report in Model.Reports)
+            <div class="list-group">
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var report in Model)
                     {
-                        <li>
-                            <a href="@Url.Action("DownloadReport", "BodyIndicator", new { filePath = report.Path })" target="_blank">
-                                <i class="fa-solid fa-file-pdf"></i> @report.CreationDate.ToShortDateString()
-                            </a>
-                        </li>
+                        <a href="@Url.Action("DownloadReport", "BodyIndicator", new { filePath = report.Path })" target="_blank" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                            <span class="me-auto">
+                                <i class="fa-solid fa-file-pdf me-2"></i>
+                                Report - @report.CreationDate.ToShortDateString()
+                            </span>
+                            <span class="badge bg-primary rounded-pill">PDF</span>
+                        </a>
                     }
-                </ul>
-            }
-            else
-            {
-                <p>No reports to display.</p>
-            }
-            <a href="@Url.Action("CreateBodyIndicator", "BodyIndicator")" class="btn btn-primary">Add New Report</a>
+                }
+                else
+                {
+                    <p class="text-muted">No reports to display.</p>
+                }
+            </div>
         </div>
-        <div class="col-6" style="min-height: 300px; border: 1px solid #ddd;">
-            <h2>UserInfo 2</h2>
-            <ul>
+        <div class="col-md-6">
+            <h2>Create New Report</h2>
 
-                <li>
-                    <span>@Model.User.UserName</span>
-                    <span>@Model.User.Sex</span>
-                    <span>@Model.User.Name</span>
-                    <span>@Model.User.Surname</span>
-                    <span>@Model.User.Weight</span>
-                    <span>@Model.User.DateOfBirth</span>
-                </li>
-            </ul>
-        </div>
-    </div>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createReportModal">
+                Add Report
+            </button>
 
 
-    <div class="row">
-        <div class="col-6" style="min-height: 300px; border: 1px solid #ddd;">
-            <h2>Section 3</h2>
-
-        </div>
-        <div class="col-6" style="min-height: 300px; border: 1px solid #ddd;">
-            <h2>Section 4</h2>
-
+            <div class="modal fade" id="createReportModal" tabindex="-1" aria-labelledby="createReportModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="createReportModalLabel">New Report</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            @Html.Partial("CreateBodyIndicatorPartial", new NewBodyIndicatorVm())
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+}

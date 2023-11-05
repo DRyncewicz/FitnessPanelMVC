@@ -57,7 +57,8 @@ namespace FitnessPanelMVC.Infrastructure.Repositories
 
         public async Task<Meal> GetByIdAsync(int id)
         {
-            var meal = await _dbContext.Meals.FirstOrDefaultAsync(m => m.Id == id);
+            var meal = await _dbContext.Meals.Include(m => m.MealProducts).ThenInclude(m => m.Product)
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (meal == null)
             {
                 meal = new Meal();

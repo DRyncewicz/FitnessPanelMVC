@@ -63,7 +63,7 @@ namespace FitnessPanelMVC.web.Controllers
         public async Task<IActionResult> AddProductsToMealList()
         {
             var userId = await _userSerivce.GetIdAsync(User);
-            var model = _productService.GetAllForListAsync(20, 1, "", userId);
+            var model = await _productService.GetAllForListAsync(20, 1, "", userId);
             return View(model);
         }
 
@@ -79,7 +79,7 @@ namespace FitnessPanelMVC.web.Controllers
             {
                 searchString = String.Empty;
             }
-            var model = _productService.GetAllForListAsync(pageSize, pageNo.Value, searchString, userId);
+            var model = await _productService.GetAllForListAsync(pageSize, pageNo.Value, searchString, userId);
             return View(model);
         }
 

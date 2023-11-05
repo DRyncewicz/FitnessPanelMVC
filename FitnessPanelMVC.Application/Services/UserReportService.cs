@@ -13,7 +13,6 @@ using Microsoft.AspNetCore.Identity;
 using FitnessPanelMVC.Application.ViewModels.UserReportFile;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using FitnessPanelMVC.Application.ViewModels.UserHealthDashboard;
 using FitnessPanelMVC.Application.ViewModels.User;
 
 namespace FitnessPanelMVC.Application.Services
@@ -56,9 +55,9 @@ namespace FitnessPanelMVC.Application.Services
             await _userReportFileRepository.CreateAsync(userReportFile);
         }
 
-        public async Task<ReportDashboardVm> GetUserBodyReportsAsync(UserDetailsVm user)
+        public async Task<IEnumerable<UserReportForListVm>> GetUserBodyReportsAsync(string userId)
         {
-            var reports = await _userReportFileRepository.GetAll().Where(r => r.UserId == user.Id)
+            var reports = await _userReportFileRepository.GetAll().Where(r => r.UserId == userId)
                 .OrderByDescending(r => r.CreationDate).Take(5)
                 .Select(r => new UserReportForListVm()
                 {
@@ -67,13 +66,9 @@ namespace FitnessPanelMVC.Application.Services
                     Id = r.Id,
                     UserId = r.UserId
                 }).ToListAsync();
-            ReportDashboardVm reportDashboardVm = new ReportDashboardVm()
-            {
-                Reports = reports,
-                User = user
-            };
 
-            return reportDashboardVm;
+
+            return reports;
         }
     }
 }

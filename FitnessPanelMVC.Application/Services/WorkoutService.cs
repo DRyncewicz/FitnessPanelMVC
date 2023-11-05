@@ -91,7 +91,7 @@ namespace FitnessPanelMVC.Application.Services
 
         public async Task<WorkoutForListVm> GetDetailsByIdAsync(int workoutId)
         {
-            var workout = await _workoutRepository.GetAll().FirstOrDefaultAsync(w => w.Id == workoutId);
+            var workout = await _workoutRepository.GetByIdAsync(workoutId);
             var workoutVm = _mapper.Map<WorkoutForListVm>(workout);
 
             return workoutVm;

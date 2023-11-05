@@ -41,8 +41,9 @@ namespace FitnessPanelMVC.web.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var userVm = await _userService.GetAsync(User);
-            var model = await _userReportService.GetUserBodyReportsAsync(userVm);
+            var userId = await _userService.GetIdAsync(User);
+            var model = await _userReportService.GetUserBodyReportsAsync(userId);
+           
 
             return View(model);
         }
@@ -60,7 +61,8 @@ namespace FitnessPanelMVC.web.Controllers
         [HttpGet]
         public IActionResult CreateBodyIndicator()
         {
-            return View();
+            var model = new NewBodyIndicatorVm();
+            return View(model);
         }
 
         [HttpPost]
@@ -73,8 +75,10 @@ namespace FitnessPanelMVC.web.Controllers
                 int id = await _bodyIndicatorService.AddNewAsync(newBodyIndicatorVm);
                 var bodyIndicator = await _bodyIndicatorService.GetByIdAsync(id);
                 await _userReportService.CreateUserBodyReportAsync(bodyIndicator, userId);
+                return RedirectToAction("Index");
             }
-            return View();
+
+            return View(newBodyIndicatorVm);
         }
     }
 }

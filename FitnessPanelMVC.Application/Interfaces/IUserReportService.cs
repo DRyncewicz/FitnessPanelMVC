@@ -1,5 +1,4 @@
 ﻿using FitnessPanelMVC.Application.ViewModels.User;
-using FitnessPanelMVC.Application.ViewModels.UserHealthDashboard;
 using FitnessPanelMVC.Application.ViewModels.UserReportFile;
 using FitnessPanelMVC.Domain.Model;
 using System;
@@ -13,6 +12,6 @@ namespace FitnessPanelMVC.Application.Interfaces
     public interface IUserReportService
     {
         public Task CreateUserBodyReportAsync(BodyIndicator bodyIndicators, string userId);
-        Task<ReportDashboardVm> GetUserBodyReportsAsync(UserDetailsVm user);
+        Task<IEnumerable<UserReportForListVm>> GetUserBodyReportsAsync(string userId);
     }
 }

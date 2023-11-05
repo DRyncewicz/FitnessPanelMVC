@@ -37,7 +37,7 @@ namespace FitnessPanelMVC.Infrastructure.Repositories
 
         public async Task<int> UpdateAsync(Recipe recipe)
         {
-            if(await _dbContext.Recipes.FindAsync(recipe.Id) != null)
+            if (await _dbContext.Recipes.FindAsync(recipe.Id) != null)
             {
                 _dbContext.Recipes.Update(recipe);
                 await _dbContext.SaveChangesAsync();
@@ -56,7 +56,7 @@ namespace FitnessPanelMVC.Infrastructure.Repositories
 
         public async Task<Recipe> GetByIdAsync(int id)
         {
-            var recipe = await _dbContext.Recipes.FirstOrDefaultAsync(r => r.Id == id);
+            var recipe = await _dbContext.Recipes.Include(n => n.RecipeProducts).ThenInclude(n => n.Product).FirstOrDefaultAsync(r => r.Id == id);
             if (recipe == null)
             {
                 recipe = new Recipe();

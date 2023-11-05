@@ -1,6 +1,8 @@
 ﻿@using FitnessPanelMVC.Domain.Model;
 @using Microsoft.AspNetCore.Identity
+@model FitnessPanelMVC.Application.ViewModels.Calendar.CalendarVm
 @inject SignInManager<ApplicationUser> SignInManager
+
 
 @{
     ViewData["Title"] = "Home Page";
@@ -16,9 +18,6 @@
         @if (SignInManager.IsSignedIn(User))
         {
             <p class="lead">Explore your personal fitness dashboard.</p>
-
-
-
         }
         else
         {
@@ -49,3 +48,5 @@
         }
     </div>
 </main>
+
+

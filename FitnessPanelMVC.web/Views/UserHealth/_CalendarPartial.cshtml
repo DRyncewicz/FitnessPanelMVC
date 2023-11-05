@@ -1,0 +1,35 @@
+﻿@model FitnessPanelMVC.Application.ViewModels.Calendar.CalendarVm
+
+@{
+    ViewData["Title"] = "Calendar";
+}
+
+<link href="~/lib/fullcalendar/index.min.css" rel="stylesheet" />
+
+<div class="container">
+    <div id="calendar"></div>
+</div>
+
+<script src="~/lib/fullcalendar/index.global.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var calendarEl = document.getElementById('calendar');
+        var calendarEvents = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Events.Select(e => new {
+            title = e.Title,
+            start = e.Start.ToString("s"),
+            end = e.End.ToString("s"),
+            color = e.Color
+            })));
+
+        calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            events: calendarEvents
+        });
+
+        if (calendarEl.style.display !== 'none') {
+            calendar.render();
+        }
+    });
+
+
+</script>

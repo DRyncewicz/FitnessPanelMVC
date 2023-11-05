@@ -107,10 +107,10 @@ namespace FitnessPanelMVC.web.Controllers
             return Json(new { success = true, message = "Product added successfully" });
         }
 
-        public IActionResult RecipeDetails(int id)
+        public async Task<IActionResult> RecipeDetails(int id)
         {
             HttpContext.Session.SetInt32("CurrentRecipeId", id);
-            var model = _recipeService.GetDetailsByIdAsync(id);
+            var model = await _recipeService.GetDetailsByIdAsync(id);
             return View(model);
         }
 

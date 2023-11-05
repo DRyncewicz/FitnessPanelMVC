@@ -1,0 +1,124 @@
+﻿@using System.Text.Json;
+
+@model FitnessPanelMVC.Application.ViewModels.HealthStats.HealthStatsVm
+<link href="~/lib/fullcalendar/index.min.css" rel="stylesheet" />
+
+<div class="container">
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link active show" href="#healthStats" data-bs-toggle="tab">Health & Stats</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#calendarTab" data-bs-toggle="tab">Activity Calendar</a>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <div id="healthStats" class="container tab-pane active show">
+            <h3>Health and Statistics</h3>
+            <div class="container mt-4">
+                <h2 class="mb-4">Health & Statistics</h2>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <h5 class="card-header">Calorie Intake</h5>
+                            <div class="card-body">
+                                <canvas id="calorieChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <h5 class="card-header">Workout Summary</h5>
+                            <div class="card-body">
+                                <canvas id="workoutChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="calendarTab" class="container tab-pane fade">
+            <h3>Activity Calendar</h3>
+            @await Html.PartialAsync("_CalendarPartial", Model.Calendar)
+        </div>
+    </div>
+</div>
+
+<script src="~/lib/fullcalendar/index.global.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var calendarEl = document.getElementById('calendar');
+
+        var calendarTab = document.querySelector('a[href="#calendarTab"]');
+        calendarTab.addEventListener('shown.bs.tab', function (event) {
+            calendar.render();
+        });
+    });
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const last7Days = getLast7DaysLabels();
+        const calorieData = @Html.Raw(JsonSerializer.Serialize(Model.Charts.LastWeekCalories));
+        const workoutData = @Html.Raw(JsonSerializer.Serialize(Model.Charts.LastWeekWorkoutTime));
+
+
+        const calorieChartCtx = document.getElementById('calorieChart').getContext('2d');
+        const workoutChartCtx = document.getElementById('workoutChart').getContext('2d');
+
+        const calorieChart = new Chart(calorieChartCtx, {
+            type: 'line',
+            data: {
+                labels: last7Days,
+                datasets: [{
+                    label: 'Calories',
+                    data: calorieData,
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        const workoutChart = new Chart(workoutChartCtx, {
+            type: 'line',
+            data: {
+                labels: last7Days,
+                datasets: [{
+                    label: 'Workout calories burn',
+                    data: workoutData,
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    });
+
+    function getLast7DaysLabels() {
+        const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        const labels = [];
+        const today = new Date();
+        for (let i = 6; i >= 0; i--) {
+            const day = new Date(today.getFullYear(), today.getMonth(), today.getDate() - i);
+            labels.push(daysOfWeek[day.getDay()]);
+        }
+        return labels;
+    }
+</script>
