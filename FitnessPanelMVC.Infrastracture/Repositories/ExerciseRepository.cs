@@ -1,5 +1,6 @@
 ﻿using FitnessPanelMVC.Domain.Interface;
 using FitnessPanelMVC.Domain.Model;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,38 +18,37 @@ namespace FitnessPanelMVC.Infrastructure.Repositories
             _dbContext = dbContext;
         }
 
-        public int Create(Exercise exercise)
+        public async Task<int> CreateAsync(Exercise exercise)
         {
-            _dbContext.Exercises.Add(exercise);
-            _dbContext.SaveChanges();
+            await _dbContext.Exercises.AddAsync(exercise);
+            await _dbContext.SaveChangesAsync();
             return exercise.Id;
         }
 
-        public void Delete(int id) 
+        public async Task Delete(int id)
         {
-            var exercise = _dbContext.Exercises.Find(id);
+            var exercise = await _dbContext.Exercises.FindAsync(id);
             if (exercise != null)
             {
                 _dbContext.Exercises.Remove(exercise);
-                _dbContext.SaveChanges();
+                await _dbContext.SaveChangesAsync();
             }
-        }
-
-        public int UpdateExercise(Exercise exercise)
-        {
-            if (_dbContext.Exercises.Find(exercise.Id) != null)
-            {
-                _dbContext.Exercises.Update(exercise);
-                _dbContext.SaveChanges();
-                return exercise.Id;
-            }
-            return 0;
         }
 
         public IQueryable<Exercise> GetAll()
         {
             var exercises = _dbContext.Exercises;
             return exercises;
+        }
+
+        public async Task<Exercise> GetByIdAsync(int id)
+        {
+            var exercise = await _dbContext.Exercises.FirstOrDefaultAsync(r => r.Id == id);
+            if (exercise == null)
+            {
+                exercise = new Exercise();
+            }
+            return exercise;
         }
     }
 }

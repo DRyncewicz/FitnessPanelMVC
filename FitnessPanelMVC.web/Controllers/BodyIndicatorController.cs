@@ -3,6 +3,7 @@ using FitnessPanelMVC.Application.Services;
 using FitnessPanelMVC.Application.Validators;
 using FitnessPanelMVC.Application.ViewModels.BodyIndicator;
 using FitnessPanelMVC.Application.ViewModels.Product;
+using FitnessPanelMVC.Application.ViewModels.UserReportFile;
 using FitnessPanelMVC.Domain.Model;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
@@ -22,35 +23,35 @@ namespace FitnessPanelMVC.web.Controllers
 
         private readonly IWebHostEnvironment _hostEnvironment;
 
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IUserService _userService;
 
         public BodyIndicatorController(IBodyIndicatorService bodyIndicatorService,
             IUserReportService userReportService,
             IValidator<NewBodyIndicatorVm> validator,
-            UserManager<ApplicationUser> userManager,
+            IUserService userService,
             IWebHostEnvironment hostEnvironment)
         {
             _bodyIndicatorService = bodyIndicatorService;
             _userReportService = userReportService;
             _validator = validator;
-            _userManager = userManager;
+            _userService = userService;
             _hostEnvironment = hostEnvironment;
         }
 
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var user = await _userManager.GetUserAsync(User);
-            var userId = user?.Id;
-            var model = await _userReportService.GetUserBodyReportsAsync(userId);
+            var userVm = await _userService.GetAsync(User);
+            var model = await _userReportService.GetUserBodyReportsAsync(userVm);
+
             return View(model);
         }
 
-        public FileResult DownloadReport(string filePath)
+        public async Task<FileResult> DownloadReport(string filePath)
         {
             var mimeType = "application/pdf";
             var fileFullPath = Path.Combine(_hostEnvironment.WebRootPath, filePath);
-            var fileBytes = System.IO.File.ReadAllBytes(fileFullPath);
+            var fileBytes = await System.IO.File.ReadAllBytesAsync(fileFullPath);
             var fileName = Path.GetFileName(filePath);
 
             return File(fileBytes, mimeType, fileName);
@@ -65,14 +66,13 @@ namespace FitnessPanelMVC.web.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateBodyIndicator(NewBodyIndicatorVm newBodyIndicatorVm)
         {
-            var userId = _userManager.GetUserId(User);
-            var result = _validator.Validate(newBodyIndicatorVm);
+            var userId = await _userService.GetIdAsync(User);
+            var result = await _validator.ValidateAsync(newBodyIndicatorVm);
             if (result.IsValid)
             {
-                int id = _bodyIndicatorService.AddNew(newBodyIndicatorVm);
-                var bodyIndicator = _bodyIndicatorService.GetById(id);
+                int id = await _bodyIndicatorService.AddNewAsync(newBodyIndicatorVm);
+                var bodyIndicator = await _bodyIndicatorService.GetByIdAsync(id);
                 await _userReportService.CreateUserBodyReportAsync(bodyIndicator, userId);
-
             }
             return View();
         }

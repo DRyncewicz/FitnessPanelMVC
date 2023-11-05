@@ -10,6 +10,7 @@ namespace FitnessPanelMVC.Application.Interfaces
 {
     public interface IUserService
     {
-        Task<UserVm> GetAsync(ClaimsPrincipal userClaims);
+        Task<UserDetailsVm> GetAsync(ClaimsPrincipal userClaims);
+        Task<string> GetIdAsync(ClaimsPrincipal userClaims);
     }
 }

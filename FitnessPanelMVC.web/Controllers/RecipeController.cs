@@ -16,29 +16,29 @@ namespace FitnessPanelMVC.web.Controllers
 
         private readonly IProductService _productService;
 
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IUserService _userService;
 
         public RecipeController(
             IRecipeService recipeService,
             IProductService productService,
-            UserManager<ApplicationUser> userManager)
+            IUserService userService)
         {
             _recipeService = recipeService;
             _productService = productService;
-            _userManager = userManager;
+            _userService = userService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var userId = _userManager.GetUserId(User);
-            var model = _recipeService.GetForList(10, 1, "", userId);
+            var userId = await _userService.GetIdAsync(User);
+            var model = await _recipeService.GetForListAsync(10, 1, "", userId);
             return View(model);
         }
 
         [HttpPost]
-        public IActionResult Index(int pageSize, int? pageNo, string searchString)
+        public async Task<IActionResult> Index(int pageSize, int? pageNo, string searchString)
         {
-            var userId = _userManager.GetUserId(User);
+            var userId = await _userService.GetIdAsync(User);
             if (!pageNo.HasValue)
             {
                 pageNo = 1;
@@ -47,13 +47,13 @@ namespace FitnessPanelMVC.web.Controllers
             {
                 searchString = String.Empty;
             }
-            var model = _recipeService.GetForList(pageSize, pageNo.Value, searchString, userId);
+            var model = await _recipeService.GetForListAsync(pageSize, pageNo.Value, searchString, userId);
             return View(model);
         }
 
-        public IActionResult DeleteRecipe(int id)
+        public async Task<IActionResult> DeleteRecipe(int id)
         {
-            _recipeService.Delete(id);
+            await _recipeService.DeleteAsync(id);
             return RedirectToAction("Index");
         }
 
@@ -64,27 +64,27 @@ namespace FitnessPanelMVC.web.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddRecipe(NewRecipeVm newRecipeVm)
+        public async Task<IActionResult> AddRecipe(NewRecipeVm newRecipeVm)
         {
-            var userId = _userManager.GetUserId(User);
-            int id = _recipeService.AddNew(newRecipeVm, userId);
+            var userId = await _userService.GetIdAsync(User);
+            int id = await _recipeService.AddNewAsync(newRecipeVm, userId);
             HttpContext.Session.SetInt32("CurrentRecipeId", id);
             return RedirectToAction("AddProductsToRecipeList");
         }
 
         [HttpGet]
-        public IActionResult AddProductsToRecipeList()
+        public async Task<IActionResult> AddProductsToRecipeList()
         {
-            var userId = _userManager.GetUserId(User);
-            var model = _productService.GetAllForList(20, 1, "", userId);
+            var userId = await _userService.GetIdAsync(User);
+            var model = await _productService.GetAllForListAsync(20, 1, "", userId);
             return View(model);
         }
 
         [HttpPost]
-        public IActionResult AddProductsToRecipeList(int pageSize, int? pageNo, string searchString)
+        public async Task<IActionResult> AddProductsToRecipeList(int pageSize, int? pageNo, string searchString)
         {
             
-            var userId = _userManager.GetUserId(User);
+            var userId = await _userService.GetIdAsync(User);
             if (!pageNo.HasValue)
             {
                 pageNo = 1;
@@ -93,30 +93,30 @@ namespace FitnessPanelMVC.web.Controllers
             {
                 searchString = String.Empty;
             }
-            var model = _productService.GetAllForList(pageSize, pageNo.Value, searchString, userId);
+            var model = await _productService.GetAllForListAsync(pageSize, pageNo.Value, searchString, userId);
             return View(model);
         }
 
         [HttpPost]
-        public IActionResult AddProductToRecipe([FromBody] ProductMealModel model)
+        public async Task<IActionResult> AddProductToRecipe([FromBody] ProductMealModel model)
         {
             int recipeId = HttpContext.Session.GetInt32("CurrentRecipeId") ?? default;
-            _recipeService.AddProductToRecipe(model.ProductId, recipeId, model.Weight);
-            var productVm = _recipeService.UpdateProductOnRecipeChange(recipeId);
-            _productService.Update(productVm);
+            await _recipeService.AddProductToRecipeAsync(model.ProductId, recipeId, model.Weight);
+            var productVm =await _recipeService.UpdateProductOnRecipeChangeAsync(recipeId);
+            await _productService.UpdateAsync(productVm);
             return Json(new { success = true, message = "Product added successfully" });
         }
 
         public IActionResult RecipeDetails(int id)
         {
             HttpContext.Session.SetInt32("CurrentRecipeId", id);
-            var model = _recipeService.GetDetailsById(id);
+            var model = _recipeService.GetDetailsByIdAsync(id);
             return View(model);
         }
 
         public IActionResult DeleteProductFromRecipe (int productId, int recipeId)
         {
-            _recipeService.DeleteProductFromMealById(productId, recipeId);
+            _recipeService.DeleteProductFromMealByIdsAsync(productId, recipeId);
             return RedirectToAction("Index");
         }
     }

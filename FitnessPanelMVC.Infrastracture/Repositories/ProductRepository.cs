@@ -18,20 +18,20 @@ namespace FitnessPanelMVC.Infrastructure.Repositories
             _dbContext = dbContext;
         }
 
-        public int Create(Product product)
+        public async Task<int> CreateAsync(Product product)
         {
-            _dbContext.Products.Add(product);
-            _dbContext.SaveChanges();
+            await _dbContext.Products.AddAsync(product);
+            await _dbContext.SaveChangesAsync();
             return product.Id;
         }
 
-        public void Delete(int id)
+        public async Task DeleteAsync(int id)
         {
-            var product = _dbContext.Products.Find(id);
+            var product = await _dbContext.Products.FindAsync(id);
             if (product != null)
             {
                 _dbContext.Products.Remove(product);
-                _dbContext.SaveChanges();
+                await _dbContext.SaveChangesAsync();
             }
         }
 
@@ -41,9 +41,9 @@ namespace FitnessPanelMVC.Infrastructure.Repositories
             return products.AsQueryable();
         }
 
-        public Product GetById(int id)
+        public async Task<Product> GetByIdAsync(int id)
         {
-            var product = _dbContext.Products.FirstOrDefault(x => x.Id == id);
+            var product = await _dbContext.Products.FirstOrDefaultAsync(x => x.Id == id);
             if (product == null)
             {
                 product = new Product();
@@ -51,13 +51,13 @@ namespace FitnessPanelMVC.Infrastructure.Repositories
             return product;
         }
 
-        public void Update(Product product)
+        public async Task UpdateAsync(Product product)
         {
-            var existingProduct = _dbContext.Products.Find(product.Id);
+            var existingProduct = await _dbContext.Products.FindAsync(product.Id);
             if (existingProduct != null)
             {
                 _dbContext.Entry(existingProduct).CurrentValues.SetValues(product);
-                _dbContext.SaveChanges();
+                await _dbContext.SaveChangesAsync();
             }
         }
 

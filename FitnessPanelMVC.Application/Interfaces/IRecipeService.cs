@@ -10,18 +10,17 @@ namespace FitnessPanelMVC.Application.Interfaces
 {
     public interface IRecipeService
     {
-        int AddNew(NewRecipeVm newRecipeVm, string userId);
+        Task<int> AddNewAsync(NewRecipeVm newRecipeVm, string userId);
 
-        int AddProductToRecipe(int productId, int recipeId, double weight);
+        Task<int> AddProductToRecipeAsync(int productId, int recipeId, double weight);
 
-        void DeleteProductFromMealById(int productId, int recipeId);
+        Task DeleteProductFromMealByIdsAsync(int productId, int recipeId);
 
-        void Delete(int recipeId);
+        Task DeleteAsync(int recipeId);
 
-        RecipeForListVm GetDetailsById(int recipeId);
+        Task<RecipeForListVm> GetDetailsByIdAsync(int recipeId);
 
-        ListRecipeForListVm GetForList(int pageSize, int pageNo, string searchString, string userId);
-
-        NewProductVm UpdateProductOnRecipeChange(int recipeId);
+        Task<ListRecipeForListVm> GetForListAsync(int pageSize, int pageNo, string searchString, string userId);
+        Task<NewProductVm> UpdateProductOnRecipeChangeAsync(int recipeId);
     }
 }

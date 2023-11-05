@@ -9,16 +9,16 @@ namespace FitnessPanelMVC.Application.Interfaces
 {
     public interface IProductService
     {
-        int AddNew(NewProductVm newProductVm, string userId);
-        Task AddFromXmlFile(string filePath, string userId);
-        void DeleteById(int productId);
+        Task<int> AddNewAsync(NewProductVm newProductVm, string userId);
+        Task AddFromXmlFileAsync(string filePath, string userId);
+        Task DeleteByIdAsync(int productId);
 
-        public ListProductForListVm GetAllForList(int pageSize, int pageNo, string searchString, string userId);
+        Task<ListProductForListVm> GetAllForListAsync(int pageSize, int pageNo, string searchString, string userId);
 
-        ProductDetailsVm GetDetailsById(int productId);
+        Task<ProductDetailsVm> GetDetailsByIdAsync(int productId);
 
-        NewProductVm GetForEdit(int productId);
+        Task<NewProductVm> GetForEditAsync(int productId);
 
-        void Update(NewProductVm editedProduct);
+        Task UpdateAsync(NewProductVm editedProduct);
     }
 }

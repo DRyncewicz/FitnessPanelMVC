@@ -10,16 +10,16 @@ namespace FitnessPanelMVC.Application.Interfaces
 {
     public interface IWorkoutService
     {
-        int AddExerciseToWorkout(int exerciseId, int workoutId, int durationSeconds, double burnedCalories);
+        Task<int> AddExerciseToWorkoutAsync(int exerciseId, int workoutId, int durationSeconds, double burnedCalories);
 
-        int AddNew(NewWorkoutVm newWorkoutVm, string userId);
+        Task<int> AddNewAsync(NewWorkoutVm newWorkoutVm, string userId);
 
-        void DeleteExerciseFromWorkoutByIds(int workoutId, int exerciseId);
+        Task DeleteExerciseFromWorkoutByIdsAsync(int workoutId, int exerciseId);
 
-        void DeleteById(int workoutId);
+        Task DeleteByIdAsync(int workoutId);
 
-        List<WorkoutForListVm> GetAllForList(DateTime Date, string userId);
+        Task<List<WorkoutForListVm>> GetAllForListAsync(DateTime Date, string userId);
 
-        WorkoutForListVm GetDetailsById(int workoutId);
+        Task<WorkoutForListVm> GetDetailsByIdAsync(int workoutId);
     }
 }

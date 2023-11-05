@@ -9,12 +9,12 @@ namespace FitnessPanelMVC.Domain.Interface
 {
     public interface IRecipeProductRepository
     {
-        public int Create(RecipeProduct recipeProduct);
+        Task<int> CreateAsync(RecipeProduct recipeProduct);
 
-        public void Delete(int productId, int recipeId);
+        Task DeleteAsync(int productId, int recipeId);
 
-        public IQueryable<RecipeProduct> GetAll();
+        IQueryable<RecipeProduct> GetAll();
 
-        public int Update(RecipeProduct recipeProduct);
+        Task<int> UpdateAsnyc(RecipeProduct recipeProduct);
     }
 }

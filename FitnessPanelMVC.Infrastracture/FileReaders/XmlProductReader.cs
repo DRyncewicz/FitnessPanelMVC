@@ -12,7 +12,7 @@ namespace FitnessPanelMVC.Infrastructure.FileReaders
 {
     public class XmlProductReader : IXmlProductReader
     {
-        public async Task<List<Product>> ReadFromFile(string? filePath, string userId)
+        public Task<List<Product>> ReadFromFile(string? filePath, string userId)
         {
             var workbook = new XLWorkbook(filePath);
             var worksheet = workbook.Worksheet(1);
@@ -38,10 +38,9 @@ namespace FitnessPanelMVC.Infrastructure.FileReaders
                     IsConfirmed = true,
                     IsUserAdded = false
                 });
-
             }
 
-            return products;
+            return Task.FromResult(products);
         }
     }
 }

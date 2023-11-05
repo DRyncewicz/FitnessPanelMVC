@@ -13,6 +13,8 @@ using Microsoft.AspNetCore.Identity;
 using FitnessPanelMVC.Application.ViewModels.UserReportFile;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using FitnessPanelMVC.Application.ViewModels.UserHealthDashboard;
+using FitnessPanelMVC.Application.ViewModels.User;
 
 namespace FitnessPanelMVC.Application.Services
 {
@@ -37,7 +39,7 @@ namespace FitnessPanelMVC.Application.Services
 
         public async Task CreateUserBodyReportAsync(BodyIndicator bodyIndicators, string userId)
         {
-            byte[] reportPdfFile = _pdfReportGenerator.Generate(bodyIndicators);
+            byte[] reportPdfFile = await _pdfReportGenerator.Generate(bodyIndicators);
             string fileName = "BodyMetricReport-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".pdf";
             string finalPath = Path.Combine(filePath, fileName);
             await File.WriteAllBytesAsync(finalPath, reportPdfFile);
@@ -51,12 +53,12 @@ namespace FitnessPanelMVC.Application.Services
             };
             var userReportFile = _mapper.Map<UserReportFile>(newUserReportFileVm);
 
-            _userReportFileRepository.Create(userReportFile);
+            await _userReportFileRepository.CreateAsync(userReportFile);
         }
 
-        public async Task<List<UserReportForListVm>> GetUserBodyReportsAsync(string userId)
+        public async Task<ReportDashboardVm> GetUserBodyReportsAsync(UserDetailsVm user)
         {
-            var reports = await _userReportFileRepository.GetAll().Where(r => r.UserId == userId)
+            var reports = await _userReportFileRepository.GetAll().Where(r => r.UserId == user.Id)
                 .OrderByDescending(r => r.CreationDate).Take(5)
                 .Select(r => new UserReportForListVm()
                 {
@@ -65,8 +67,13 @@ namespace FitnessPanelMVC.Application.Services
                     Id = r.Id,
                     UserId = r.UserId
                 }).ToListAsync();
+            ReportDashboardVm reportDashboardVm = new ReportDashboardVm()
+            {
+                Reports = reports,
+                User = user
+            };
 
-            return reports;
+            return reportDashboardVm;
         }
     }
 }

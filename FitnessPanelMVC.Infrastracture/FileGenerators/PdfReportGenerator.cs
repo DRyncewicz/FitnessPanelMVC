@@ -14,7 +14,7 @@ namespace FitnessPanelMVC.Infrastructure.FileGenerators
 {
     public class PdfReportGenerator : IPdfReportGenerator
     {
-        public byte[] Generate(BodyIndicator data) 
+        public Task<byte[]> Generate(BodyIndicator data) 
         {
             using (var stream = new MemoryStream())
             {
@@ -38,7 +38,7 @@ namespace FitnessPanelMVC.Infrastructure.FileGenerators
                     }
                 }
 
-                return stream.ToArray();
+                return Task.FromResult(stream.ToArray());
             }
         }
     }

@@ -1,4 +1,5 @@
-﻿using FitnessPanelMVC.Domain.Interface;
+﻿using DocumentFormat.OpenXml.Packaging;
+using FitnessPanelMVC.Domain.Interface;
 using FitnessPanelMVC.Domain.Model;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -18,29 +19,29 @@ namespace FitnessPanelMVC.Infrastructure.Repositories
             _dbContext = dbContext;
         }
 
-        public int Create(Workout workout)
+        public async Task<int> CreateAsync(Workout workout)
         {
-            _dbContext.Workouts.Add(workout);
-            _dbContext.SaveChanges();
+            await _dbContext.Workouts.AddAsync(workout);
+            await _dbContext.SaveChangesAsync();
             return workout.Id;
         }
 
-        public void Delete(int id)
+        public async Task DeleteAsync(int id)
         {
-            var workout = _dbContext.Workouts.Find(id);
+            var workout = await _dbContext.Workouts.FindAsync(id);
             if (workout != null)
             {
                 _dbContext.Workouts.Remove(workout);
-                _dbContext.SaveChanges();
+                await _dbContext.SaveChangesAsync();
             }
         }
 
-        public int Update(Workout workout)
+        public async Task<int> UpdateAsync(Workout workout)
         {
-            if (_dbContext.Workouts.Find(workout.Id) != null)
+            if (await _dbContext.Workouts.FindAsync(workout.Id) != null)
             {
                 _dbContext.Workouts.Update(workout);
-                _dbContext.SaveChanges();
+                await _dbContext.SaveChangesAsync();
                 return workout.Id;
             }
             return 0;
@@ -52,6 +53,16 @@ namespace FitnessPanelMVC.Infrastructure.Repositories
                 .Include(w => w.WorkoutExercises)
                 .ThenInclude(w => w.Exercise);
             return workouts.AsQueryable();
+        }
+
+        public async Task<Workout> GetByIdAsync(int id)
+        {
+            var workout = await _dbContext.Workouts.FirstOrDefaultAsync(w => w.Id == id);
+            if (workout == null)
+            {
+                workout = new Workout();
+            }
+            return workout;
         }
     }
 }

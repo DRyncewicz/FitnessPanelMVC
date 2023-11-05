@@ -9,7 +9,7 @@ namespace FitnessPanelMVC.Application.Interfaces
 {
     public interface IExerciseService
     {
-        int AddNew(ExerciseForListAndNewVm exerciseVm, string userId);
+        Task<int> AddNewAsync(ExerciseForListAndNewVm exerciseVm, string userId);
 
         List<ExerciseForListAndNewVm> GetForList();
     }

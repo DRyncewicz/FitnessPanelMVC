@@ -9,7 +9,7 @@ namespace FitnessPanelMVC.Domain.Interfaces
 {
     public interface IUserReportFileRepository
     {
-        int Create(UserReportFile userReportFile);
+        Task<int> CreateAsync(UserReportFile userReportFile);
 
         IQueryable<UserReportFile> GetAll();
     }

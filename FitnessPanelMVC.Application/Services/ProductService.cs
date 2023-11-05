@@ -5,6 +5,7 @@ using FitnessPanelMVC.Application.ViewModels.Product;
 using FitnessPanelMVC.Domain.Interface;
 using FitnessPanelMVC.Domain.Interfaces;
 using FitnessPanelMVC.Domain.Model;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,12 +30,12 @@ namespace FitnessPanelMVC.Application.Services
             _xmlProductReader = xmlProductReader;
         }
 
-        public ListProductForListVm GetAllForList(int pageSize, int pageNo, string searchString, string userId)
+        public async Task<ListProductForListVm> GetAllForListAsync(int pageSize, int pageNo, string searchString, string userId)
         {
-            var products = _productRepository.GetAll().
+            var products = await _productRepository.GetAll().
                 Where(p => p.Name.StartsWith(searchString) && p.IsConfirmed == true ||
                 p.Name.StartsWith(searchString) && p.UserId == userId)
-                .ProjectTo<ProductForListVm>(_mapper.ConfigurationProvider).ToList();
+                .ProjectTo<ProductForListVm>(_mapper.ConfigurationProvider).ToListAsync();
             var productsToShow = products.Skip(pageSize * (pageNo - 1)).Take(pageSize).ToList();
             var productList = new ListProductForListVm()
             {
@@ -48,42 +49,42 @@ namespace FitnessPanelMVC.Application.Services
             return productList;
         }
 
-        public int AddNew(NewProductVm newProductVm, string userId)
+        public async Task<int> AddNewAsync(NewProductVm newProductVm, string userId)
         {
             var product = _mapper.Map<Product>(newProductVm);
             product.UserId = userId;
-            int productId = _productRepository.Create(product);
+            int productId = await _productRepository.CreateAsync(product);
             return productId;
         }
 
-        public NewProductVm GetForEdit(int productId)
+        public async Task<NewProductVm> GetForEditAsync(int productId)
         {
-            var product = _productRepository.GetById(productId);
+            var product = _productRepository.GetByIdAsync(productId);
             var productVm = _mapper.Map<NewProductVm>(product);
             return productVm;
         }
 
-        public void Update(NewProductVm editedProduct)
+        public async Task UpdateAsync(NewProductVm editedProduct)
         {
             var product = _mapper.Map<Product>(editedProduct);
-            _productRepository.Update(product);
+            await _productRepository.UpdateAsync(product);
         }
 
-        public void DeleteById(int productId)
+        public async Task DeleteByIdAsync(int productId)
         {
-            _productRepository.Delete(productId);
+            await _productRepository.DeleteAsync(productId);
         }
 
-        public ProductDetailsVm GetDetailsById(int productId)
+        public async Task<ProductDetailsVm> GetDetailsByIdAsync(int productId)
         {
-            var product = _productRepository.GetById(productId);
+            var product = await _productRepository.GetByIdAsync(productId);
             var productDetailsVm = _mapper.Map<ProductDetailsVm>(product);
             productDetailsVm = ProductDetailsReflection(productDetailsVm);
 
             return productDetailsVm;
         }
 
-        public async Task AddFromXmlFile(string filePath, string userId)
+        public async Task AddFromXmlFileAsync(string filePath, string userId)
         {
             List<Product> products = await _xmlProductReader.ReadFromFile(filePath, userId);
             await _productRepository.CreateRangeAsync(products);

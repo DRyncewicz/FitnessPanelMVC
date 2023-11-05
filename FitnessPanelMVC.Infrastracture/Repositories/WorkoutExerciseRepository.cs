@@ -1,5 +1,6 @@
 ﻿using FitnessPanelMVC.Domain.Interface;
 using FitnessPanelMVC.Domain.Model;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,28 +18,29 @@ namespace FitnessPanelMVC.Infrastructure.Repositories
             _dbContext = dbContext;
         }
 
-        public void Create(WorkoutExercise workoutExercise)
+        public async Task CreateAsync(WorkoutExercise workoutExercise)
         {
-            _dbContext.WorkoutExercise.Add(workoutExercise);
-            _dbContext.SaveChanges();
+            await _dbContext.WorkoutExercise.AddAsync(workoutExercise);
+            await _dbContext.SaveChangesAsync();
         }
 
-        public void Delete(int workoutId, int exerciseId)
+        public async Task DeleteAsync(int workoutId, int exerciseId)
         {
-            var workoutExercise = _dbContext.WorkoutExercise.FirstOrDefault(we => we.WorkoutId == workoutId && we.ExerciseId == exerciseId);
-            if (workoutExercise != null) 
+            var workoutExercise = await _dbContext.WorkoutExercise
+                .FirstOrDefaultAsync(we => we.WorkoutId == workoutId && we.ExerciseId == exerciseId);
+            if (workoutExercise != null)
             {
                 _dbContext.WorkoutExercise.Remove(workoutExercise);
-                _dbContext.SaveChanges();
+                await _dbContext.SaveChangesAsync();
             }
         }
 
-        public void Update(WorkoutExercise workoutExercise)
+        public async Task UpdateAsync(WorkoutExercise workoutExercise)
         {
-            if (_dbContext.WorkoutExercise.Find(workoutExercise.WorkoutId, workoutExercise.ExerciseId) != null)
+            if (await _dbContext.WorkoutExercise.FindAsync(workoutExercise.WorkoutId, workoutExercise.ExerciseId) != null)
             {
                 _dbContext.WorkoutExercise.Update(workoutExercise);
-                _dbContext.SaveChanges();
+                await _dbContext.SaveChangesAsync();
             }
         }
 

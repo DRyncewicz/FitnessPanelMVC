@@ -9,8 +9,9 @@ namespace FitnessPanelMVC.Domain.Interfaces
 {
     public interface IBodyIndicatorsRepository
     {
-        public int Create(BodyIndicator bMI);
+        public Task<int> CreateAsync(BodyIndicator bodyIndicator);
 
         IQueryable<BodyIndicator> GetAll();
+        Task<BodyIndicator> GetByIdAsync(int id);
     }
 }

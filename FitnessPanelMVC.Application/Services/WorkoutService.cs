@@ -5,6 +5,7 @@ using FitnessPanelMVC.Application.ViewModels.Product;
 using FitnessPanelMVC.Application.ViewModels.Workout;
 using FitnessPanelMVC.Domain.Interface;
 using FitnessPanelMVC.Domain.Model;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,38 +35,37 @@ namespace FitnessPanelMVC.Application.Services
             _exerciseRepository = exerciseRepository;
         }
 
-        public List<WorkoutForListVm> GetAllForList(DateTime Date, string userId)
+        public async Task<List<WorkoutForListVm>> GetAllForListAsync(DateTime Date, string userId)
         {
-            var workouts = _workoutRepository.GetAll().
+            var workouts =await _workoutRepository.GetAll().
                 Where(i => i.Date.Date == Date.Date && i.UserId == userId)
-                .ProjectTo<WorkoutForListVm>(_mapper.ConfigurationProvider).ToList();
+                .ProjectTo<WorkoutForListVm>(_mapper.ConfigurationProvider).ToListAsync();
 
             return workouts;
         }
 
-        public int AddNew(NewWorkoutVm workoutVm, string userId)
+        public async Task<int> AddNewAsync(NewWorkoutVm workoutVm, string userId)
         {
             var workout = _mapper.Map<Workout>(workoutVm);
             workout.UserId = userId;
-            _workoutRepository.Create(workout);
+            await _workoutRepository.CreateAsync(workout);
 
             return workout.Id;
         }
 
-        public int AddExerciseToWorkout(int exerciseId, int workoutId, int durationSeconds, double burnedCalories)
+        public async Task<int> AddExerciseToWorkoutAsync(int exerciseId, int workoutId, int durationSeconds, double burnedCalories)
         {
             TimeSpan duration = TimeSpan.FromSeconds(durationSeconds);
-            var exercise = _exerciseRepository.GetAll()
-                .FirstOrDefault(i => i.Id == exerciseId);
-            if (_workoutExerciseRepository.GetAll()
-                .Any(e => e.WorkoutId == workoutId && e.ExerciseId == exerciseId))
+            var exercise = await _exerciseRepository.GetByIdAsync(exerciseId);
+            if (await _workoutExerciseRepository.GetAll()
+                .AnyAsync(e => e.WorkoutId == workoutId && e.ExerciseId == exerciseId))
             {
                 var workoutExercise = _workoutExerciseRepository.GetAll()
                     .First(e => e.WorkoutId == workoutId && e.ExerciseId == exerciseId);
                 workoutExercise.Duration += duration;
                 workoutExercise.CaloriesBurned += burnedCalories;
 
-                _workoutExerciseRepository.Update(workoutExercise);
+                await _workoutExerciseRepository.UpdateAsync(workoutExercise);
             }
             else
             {
@@ -77,34 +77,34 @@ namespace FitnessPanelMVC.Application.Services
                     CaloriesBurned = burnedCalories
                 };
 
-                _workoutExerciseRepository.Create(workoutExercise);
+                await _workoutExerciseRepository.CreateAsync(workoutExercise);
             }
 
-            UpdateWorkoutInformationsAfterProductChange(workoutId);
+            await UpdateWorkoutInformationsAfterProductChangeAsync(workoutId);
             return workoutId;
         }
 
-        public void DeleteById(int workoutId)
+        public async Task DeleteByIdAsync(int workoutId)
         {
-            _workoutRepository.Delete(workoutId);
+            await _workoutRepository.DeleteAsync(workoutId);
         }
 
-        public WorkoutForListVm GetDetailsById(int workoutId)
+        public async Task<WorkoutForListVm> GetDetailsByIdAsync(int workoutId)
         {
-            var workout = _workoutRepository.GetAll().FirstOrDefault(w => w.Id == workoutId);
+            var workout = await _workoutRepository.GetAll().FirstOrDefaultAsync(w => w.Id == workoutId);
             var workoutVm = _mapper.Map<WorkoutForListVm>(workout);
 
             return workoutVm;
         }
 
-        public void DeleteExerciseFromWorkoutByIds(int workoutId, int exerciseId)
+        public async Task DeleteExerciseFromWorkoutByIdsAsync(int workoutId, int exerciseId)
         {
-            _workoutExerciseRepository.Delete(workoutId, exerciseId);
+            await _workoutExerciseRepository.DeleteAsync(workoutId, exerciseId);
         }
 
-        private void UpdateWorkoutInformationsAfterProductChange(int workoutId)
+        private async Task UpdateWorkoutInformationsAfterProductChangeAsync(int workoutId)
         {
-            var workout = _workoutRepository.GetAll().FirstOrDefault(w => w.Id == workoutId);
+            var workout = await _workoutRepository.GetByIdAsync(workoutId);
             var workoutExercises = workout.WorkoutExercises.ToList();
             workout.TotalCaloriesBurned = workoutExercises.Select(w => w.CaloriesBurned).Sum();
             TimeSpan totalDuration = workoutExercises
@@ -112,7 +112,7 @@ namespace FitnessPanelMVC.Application.Services
                 .Aggregate(TimeSpan.Zero, (subtotal, t) => subtotal + t);
 
             workout.Duration = totalDuration;
-            _workoutRepository.Update(workout);
+            await _workoutRepository.UpdateAsync(workout);
         }
     }
 }

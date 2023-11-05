@@ -1,4 +1,5 @@
 ﻿using FitnessPanelMVC.Application.Interfaces;
+using FitnessPanelMVC.Application.Services;
 using FitnessPanelMVC.Application.ViewModels.Product;
 using FitnessPanelMVC.Domain.Model;
 using FluentValidation;
@@ -18,31 +19,31 @@ namespace FitnessPanelMVC.web.Controllers
 
         private readonly IUserReportService _fileService;
 
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IUserService _userSerivce;
 
         public ProductController(IProductService productService,
             IValidator<NewProductVm> validator,
             IUserReportService fileService,
-            UserManager<ApplicationUser> userManager)
+            IUserService userService)
         {
             _productService = productService;
             _validator = validator;
             _fileService = fileService;
-            _userManager = userManager;
+            _userSerivce = userService;
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var userId = _userManager.GetUserId(User);
-            var model = _productService.GetAllForList(20, 1, "", userId);
+            var userId = await _userSerivce.GetIdAsync(User);
+            var model = await _productService.GetAllForListAsync(20, 1, "", userId);
             return View(model);
         }
 
         [HttpPost]
-        public IActionResult Index(int pageSize, int? pageNo, string searchString)
+        public async Task<IActionResult> Index(int pageSize, int? pageNo, string searchString)
         {
-            var userId = _userManager.GetUserId(User);
+            var userId = await _userSerivce.GetIdAsync(User);
             if (!pageNo.HasValue)
             {
                 pageNo = 1;
@@ -51,7 +52,7 @@ namespace FitnessPanelMVC.web.Controllers
             {
                 searchString = String.Empty;
             }
-            var model = _productService.GetAllForList(pageSize, pageNo.Value, searchString, userId);
+            var model = await _productService.GetAllForListAsync(pageSize, pageNo.Value, searchString, userId);
             return View(model);
         }
 
@@ -62,13 +63,13 @@ namespace FitnessPanelMVC.web.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddProduct(NewProductVm newProduct)
+        public async Task<IActionResult> AddProduct(NewProductVm newProduct)
         {
-            var userId = _userManager.GetUserId(User);
+            var userId = await _userSerivce.GetIdAsync(User);
             var result = _validator.Validate(newProduct);
             if (result.IsValid)
             {
-                _productService.AddNew(newProduct, userId);
+                await _productService.AddNewAsync(newProduct, userId);
                 return RedirectToAction("Index");
             }
 
@@ -77,20 +78,20 @@ namespace FitnessPanelMVC.web.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Admin")]
-        public IActionResult EditProduct(int id)
+        public async Task<IActionResult> EditProduct(int id)
         {
-            var product = _productService.GetForEdit(id);
+            var product = await _productService.GetForEditAsync(id);
             return View(product);
         }
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public IActionResult EditProduct(NewProductVm editedProduct)
+        public async Task<IActionResult> EditProduct(NewProductVm editedProduct)
         {
-            var result = _validator.Validate(editedProduct);
+            var result = await _validator.ValidateAsync(editedProduct);
             if (result.IsValid)
             {
-                _productService.Update(editedProduct);
+                await _productService.UpdateAsync(editedProduct);
                 return RedirectToAction("Index");
             }
 
@@ -98,24 +99,24 @@ namespace FitnessPanelMVC.web.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        public IActionResult DeleteProduct(int id)
+        public async Task<IActionResult> DeleteProduct(int id)
         {
-            _productService.DeleteById(id);
+            await _productService.DeleteByIdAsync(id);
             return RedirectToAction("Index");
         }
 
-        public IActionResult ProductDetails(int id)
+        public async Task<IActionResult> ProductDetails(int id)
         {
 
-            var productDetails = _productService.GetDetailsById(id);
+            var productDetails = await _productService.GetDetailsByIdAsync(id);
             return View(productDetails);
         }
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public IActionResult GetProductsFromExcel(IFormFile file)
+        public async Task<IActionResult> GetProductsFromExcel(IFormFile file)
         {
-            var userId = _userManager.GetUserId(User);
+            var userId = await _userSerivce.GetIdAsync(User);
             if (file != null && file.Length > 0)
             {
                 var filePath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString() + ".xlsx");
@@ -125,7 +126,7 @@ namespace FitnessPanelMVC.web.Controllers
                 {
                     file.CopyTo(stream);
                 }
-                _productService.AddFromXmlFile(filePath, userId);
+                await _productService.AddFromXmlFileAsync(filePath, userId);
                 if (System.IO.File.Exists(filePath))
                 {
                     System.IO.File.Delete(filePath);

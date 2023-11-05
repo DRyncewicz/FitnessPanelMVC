@@ -1,5 +1,6 @@
 ﻿using FitnessPanelMVC.Domain.Interface;
 using FitnessPanelMVC.Domain.Model;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,30 +18,30 @@ namespace FitnessPanelMVC.Infrastructure.Repositories
             _dbCotenxt = dbContext;
         }
 
-        public int Create(RecipeProduct recipeProduct)
+        public async Task<int> CreateAsync(RecipeProduct recipeProduct)
         {
-            _dbCotenxt.RecipeProduct.Add(recipeProduct);
-            _dbCotenxt.SaveChanges();
+            await _dbCotenxt.RecipeProduct.AddAsync(recipeProduct);
+            await _dbCotenxt.SaveChangesAsync();
             return recipeProduct.Id;
         }
 
-        public void Delete (int productId, int recipeId)
+        public async Task DeleteAsync(int productId, int recipeId)
         {
-            var recipeProduct = _dbCotenxt.RecipeProduct.First(rp => rp.ProductId == productId &&
+            var recipeProduct = await _dbCotenxt.RecipeProduct.FirstAsync(rp => rp.ProductId == productId &&
             rp.RecipeId == recipeId);
             if (recipeProduct != null)
             {
                 _dbCotenxt.RecipeProduct.Remove(recipeProduct);
-                _dbCotenxt.SaveChanges();
+                await _dbCotenxt.SaveChangesAsync();
             }
         }
 
-        public int Update (RecipeProduct recipeProduct)
+        public async Task<int> UpdateAsnyc(RecipeProduct recipeProduct)
         {
-            if (_dbCotenxt.RecipeProduct.Find(recipeProduct.Id) != null)
+            if (await _dbCotenxt.RecipeProduct.FindAsync(recipeProduct.Id) != null)
             {
                 _dbCotenxt.RecipeProduct.Update(recipeProduct);
-                _dbCotenxt.SaveChanges();
+                await _dbCotenxt.SaveChangesAsync();
                 return recipeProduct.Id;
             }
             return 0;

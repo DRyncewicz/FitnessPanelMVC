@@ -17,10 +17,10 @@ namespace FitnessPanelMVC.Infrastructure.Repositories
             _dbContext = dbContext;
         }
 
-        public int Create(UserReportFile userReportFile)
+        public async Task<int> CreateAsync(UserReportFile userReportFile)
         {
-            _dbContext.Add(userReportFile);
-            _dbContext.SaveChanges();
+            await _dbContext.AddAsync(userReportFile);
+            await _dbContext.SaveChangesAsync();
             return userReportFile.Id;
         }
 

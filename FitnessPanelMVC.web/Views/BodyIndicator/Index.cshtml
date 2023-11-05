@@ -1,4 +1,6 @@
-﻿@model IEnumerable<FitnessPanelMVC.Application.ViewModels.UserReportFile.UserReportForListVm>
+﻿
+@model FitnessPanelMVC.Application.ViewModels.UserHealthDashboard.ReportDashboardVm
+
 @{
     ViewData["Title"] = "Dashboard";
 }
@@ -8,10 +10,10 @@
     <div class="row">
         <div class="col-6" style="min-height: 300px; border: 1px solid #ddd;">
             <h2>Recent Reports</h2>
-            @if (Model != null && Model.Any())
+            @if (Model != null && Model.Reports.Any())
             {
                 <ul>
-                    @foreach (var report in Model)
+                    @foreach (var report in Model.Reports)
                     {
                         <li>
                             <a href="@Url.Action("DownloadReport", "BodyIndicator", new { filePath = report.Path })" target="_blank">
@@ -28,8 +30,18 @@
             <a href="@Url.Action("CreateBodyIndicator", "BodyIndicator")" class="btn btn-primary">Add New Report</a>
         </div>
         <div class="col-6" style="min-height: 300px; border: 1px solid #ddd;">
-            <h2>Section 2</h2>
+            <h2>UserInfo 2</h2>
+            <ul>
 
+                <li>
+                    <span>@Model.User.UserName</span>
+                    <span>@Model.User.Sex</span>
+                    <span>@Model.User.Name</span>
+                    <span>@Model.User.Surname</span>
+                    <span>@Model.User.Weight</span>
+                    <span>@Model.User.DateOfBirth</span>
+                </li>
+            </ul>
         </div>
     </div>
 

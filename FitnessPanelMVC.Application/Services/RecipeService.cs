@@ -5,6 +5,7 @@ using FitnessPanelMVC.Application.ViewModels.Product;
 using FitnessPanelMVC.Application.ViewModels.Recipe;
 using FitnessPanelMVC.Domain.Interface;
 using FitnessPanelMVC.Domain.Model;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,11 +32,11 @@ namespace FitnessPanelMVC.Application.Services
             _mapper = mapper;
         }
 
-        public ListRecipeForListVm GetForList(int pageSize, int pageNo, string searchString, string userId)
+        public async Task<ListRecipeForListVm> GetForListAsync(int pageSize, int pageNo, string searchString, string userId)
         {
-            var recipesVm = _recipeRepository.GetAll().Where(p => p.Name.Contains(searchString) && p.UserId == userId)
+            var recipesVm = await _recipeRepository.GetAll().Where(p => p.Name.Contains(searchString) && p.UserId == userId)
                 .ProjectTo<RecipeForListVm>(_mapper.ConfigurationProvider)
-                .Skip(pageSize * (pageNo - 1)).Take(pageSize).ToList();
+                .Skip(pageSize * (pageNo - 1)).Take(pageSize).ToListAsync();
             var listRecipesVm = new ListRecipeForListVm()
             {
                 PageSize = pageSize,
@@ -48,16 +49,16 @@ namespace FitnessPanelMVC.Application.Services
             return listRecipesVm;
         }
 
-        public void Delete(int recipeId)
+        public async Task DeleteAsync(int recipeId)
         {
-            _recipeRepository.Remove(recipeId);
+            await _recipeRepository.DeleteAsync(recipeId);
         }
 
-        public int AddNew(NewRecipeVm newRecipeVm, string userId)
+        public async Task<int> AddNewAsync(NewRecipeVm newRecipeVm, string userId)
         {
             var recipe = _mapper.Map<Recipe>(newRecipeVm);
             recipe.UserId = userId;
-            int id = _recipeRepository.Create(recipe);
+            int id = await _recipeRepository.CreateAsync(recipe);
             Product product = new Product()
             {
                 Name = newRecipeVm.Name,
@@ -65,23 +66,24 @@ namespace FitnessPanelMVC.Application.Services
                 IsUserAdded = true,
                 UserId = userId,
             };
-            _productRepository.Create(product);
+            await _productRepository.CreateAsync(product);
             return id;
         }
 
-        public int AddProductToRecipe(int productId, int recipeId, double weight)
+        public async Task<int> AddProductToRecipeAsync(int productId, int recipeId, double weight)
         {
-            var product = _productRepository.GetById(productId);
+            var product = await _productRepository.GetByIdAsync(productId);
             if (_recipeProductRepository.GetAll().Any(e => e.ProductId == productId && e.RecipeId == recipeId))
             {
-                var recipeProduct = _recipeProductRepository.GetAll().First(e => e.ProductId == productId && e.RecipeId == recipeId);
+                var recipeProduct = await _recipeProductRepository.GetAll()
+                    .FirstAsync(e => e.ProductId == productId && e.RecipeId == recipeId);
                 recipeProduct.Weight += Math.Round(weight, 2);
                 recipeProduct.Calories += Math.Round(product.CaloriesPer100g * weight / 100, 2);
                 recipeProduct.Fat += Math.Round(product.FatPer100g * weight / 100, 2);
                 recipeProduct.Carbs += Math.Round(product.CarbsPer100g * weight / 100, 2);
                 recipeProduct.Protein += Math.Round(product.ProteinPer100g * weight / 100, 2);
 
-                _recipeProductRepository.Update(recipeProduct);
+                await _recipeProductRepository.UpdateAsnyc(recipeProduct);
             }
             else
             {
@@ -96,18 +98,17 @@ namespace FitnessPanelMVC.Application.Services
                     Protein = Math.Round(product.ProteinPer100g * weight / 100, 2),
                 };
 
-                _recipeProductRepository.Create(recipeProduct);
+                await _recipeProductRepository.CreateAsync(recipeProduct);
             }
 
-            UpdateRecipeInformationsAfterProductChange(recipeId);
+            await UpdateRecipeInformationsAfterProductChangeAsync(recipeId);
             return recipeId;
         }
 
-        private void UpdateRecipeInformationsAfterProductChange(int recipeId)
+        private async Task UpdateRecipeInformationsAfterProductChangeAsync(int recipeId)
         {
 
-            var recipe = _recipeRepository.GetAll()
-                          .FirstOrDefault(m => m.Id == recipeId);
+            var recipe = await _recipeRepository.GetByIdAsync(recipeId);
             var recipeProducts = recipe.RecipeProducts.ToList();
             recipe.TotalCalories = recipeProducts
                 .Select(m => m.Calories).Sum();
@@ -118,12 +119,12 @@ namespace FitnessPanelMVC.Application.Services
             recipe.TotalProtein = recipeProducts
                 .Select(m => m.Protein).Sum();
 
-            _recipeRepository.Update(recipe);
+            await _recipeRepository.UpdateAsync(recipe);
         }
 
-        public NewProductVm UpdateProductOnRecipeChange(int recipeId)
+        public async Task<NewProductVm> UpdateProductOnRecipeChangeAsync(int recipeId)
         {
-            var recipe = _recipeRepository.GetAll().FirstOrDefault(m => m.Id == recipeId);
+            var recipe = await _recipeRepository.GetByIdAsync(recipeId);
             var totalRecipeWeight = recipe.RecipeProducts.Select(m => m.Weight).Sum();
             var product = _productRepository.GetAll().First(m => m.Name == recipe.Name);
             var newProductVm = _mapper.Map<NewProductVm>(product);
@@ -135,19 +136,19 @@ namespace FitnessPanelMVC.Application.Services
             return newProductVm;
         }
 
-        public RecipeForListVm GetDetailsById(int recipeId)
+        public async Task<RecipeForListVm> GetDetailsByIdAsync(int recipeId)
         {
-            var recipe = _recipeRepository.GetAll().FirstOrDefault(r => r.Id == recipeId);
+            var recipe = await _recipeRepository.GetByIdAsync(recipeId);
             var recipeVm = _mapper.Map<RecipeForListVm>(recipe);
 
             return recipeVm;
         }
 
-        public void DeleteProductFromMealById(int productId, int recipeId)
+        public async Task DeleteProductFromMealByIdsAsync(int productId, int recipeId)
         {
-            _recipeProductRepository.Delete(productId, recipeId);
-            UpdateRecipeInformationsAfterProductChange(recipeId);
-            UpdateProductOnRecipeChange(recipeId);
+            await _recipeProductRepository.DeleteAsync(productId, recipeId);
+            await UpdateRecipeInformationsAfterProductChangeAsync(recipeId);
+            await UpdateProductOnRecipeChangeAsync(recipeId);
         }
     }
 }

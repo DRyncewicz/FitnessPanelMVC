@@ -32,10 +32,10 @@ namespace FitnessPanelMVC.Application.Services
             return exercisesVm;
         }
 
-        public int AddNew(ExerciseForListAndNewVm exerciseVm,string userId)
+        public async Task<int> AddNewAsync(ExerciseForListAndNewVm exerciseVm,string userId)
         {
             var exercise = _mapper.Map<Exercise>(exerciseVm);
-            _exerciseRepository.Create(exercise);
+            await _exerciseRepository.CreateAsync(exercise);
             return exercise.Id;
         }
     }

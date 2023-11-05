@@ -24,11 +24,18 @@ namespace FitnessPanelMVC.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<UserVm> GetAsync(ClaimsPrincipal userClaims)
+        public async Task<UserDetailsVm> GetAsync(ClaimsPrincipal userClaims)
         {
             var user = await _userManager.GetUserAsync(userClaims);
 
-            return _mapper.Map<UserVm>(user); 
+            return _mapper.Map<UserDetailsVm>(user); 
+        }
+
+        public async Task<string> GetIdAsync (ClaimsPrincipal userClaims)
+        {
+            var user = await _userManager.GetUserAsync(userClaims);
+
+            return user.Id;
         }
     }
 }

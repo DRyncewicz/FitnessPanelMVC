@@ -6,6 +6,7 @@ using FitnessPanelMVC.Application.ViewModels.MealProduct;
 using FitnessPanelMVC.Application.ViewModels.Product;
 using FitnessPanelMVC.Domain.Interface;
 using FitnessPanelMVC.Domain.Model;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,31 +47,31 @@ namespace FitnessPanelMVC.Application.Services
             };
         }
 
-        public int AddNew(NewMealVm newMealVm, string userId)
+        public async Task<int> AddNewAsync(NewMealVm newMealVm, string userId)
         {
 
             var meal = _mapper.Map<Meal>(newMealVm);
             meal.UserId = userId;
-            int mealId = _mealRepository.Create(meal);
+            int mealId = await _mealRepository.CreateAsync(meal);
 
             return mealId;
         }
 
-        public int AddProductToMeal(int productId, int mealId, double weight)
+        public async Task<int> AddProductToMealAsync(int productId, int mealId, double weight)
         {
-            var product = _productRepository.GetById(productId);
+            var product = await _productRepository.GetByIdAsync(productId);
             if (_mealProductRepository.GetAll()
                 .Any(e => e.ProductId == productId && e.MealId == mealId))
             {
-                var mealProduct = _mealProductRepository.GetAll()
-                    .First(e => e.ProductId == productId && e.MealId == mealId);
+                var mealProduct = await _mealProductRepository.GetAll()
+                    .FirstAsync(e => e.ProductId == productId && e.MealId == mealId);
                 mealProduct.Weight += Math.Round(weight, 2);
                 mealProduct.Calories += Math.Round(product.CaloriesPer100g * weight / 100, 2);
                 mealProduct.Fat += Math.Round(product.FatPer100g * weight / 100, 2);
                 mealProduct.Carbs += Math.Round(product.CarbsPer100g * weight / 100, 2);
                 mealProduct.Protein += Math.Round(product.ProteinPer100g * weight / 100, 2);
 
-                _mealProductRepository.Update(mealProduct);
+                await _mealProductRepository.UpdateAsync(mealProduct);
             }
             else
             {
@@ -85,37 +86,35 @@ namespace FitnessPanelMVC.Application.Services
                     Protein = Math.Round(product.ProteinPer100g * weight / 100, 2),
                 };
 
-                _mealProductRepository.Create(mealProduct);
+                await _mealProductRepository.CreateAsync(mealProduct);
             }
 
-            UpdateMealInformationsAfterProductChange(mealId);
+            await UpdateMealInformationsAfterProductChangeAsync(mealId);
             return mealId;
         }
 
-        public MealForListVm GetDetailsById(int mealId)
+        public async Task<MealForListVm> GetDetailsByIdAsync(int mealId)
         {
-            var meal = _mealRepository.GetAll().
-                FirstOrDefault(m => m.Id == mealId);
+            var meal = await _mealRepository.GetByIdAsync(mealId);
             var mealForListVm = _mapper.Map<MealForListVm>(meal);
 
             return mealForListVm;
         }
 
-        public void DeleteById(int mealId)
+        public async Task DeleteByIdAsync(int mealId)
         {
-            _mealRepository.Delete(mealId);
+            await _mealRepository.DeleteAsync(mealId);
         }
 
-        public void DeleteProductFromMealById(int productId, int mealId)
+        public async Task DeleteProductFromMealByIdAsync(int productId, int mealId)
         {
-            _mealProductRepository.Delete(productId, mealId);
-            UpdateMealInformationsAfterProductChange(mealId);
+            await _mealProductRepository.DeleteAsync(productId, mealId);
+            await UpdateMealInformationsAfterProductChangeAsync(mealId);
         }
 
-        private void UpdateMealInformationsAfterProductChange(int mealId)
+        private async Task UpdateMealInformationsAfterProductChangeAsync(int mealId)
         {
-            var meal = _mealRepository.GetAll()
-                          .FirstOrDefault(m => m.Id == mealId);
+            var meal = await _mealRepository.GetByIdAsync(mealId);
             var mealProducts = meal.MealProducts.ToList();
             meal.TotalCalories = mealProducts
                 .Select(m => m.Calories).Sum();
@@ -126,7 +125,7 @@ namespace FitnessPanelMVC.Application.Services
             meal.TotalProtein = mealProducts
                 .Select(m => m.Protein).Sum();
 
-            _mealRepository.Update(meal);
+            await _mealRepository.UpdateAsync(meal);
         }
     }
 }

@@ -18,29 +18,29 @@ namespace FitnessPanelMVC.Infrastructure.Repositories
             _dbContext = dbContext;
         }
 
-        public int Create(Recipe recipe)
+        public async Task<int> CreateAsync(Recipe recipe)
         {
-            _dbContext.Recipes.Add(recipe);
-            _dbContext.SaveChanges();
+            await _dbContext.Recipes.AddAsync(recipe);
+            await _dbContext.SaveChangesAsync();
             return recipe.Id;
         }
 
-        public void Remove(int id)
+        public async Task DeleteAsync(int id)
         {
-            var recipe = _dbContext.Recipes.Find(id);
+            var recipe = await _dbContext.Recipes.FindAsync(id);
             if (recipe != null)
             {
                 _dbContext.Recipes.Remove(recipe);
-                _dbContext.SaveChanges();
+                await _dbContext.SaveChangesAsync();
             }
         }
 
-        public int Update(Recipe recipe)
+        public async Task<int> UpdateAsync(Recipe recipe)
         {
-            if(_dbContext.Recipes.Find(recipe.Id) != null)
+            if(await _dbContext.Recipes.FindAsync(recipe.Id) != null)
             {
                 _dbContext.Recipes.Update(recipe);
-                _dbContext.SaveChanges();
+                await _dbContext.SaveChangesAsync();
                 return recipe.Id;
             }
             return 0;
@@ -52,6 +52,16 @@ namespace FitnessPanelMVC.Infrastructure.Repositories
                 .Include(m => m.RecipeProducts)
                 .ThenInclude(m => m.Product);
             return recipes.AsQueryable();
+        }
+
+        public async Task<Recipe> GetByIdAsync(int id)
+        {
+            var recipe = await _dbContext.Recipes.FirstOrDefaultAsync(r => r.Id == id);
+            if (recipe == null)
+            {
+                recipe = new Recipe();
+            }
+            return recipe;
         }
     }
 }

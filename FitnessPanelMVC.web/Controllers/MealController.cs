@@ -19,27 +19,27 @@ namespace FitnessPanelMVC.web.Controllers
 
         private readonly IProductService _productService;
 
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IUserService _userSerivce;
 
-        public MealController(IMealService mealService, IProductService productService, UserManager<ApplicationUser> userManager)
+        public MealController(IMealService mealService, IProductService productService, IUserService userService)
         {
             _mealService = mealService;
             _productService = productService;
-            _userManager = userManager;
+            _userSerivce = userService;
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var userId = _userManager.GetUserId(User);
+            var userId = await _userSerivce.GetIdAsync(User);
             var model = _mealService.GetForListByDate(DateTime.Now, userId);
             return View(model);
         }
 
         [HttpPost]
-        public IActionResult Index(DateTime date)
+        public async Task<IActionResult> Index(DateTime date)
         {
-            var userId = _userManager.GetUserId(User);
+            var userId = await _userSerivce.GetIdAsync(User);
             var model = _mealService.GetForListByDate(date, userId);
             return View(model);
         }
@@ -51,26 +51,26 @@ namespace FitnessPanelMVC.web.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddMeal(NewMealVm newMealVm)
+        public async Task<IActionResult> AddMeal(NewMealVm newMealVm)
         {
-            var userId = _userManager.GetUserId(User);
-            int id = _mealService.AddNew(newMealVm, userId);
+            var userId = await _userSerivce.GetIdAsync(User);
+            int id = await _mealService.AddNewAsync(newMealVm, userId);
             HttpContext.Session.SetInt32("CurrentMealId", id);
             return RedirectToAction("AddProductsToMealList");
         }
 
         [HttpGet]
-        public IActionResult AddProductsToMealList()
+        public async Task<IActionResult> AddProductsToMealList()
         {
-            var userId = _userManager.GetUserId(User);
-            var model = _productService.GetAllForList(20, 1, "", userId);
+            var userId = await _userSerivce.GetIdAsync(User);
+            var model = _productService.GetAllForListAsync(20, 1, "", userId);
             return View(model);
         }
 
         [HttpPost]
-        public IActionResult AddProductsToMealList(int pageSize, int? pageNo, string searchString)
+        public async Task<IActionResult> AddProductsToMealList(int pageSize, int? pageNo, string searchString)
         {
-            var userId = _userManager.GetUserId(User);
+            var userId = await _userSerivce.GetIdAsync(User);
             if (!pageNo.HasValue)
             {
                 pageNo = 1;
@@ -79,34 +79,34 @@ namespace FitnessPanelMVC.web.Controllers
             {
                 searchString = String.Empty;
             }
-            var model = _productService.GetAllForList(pageSize, pageNo.Value, searchString, userId);
+            var model = _productService.GetAllForListAsync(pageSize, pageNo.Value, searchString, userId);
             return View(model);
         }
 
         [HttpPost]
-        public IActionResult AddProductToMeal([FromBody] ProductMealModel model)
+        public async Task<IActionResult> AddProductToMeal([FromBody] ProductMealModel model)
         {
             int mealId = HttpContext.Session.GetInt32("CurrentMealId") ?? default;
-            _mealService.AddProductToMeal(model.ProductId, mealId, model.Weight);
+            await _mealService.AddProductToMealAsync(model.ProductId, mealId, model.Weight);
             return Json(new { success = true, message = "Product added successfully" });
         }
 
-        public IActionResult DeleteMeal(int id)
+        public async Task<IActionResult> DeleteMeal(int id)
         {
-            _mealService.DeleteById(id);
+            await _mealService.DeleteByIdAsync(id);
             return RedirectToAction("Index");
         }
 
-        public IActionResult MealDetails(int id)
+        public async Task<IActionResult> MealDetails(int id)
         {
             HttpContext.Session.SetInt32("CurrentMealId", id);
-            var model = _mealService.GetDetailsById(id);
+            var model = await _mealService.GetDetailsByIdAsync(id);
             return View(model);
         }
 
-        public IActionResult DeleteProductFromMeal(int id, int mealId)
+        public async Task<IActionResult> DeleteProductFromMeal(int id, int mealId)
         {
-            _mealService.DeleteProductFromMealById(id, mealId);
+            await _mealService.DeleteProductFromMealByIdAsync(id, mealId);
             return RedirectToAction("Index");
         }
     }

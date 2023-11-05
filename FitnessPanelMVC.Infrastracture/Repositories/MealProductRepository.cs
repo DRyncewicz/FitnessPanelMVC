@@ -18,31 +18,32 @@ namespace FitnessPanelMVC.Infrastructure.Repositories
             _dbContext = dbContext;
         }
 
-        public void Create(MealProduct mealProduct)
+        public async Task CreateAsync(MealProduct mealProduct)
         {
-            _dbContext.MealProduct.Add(mealProduct);
-            _dbContext.SaveChanges();
+            await _dbContext.MealProduct.AddAsync(mealProduct);
+            await _dbContext.SaveChangesAsync();
         }
 
-        public void Delete(int productId, int mealId)
+        public async Task DeleteAsync(int productId, int mealId)
         {
-            var mealProduct = _dbContext.MealProduct.FirstOrDefault(mp => mp.MealId == mealId && mp.ProductId == productId);
+            var mealProduct = await _dbContext.MealProduct
+                .FirstOrDefaultAsync(mp => mp.MealId == mealId && mp.ProductId == productId);
             if (mealProduct != null)
             {
                 _dbContext.MealProduct.Remove(mealProduct);
-                _dbContext.SaveChanges();
+                await _dbContext.SaveChangesAsync();
             }
         }
 
-        public void Update(MealProduct mealProduct)
+        public async Task UpdateAsync(MealProduct mealProduct)
         {
-            var existingMealProduct = _dbContext.MealProduct
-                .Find(mealProduct.MealId, mealProduct.ProductId);
+            var existingMealProduct = await _dbContext.MealProduct
+                .FindAsync(mealProduct.MealId, mealProduct.ProductId);
 
             if (existingMealProduct != null)
             {
                 _dbContext.Entry(existingMealProduct).CurrentValues.SetValues(mealProduct);
-                _dbContext.SaveChanges();
+                await _dbContext.SaveChangesAsync();
             }
         }
 

@@ -1,5 +1,8 @@
 ﻿@model FitnessPanelMVC.Application.ViewModels.Product.ListProductForListVm
-
+@using FitnessPanelMVC.Domain.Model;
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
 @{
     ViewData["Title"] = "Index";
 }
@@ -10,18 +13,20 @@
     <p>
         <a asp-action="AddProduct" class="btn btn-primary">Create New</a>
     </p>
-    <form asp-controller="Product" asp-action="GetProductsFromExcel" method="post" enctype="multipart/form-data" class="upload-excel-form">
-        <div class="mb-3">
-            <label for="excelFile" class="form-label"><strong>Upload Products</strong></label>
-            <p class="text-muted">
-                Here you can upload a list of products from an Excel file. Make sure the file is in the correct format.
-            </p>
-            <input type="file" class="form-control" id="excelFile" name="file" aria-describedby="fileHelp">
-            <div id="fileHelp" class="form-text">Accepted formats: .xlsx, .xls</div>
-        </div>
-        <button type="submit" class="btn btn-primary">Upload</button>
-    </form>
-
+    @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+    {
+        <form asp-controller="Product" asp-action="GetProductsFromExcel" method="post" enctype="multipart/form-data" class="upload-excel-form">
+            <div class="mb-3">
+                <label for="excelFile" class="form-label"><strong>Upload Products</strong></label>
+                <p class="text-muted">
+                    Here you can upload a list of products from an Excel file. Make sure the file is in the correct format.
+                </p>
+                <input type="file" class="form-control" id="excelFile" name="file" aria-describedby="fileHelp">
+                <div id="fileHelp" class="form-text">Accepted formats: .xlsx, .xls</div>
+            </div>
+            <button type="submit" class="btn btn-primary">Upload</button>
+        </form>
+    }
     <style>
         .upload-excel-form {
             padding: 20px;
@@ -106,10 +111,9 @@
 @section Scripts
     {
     <script type="text/javascript">
-        function PagerClick(index) 
-        {
+        function PagerClick(index) {
             document.getElementById("pageNo").value = index;
-            document.getElementById("searchForm").submit(); 
+            document.getElementById("searchForm").submit();
         }
     </script>
 }

@@ -19,21 +19,21 @@ namespace FitnessPanelMVC.Infrastructure.Repositories
             _dbContext = dbContext;
         }
 
-        public int Create(Meal meal)
+        public async Task<int> CreateAsync(Meal meal)
         {
-            _dbContext.Meals.Add(meal);
-            _dbContext.SaveChanges();
+            await _dbContext.Meals.AddAsync(meal);
+            await _dbContext.SaveChangesAsync();
             return meal.Id;
 
         }
 
-        public void Delete(int id)
+        public async Task DeleteAsync(int id)
         {
-            var meal = _dbContext.Meals.Find(id);
+            var meal = await _dbContext.Meals.FindAsync(id);
             if (meal != null)
             {
                 _dbContext.Meals.Remove(meal);
-                _dbContext.SaveChanges();
+                await _dbContext.SaveChangesAsync();
             }
         }
 
@@ -44,15 +44,25 @@ namespace FitnessPanelMVC.Infrastructure.Repositories
             return meals;
         }
 
-        public int Update(Meal meal)
+        public async Task<int> UpdateAsync(Meal meal)
         {
-            if (_dbContext.Meals.Find(meal.Id) != null)
+            if (await _dbContext.Meals.FindAsync(meal.Id) != null)
             {
                 _dbContext.Meals.Update(meal);
-                _dbContext.SaveChanges();
+                await _dbContext.SaveChangesAsync();
                 return meal.Id;
             }
             return 0;
+        }
+
+        public async Task<Meal> GetByIdAsync(int id)
+        {
+            var meal = await _dbContext.Meals.FirstOrDefaultAsync(m => m.Id == id);
+            if (meal == null)
+            {
+                meal = new Meal();
+            }
+            return meal;
         }
     }
 }

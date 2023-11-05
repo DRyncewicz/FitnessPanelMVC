@@ -9,15 +9,12 @@ namespace FitnessPanelMVC.Domain.Interface
 {
     public interface IProductRepository
     {
-        public int Create(Product product);
-
-        public void Delete(int id);
-
-        public void Update(Product product);
-
-        public Product GetById(int id);
 
         public IQueryable<Product> GetAll();
         Task CreateRangeAsync(List<Product> products);
+        Task<int> CreateAsync(Product product);
+        Task DeleteAsync(int id);
+        Task UpdateAsync(Product product);
+        Task<Product> GetByIdAsync(int id);
     }
 }

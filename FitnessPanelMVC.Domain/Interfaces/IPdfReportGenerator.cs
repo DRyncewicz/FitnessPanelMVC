@@ -10,6 +10,6 @@ namespace FitnessPanelMVC.Domain.Interfaces
 {
     public interface IPdfReportGenerator
     {
-        byte[] Generate(BodyIndicator data);
+        Task<byte[]> Generate(BodyIndicator data);
     }
 }

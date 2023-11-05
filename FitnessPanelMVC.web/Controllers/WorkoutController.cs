@@ -15,32 +15,32 @@ namespace FitnessPanelMVC.web.Controllers
     {
         private readonly IWorkoutService _workoutService;
 
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IUserService _userService;
 
         private readonly IExerciseService _exerciseService;
 
         public WorkoutController(IWorkoutService workoutService,
-            UserManager<ApplicationUser> userManager,
+            IUserService userService,
             IExerciseService exerciseService)
         {
             _exerciseService = exerciseService;
             _workoutService = workoutService;
-            _userManager = userManager;
+            _userService = userService;
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var userId = _userManager.GetUserId(User);
-            var model = _workoutService.GetAllForList(DateTime.Now, userId);
+            var userId = await _userService.GetIdAsync(User);
+            var model = await _workoutService.GetAllForListAsync(DateTime.Now, userId);
             return View(model);
         }
 
         [HttpPost]
-        public IActionResult Index(DateTime date)
+        public async Task<IActionResult> Index(DateTime date)
         {
-            var userId = _userManager.GetUserId(User);
-            var model = _workoutService.GetAllForList(date, userId);
+            var userId = await _userService.GetIdAsync(User);
+            var model = await _workoutService.GetAllForListAsync(date, userId);
             return View(model);
         }
 
@@ -51,10 +51,10 @@ namespace FitnessPanelMVC.web.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddWorkout(NewWorkoutVm newWorkoutVm)
+        public async Task<IActionResult> AddWorkout(NewWorkoutVm newWorkoutVm)
         {
-            var userId = _userManager.GetUserId(User);
-            int id = _workoutService.AddNew(newWorkoutVm, userId);
+            var userId = await _userService.GetIdAsync(User);
+            int id = await _workoutService.AddNewAsync(newWorkoutVm, userId);
             HttpContext.Session.SetInt32("CurrentWorkoutId", id);
             return RedirectToAction("AddExercisesToWorkoutList");
         }
@@ -67,29 +67,29 @@ namespace FitnessPanelMVC.web.Controllers
         }
 
         [HttpPost]
-        public IActionResult FinishExercise([FromBody] WorkoutExerciseModel model)
+        public async Task<IActionResult> FinishExercise([FromBody] WorkoutExerciseModel model)
         {
             int workoutId = HttpContext.Session.GetInt32("CurrentWorkoutId") ?? default;
-            _workoutService.AddExerciseToWorkout(model.ExerciseId, workoutId, model.DurationSeconds, model.BurnedCalories);
+            await _workoutService.AddExerciseToWorkoutAsync(model.ExerciseId, workoutId, model.DurationSeconds, model.BurnedCalories);
             return Json(new { success = true, message = "Exercise added successfully." });
         }
 
-        public IActionResult DeleteWorkout(int id)
+        public async Task<IActionResult> DeleteWorkout(int id)
         {
-            _workoutService.DeleteById(id);
+            await _workoutService.DeleteByIdAsync(id);
             return RedirectToAction("Index");
         }
 
-        public IActionResult WorkoutDetails(int id)
+        public async Task<IActionResult> WorkoutDetails(int id)
         {
             HttpContext.Session.SetInt32("CurrentWorkoutId", id);
-            var  model = _workoutService.GetDetailsById(id);
+            var model = await _workoutService.GetDetailsByIdAsync(id);
             return View(model);
         }
 
-        public IActionResult DeleteExerciseFromWorkout(int workoutId, int exerciseId)
+        public async Task<IActionResult> DeleteExerciseFromWorkout(int workoutId, int exerciseId)
         {
-            _workoutService.DeleteExerciseFromWorkoutByIds(workoutId, exerciseId);
+            await _workoutService.DeleteExerciseFromWorkoutByIdsAsync(workoutId, exerciseId);
             return RedirectToAction("Index");
         }
     }
