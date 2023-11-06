@@ -72,7 +72,7 @@ namespace FitnessPanelMVC.web.Controllers
             var result = await _validator.ValidateAsync(newBodyIndicatorVm);
             if (result.IsValid)
             {
-                int id = await _bodyIndicatorService.AddNewAsync(newBodyIndicatorVm);
+                int id = await _bodyIndicatorService.AddNewAsync(newBodyIndicatorVm, userId);
                 var bodyIndicator = await _bodyIndicatorService.GetByIdAsync(id);
                 await _userReportService.CreateUserBodyReportAsync(bodyIndicator, userId);
                 return RedirectToAction("Index");

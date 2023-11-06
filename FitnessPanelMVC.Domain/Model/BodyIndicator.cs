@@ -38,5 +38,13 @@ namespace FitnessPanelMVC.Domain.Model
         public double BeW { get; set; }
 
         public double BMI { get; set; }
+
+        public bool IsRealUserData { get; set; }
+
+        public string UserId { get; set; }
+
+        public virtual ApplicationUser User { get; set; }
+
+        public DateTime Date { get; set; }
     }
 }

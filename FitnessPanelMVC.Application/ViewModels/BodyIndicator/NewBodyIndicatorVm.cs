@@ -27,6 +27,12 @@ namespace FitnessPanelMVC.Application.ViewModels.BodyIndicator
 
         public int AbdominalCircumference { get; set; }
 
+        public bool IsRealUserData { get; set; }
+
+        public string UserId { get; set; }
+
+        public DateTime Date { get; set; }
+
         public void Mapping(Profile profile)
         {
             profile.CreateMap<FitnessPanelMVC.Domain.Model.BodyIndicator, NewBodyIndicatorVm>().ReverseMap();

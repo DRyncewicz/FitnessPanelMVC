@@ -14,10 +14,12 @@
 
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-12">
         <form asp-action="CreateBodyIndicator">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="UserId" />
+            <input type="hidden" asp-for="Date" />
 
             <div class="form-group">
                 <label asp-for="Sex" class="control-label"></label>
@@ -53,6 +55,13 @@
                 <label asp-for="AbdominalCircumference" class="control-label"></label>
                 <input asp-for="AbdominalCircumference" class="form-control" />
                 <span asp-validation-for="AbdominalCircumference" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <div class="form-check">
+                    <input asp-for="IsRealUserData" class="form-check-input" />
+                    <label asp-for="IsRealUserData" class="form-check-label">This is User data (will be used to follow your progress)</label>
+                </div>
+                <span asp-validation-for="IsRealUserData" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

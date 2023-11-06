@@ -25,7 +25,7 @@ namespace FitnessPanelMVC.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<int> AddNewAsync(NewBodyIndicatorVm newBodyIndicatorVm)
+        public async Task<int> AddNewAsync(NewBodyIndicatorVm newBodyIndicatorVm, string userId)
         {
             var bodyIndicator = _mapper.Map<BodyIndicator>(newBodyIndicatorVm);
             bodyIndicator.BMI = Math.Round(bodyIndicator.Mass / Math.Pow(((double)bodyIndicator.Height / 100), 2), 2);
@@ -43,6 +43,9 @@ namespace FitnessPanelMVC.Application.Services
             bodyIndicator.CPM = Math.Round(bodyIndicator.PPM * (double)bodyIndicator.PAL / 10, 2);
             bodyIndicator.WHtR = Math.Round(((double)bodyIndicator.HipCircumference / (double)bodyIndicator.Height) * 100.0, 2);
             bodyIndicator.NMC = bodyIndicator.Height - 100;
+            bodyIndicator.UserId = userId;
+            bodyIndicator.Date = DateTime.Now;
+
 
             await _bodyIndicatorRepository.CreateAsync(bodyIndicator);
             return bodyIndicator.Id;

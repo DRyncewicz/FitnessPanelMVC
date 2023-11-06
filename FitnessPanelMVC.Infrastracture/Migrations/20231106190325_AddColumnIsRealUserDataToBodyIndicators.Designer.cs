@@ -4,6 +4,7 @@ using FitnessPanelMVC.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FitnessPanelMVC.Infrastructure.Migrations
 {
     [DbContext(typeof(DbContext))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20231106190325_AddColumnIsRealUserDataToBodyIndicators")]
+    partial class AddColumnIsRealUserDataToBodyIndicators
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -127,9 +130,6 @@ namespace FitnessPanelMVC.Infrastructure.Migrations
 
                     b.Property<double>("CPM")
                         .HasColumnType("float");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
 
                     b.Property<int>("Height")
                         .HasColumnType("int");

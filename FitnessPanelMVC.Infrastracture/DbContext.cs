@@ -100,6 +100,10 @@ namespace FitnessPanelMVC.Infrastructure
                 .WithMany()
                 .HasForeignKey(it => it.UserId);
 
+            builder.Entity<BodyIndicator>()
+                .HasOne<ApplicationUser>(it => it.User)
+                .WithMany()
+                .HasForeignKey(it => it.UserId);
         }
     }
 }
