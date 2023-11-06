@@ -25,7 +25,8 @@ namespace FitnessPanelMVC.Application.Services
 
         private readonly IMapper _mapper;
 
-        private readonly string filePath = @"C:\Users\ereen\Temp";
+        private readonly string filePath = Path.GetTempPath();
+
 
         public UserReportService(IPdfReportGenerator pdfReportGenerator,
             IUserReportFileRepository userReportFileRepository,
