@@ -35,6 +35,7 @@ builder.Services.AddHttpClient();
 builder.Services.AddInfrastructure();
 
 builder.Services.AddControllersWithViews().AddFluentValidation();
+
 builder.Services.Configure<IdentityOptions>(options =>
 {
     options.Password.RequireDigit = true;
