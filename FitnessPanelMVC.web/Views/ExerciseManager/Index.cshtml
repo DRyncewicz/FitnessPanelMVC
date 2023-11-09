@@ -1,0 +1,46 @@
+﻿@model FitnessPanelMVC.Application.ViewModels.ExternalExercise.ExerciseOptionsVm
+
+@{
+    ViewBag.Title = "Exercise Manager";
+
+}
+
+<h2>Select an Exercise Option</h2>
+
+<form asp-controller="ExerciseManager" asp-action="GetExerciseResult" method="post">
+    <div class="form-group">
+        <label for="SelectedOption">Choose an option:</label>
+        <select asp-for="SelectedOption" asp-items="@(new SelectList(Model.AvailableOptions))" class="form-control"></select>
+    </div>
+    <button type="submit" class="btn btn-primary">Get Exercises</button>
+</form>
+
+
+@if (Model.ExerciseResults != null && Model.ExerciseResults.Any())
+{
+    <h3>Exercise Results</h3>
+    <div class="row">
+        @foreach (var exercise in Model.ExerciseResults)
+        {
+            <div class="col-md-4">
+                <div class="card mb-3">
+                    <img class="card-img-top" src="@exercise.GifUrl" alt="Exercise image">
+                    <div class="card-body">
+                        <h5 class="card-title">@exercise.Name</h5>
+                        <p class="card-text">Body Part: @exercise.BodyPart</p>
+                        <p class="card-text">Equipment: @exercise.Equipment</p>
+                        <p class="card-text">Target: @exercise.Target</p>
+                        <p class="card-text">Secondary Muscles: @string.Join(", ", exercise.SecondaryMuscles)</p>
+                        <h6>Instructions:</h6>
+                        <ul>
+                            @foreach (var instruction in exercise.Instructions)
+                            {
+                                <li>@instruction</li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

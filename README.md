@@ -76,5 +76,8 @@ with possibility to add or delete products
 ![image](https://github.com/DRyncewicz/FitnessPanelMVC/assets/97690111/d166e4d4-87c9-4a35-b397-42767b5c9e6e)
 ![image](https://github.com/DRyncewicz/FitnessPanelMVC/assets/97690111/c28a86b8-7084-4409-a15f-b7eb352e7231)
 
+- Exercise manager
+![image](https://github.com/DRyncewicz/FitnessPanelMVC/assets/97690111/76a9a57e-96be-4f22-bc32-405202ad223c)
+
 
 

@@ -13,8 +13,10 @@ using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using FitnessPanelMVC.web.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
+
 var Configuration = builder.Configuration;
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnectionString") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
@@ -22,11 +24,16 @@ builder.Services.AddDbContext<FitnessPanelMVC.Infrastructure.DbContext>(options 
     options.UseSqlServer(connectionString));
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<FitnessPanelMVC.Infrastructure.DbContext>();
 builder.Services.AddApplication();
+
+builder.Services.AddHttpClient();
+
 builder.Services.AddInfrastructure();
+
 builder.Services.AddControllersWithViews().AddFluentValidation();
 builder.Services.Configure<IdentityOptions>(options =>
 {
@@ -43,7 +50,9 @@ builder.Services.AddAuthentication().AddGoogle(options =>
 });
 
 builder.Services.AddTransient<IValidator<NewProductVm>, NewProductValidation>();
+
 builder.Services.AddTransient<IValidator<NewBodyIndicatorVm>, NewBodyIndicatorValidation>();
+
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(15);
@@ -72,6 +81,7 @@ using (var scope = app.Services.CreateScope())
     var dbContext = services.GetRequiredService<FitnessPanelMVC.Infrastructure.DbContext>();
     dbContext.Database.Migrate();
 }
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseHttpsRedirection();
 
