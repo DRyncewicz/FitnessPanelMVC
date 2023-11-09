@@ -1,5 +1,7 @@
 ﻿using FitnessPanelMVC.Domain.Interface;
 using FitnessPanelMVC.Domain.Interfaces;
+using FitnessPanelMVC.Infrastructure.ExternalApiRapidExerciseDb;
+using FitnessPanelMVC.Infrastructure.ExternalApiRapidExerciseDb.Helpers;
 using FitnessPanelMVC.Infrastructure.FileGenerators;
 using FitnessPanelMVC.Infrastructure.FileReaders;
 using FitnessPanelMVC.Infrastructure.Repositories;
@@ -28,6 +30,8 @@ namespace FitnessPanelMVC.Infrastructure
             services.AddTransient<IPdfReportGenerator, PdfReportGenerator>();
             services.AddTransient<IUserReportFileRepository, UserReportFileRepository>();
             services.AddTransient<IXmlProductReader, XmlProductReader>();
+            services.AddTransient<ExerciseUrlBuilder>();
+            services.AddTransient<IExerciseApiClient, ExerciseApiClient>();
 
             return services;
         }

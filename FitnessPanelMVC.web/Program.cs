@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using FitnessPanelMVC.web.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +29,8 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.R
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<FitnessPanelMVC.Infrastructure.DbContext>();
 builder.Services.AddApplication();
+
+builder.Services.AddHttpClient();
 
 builder.Services.AddInfrastructure();
 
@@ -78,6 +81,7 @@ using (var scope = app.Services.CreateScope())
     var dbContext = services.GetRequiredService<FitnessPanelMVC.Infrastructure.DbContext>();
     dbContext.Database.Migrate();
 }
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseHttpsRedirection();
 
