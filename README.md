@@ -22,6 +22,9 @@ The application was created to manage meals and workouts by the user. It has a d
 - AutoMapper" Version="12.0.1" 
 
 ## Views
+- Home
+![image](https://github.com/DRyncewicz/FitnessPanelMVC/assets/97690111/3593058c-c931-4def-a58f-9ceb7637b071)
+
 - Product
   
 ![image](https://github.com/DRyncewicz/FitnessPanelMVC/assets/97690111/54c28f96-2f24-4b35-97f1-e5b6ecede5cf)
