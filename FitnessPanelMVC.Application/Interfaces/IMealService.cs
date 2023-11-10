@@ -20,6 +20,6 @@ namespace FitnessPanelMVC.Application.Interfaces
 
         Task<MealForListVm> GetDetailsByIdAsync(int mealId);
 
-        ListMealForListVm GetForListByDate(DateTime date, string userId);
+        Task<ListMealForListVm> GetForListByDate(DateTime date, string userId);
     }
 }

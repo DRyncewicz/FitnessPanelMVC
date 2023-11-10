@@ -18,7 +18,7 @@ namespace FitnessPanelMVC.Infrastructure.ExternalApiRapidExerciseDb.Helpers
             bodyPartUrl = bodyPartUrl = configuration["BodyPartUrl"];
         }
 
-        public string HttpUlrBuilder(string bodyPart)
+        public string HttpUrlBuild(string bodyPart)
         {
             sb.Append(bodyPartUrl);
             sb.Append(bodyPart);

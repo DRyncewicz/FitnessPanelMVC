@@ -1,9 +1,11 @@
 ﻿using FitnessPanelMVC.Application.Interfaces;
 using FitnessPanelMVC.Application.ViewModels.Calendar;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FitnessPanelMVC.web.Controllers
 {
+    [Authorize]
     public class UserHealthController : Controller
     {
         private readonly IUserService _userService;

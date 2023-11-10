@@ -9,20 +9,30 @@ namespace FitnessPanelMVC.web.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly IUserService _userService;
 
-
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly IBodyIndicatorService _bodyIndicatorService;
+        public HomeController(IUserService userService, IBodyIndicatorService bodyIndicatorService)
         {
-            _logger = logger;
-
+            _userService = userService;
+            _bodyIndicatorService = bodyIndicatorService;
         }
 
         public async Task<IActionResult> Index()
         {
-            return View();
+
+            if (User.Identity.IsAuthenticated)
+            {
+                var userId = await _userService.GetIdAsync(User);
+                var model = await _bodyIndicatorService.GetByUserIdAsync(userId);
+                return View();
+            }
+            else
+            {
+                return View();           
+            }
         }
+
 
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

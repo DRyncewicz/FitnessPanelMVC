@@ -37,7 +37,7 @@ namespace FitnessPanelMVC.Infrastructure.ExternalApiRapidExerciseDb
 
             var httpClient = _httpClientFactory.CreateClient();
 
-            var url = _urlBuilder.HttpUlrBuilder(bodyPart.ToLower());
+            var url = _urlBuilder.HttpUrlBuild(bodyPart.ToLower());
             var builder = new UriBuilder(url);
 
             httpClient.DefaultRequestHeaders.Clear();

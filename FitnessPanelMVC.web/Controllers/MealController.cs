@@ -32,7 +32,7 @@ namespace FitnessPanelMVC.web.Controllers
         public async Task<IActionResult> Index()
         {
             var userId = await _userSerivce.GetIdAsync(User);
-            var model = _mealService.GetForListByDate(DateTime.Now, userId);
+            var model = await _mealService.GetForListByDate(DateTime.Now, userId);
             return View(model);
         }
 
@@ -40,7 +40,7 @@ namespace FitnessPanelMVC.web.Controllers
         public async Task<IActionResult> Index(DateTime date)
         {
             var userId = await _userSerivce.GetIdAsync(User);
-            var model = _mealService.GetForListByDate(date, userId);
+            var model = await _mealService.GetForListByDate(date, userId);
             return View(model);
         }
 

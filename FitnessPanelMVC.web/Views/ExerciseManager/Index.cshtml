@@ -5,11 +5,11 @@
 
 }
 
-<h2>Select an Exercise Option</h2>
+<h2>Exercise manager</h2>
 
 <form asp-controller="ExerciseManager" asp-action="GetExerciseResult" method="post">
     <div class="form-group">
-        <label for="SelectedOption">Choose an option:</label>
+        <label for="SelectedOption">Choose body part:</label>
         <select asp-for="SelectedOption" asp-items="@(new SelectList(Model.AvailableOptions))" class="form-control"></select>
     </div>
     <button type="submit" class="btn btn-primary">Get Exercises</button>

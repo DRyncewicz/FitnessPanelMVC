@@ -1,13 +1,21 @@
 html {
     font-size: 14px;
 }
-
+.body-background {
+    background-image: url('../images/35d4262c-0a7b-49b1-8819-e91a3b6d8123.webp');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100%;
+}
 @media (min-width: 768px) {
     html {
         font-size: 16px;
     }
 }
-
+.transparent-background {
+    background-color: rgba(255, 255, 255, 0.5) !important; 
+}
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
     box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }

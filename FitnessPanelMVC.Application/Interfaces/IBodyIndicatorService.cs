@@ -13,5 +13,6 @@ namespace FitnessPanelMVC.Application.Interfaces
         Task<int> AddNewAsync(NewBodyIndicatorVm bMIFormVm, string userId);
 
         Task<BodyIndicator> GetByIdAsync(int bodyIndicatorId);
+        Task<List<BodyIndicatorsForUserHistoricalVm>> GetByUserIdAsync(string userId);
     }
 }
