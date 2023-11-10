@@ -34,11 +34,11 @@ namespace FitnessPanelMVC.Application.Services
 
         }
 
-        public ListMealForListVm GetForListByDate(DateTime date, string userId)
+        public async Task<ListMealForListVm> GetForListByDate(DateTime date, string userId)
         {
-            var mealsVm = _mealRepository.GetAll().
+            var mealsVm = await _mealRepository.GetAll().
                 Where(i => i.MealDate.Date == date.Date && i.UserId == userId).
-                ProjectTo<MealForListVm>(_mapper.ConfigurationProvider).ToList();
+                ProjectTo<MealForListVm>(_mapper.ConfigurationProvider).ToListAsync();
 
             return new ListMealForListVm
             {

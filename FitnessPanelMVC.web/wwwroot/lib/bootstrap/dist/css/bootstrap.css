@@ -4442,15 +4442,16 @@ textarea.form-control-lg {
 }
 
 .card {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-  word-wrap: break-word;
-  background-color: #fff;
-  background-clip: border-box;
-  border: 1px solid rgba(0, 0, 0, 0.125);
-  border-radius: 0.25rem;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    border-radius: 0.25rem;
+    background-color: rgba(255, 255, 255, 0.8);
 }
 .card > hr {
   margin-right: 0;
@@ -4477,7 +4478,7 @@ textarea.form-control-lg {
 
 .card-body {
   flex: 1 1 auto;
-  padding: 1rem 1rem;
+  padding: 20 px;
 }
 
 .card-title {
@@ -4541,7 +4542,8 @@ textarea.form-control-lg {
 .card-img,
 .card-img-top,
 .card-img-bottom {
-  width: 100%;
+
+    flex-shrink: 0; 
 }
 
 .card-img,
@@ -5920,7 +5922,9 @@ textarea.form-control-lg {
 }
 
 .carousel {
-  position: relative;
+    position: relative;
+    background-color: #f4f4f4; 
+    padding: 30px 0;
 }
 
 .carousel.pointer-event {
@@ -5939,14 +5943,16 @@ textarea.form-control-lg {
 }
 
 .carousel-item {
-  position: relative;
-  display: none;
-  float: left;
-  width: 100%;
-  margin-right: -100%;
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  transition: transform 0.6s ease-in-out;
+    position: relative;
+    display: flex;
+    float: left;
+    width: 100%;
+    margin-right: -100%;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    transition: transform 0.6s ease-in-out;
+    justify-content: center;
+    height: 300px;
 }
 @media (prefers-reduced-motion: reduce) {
   .carousel-item {
@@ -6039,12 +6045,13 @@ textarea.form-control-lg {
 
 .carousel-control-prev-icon,
 .carousel-control-next-icon {
-  display: inline-block;
-  width: 2rem;
-  height: 2rem;
-  background-repeat: no-repeat;
-  background-position: 50%;
-  background-size: 100% 100%;
+    display: inline-block;
+    width: 2rem;
+    height: 2rem;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    filter: invert(50%);
+    background-size: 100% 100%;
 }
 
 /* rtl:options: {

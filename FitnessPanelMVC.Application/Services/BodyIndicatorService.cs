@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using FitnessPanelMVC.Application.Interfaces;
 using FitnessPanelMVC.Application.ViewModels.BodyIndicator;
 using FitnessPanelMVC.Domain.Interfaces;
 using FitnessPanelMVC.Domain.Model;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -55,6 +57,19 @@ namespace FitnessPanelMVC.Application.Services
         {
             var bodyIndicator = await _bodyIndicatorRepository.GetByIdAsync(bodyIndicatorId);
             return bodyIndicator;
+        }
+
+        public async Task<List<BodyIndicatorsForUserHistoricalVm>> GetByUserIdAsync(string userId)
+        {
+            var bodyIndicatorsForUserHistoricalVm = await _bodyIndicatorRepository.GetAll()
+                .Where(bd => bd.UserId == userId && bd.IsRealUserData == true)
+                .ProjectTo<BodyIndicatorsForUserHistoricalVm>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+            if (bodyIndicatorsForUserHistoricalVm == null)
+            {
+                return new List<BodyIndicatorsForUserHistoricalVm>();
+            }
+            return bodyIndicatorsForUserHistoricalVm;
         }
     }
 }

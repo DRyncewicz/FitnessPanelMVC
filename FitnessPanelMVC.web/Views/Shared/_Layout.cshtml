@@ -10,12 +10,11 @@
     <script src="https://kit.fontawesome.com/45733236d9.js" crossorigin="anonymous"></script>
     @RenderSection("Styles", required: false)
 </head>
-<body>
-    
-
+<body class="body-background">
     <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <div class="container">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light bg-opacity-50">
+            
+            <div class="container bg-opacity-50">
                 <a class="navbar-brand" href="@Url.Action("Index", "Home")">FitnessPanel</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse"
                         data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
