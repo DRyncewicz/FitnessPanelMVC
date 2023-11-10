@@ -32,6 +32,7 @@ namespace FitnessPanelMVC.Infrastructure
             services.AddTransient<IXmlProductReader, XmlProductReader>();
             services.AddTransient<ExerciseUrlBuilder>();
             services.AddTransient<IExerciseApiClient, ExerciseApiClient>();
+            services.AddScoped<IReportFormatter, BodyIndicatorReportFormatter>();
 
             return services;
         }
