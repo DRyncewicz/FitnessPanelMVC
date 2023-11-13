@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
 using FitnessPanelMVC.Domain.Model;
 using FitnessPanelMVC.Application.ViewModels.Product;
 using FitnessPanelMVC.Domain.Interfaces;
