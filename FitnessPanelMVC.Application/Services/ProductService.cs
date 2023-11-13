@@ -32,22 +32,28 @@ namespace FitnessPanelMVC.Application.Services
 
         public async Task<ListProductForListVm> GetAllForListAsync(int pageSize, int pageNo, string searchString, string userId)
         {
-            var products = await _productRepository.GetAll().
-                Where(p => p.Name.StartsWith(searchString) && p.IsConfirmed == true ||
-                p.Name.StartsWith(searchString) && p.UserId == userId)
-                .ProjectTo<ProductForListVm>(_mapper.ConfigurationProvider).ToListAsync();
-            var productsToShow = products.Skip(pageSize * (pageNo - 1)).Take(pageSize).ToList();
+            var query = _productRepository.GetAll()
+                .Where(p => p.Name.StartsWith(searchString) && p.IsConfirmed == true ||
+                            p.Name.StartsWith(searchString) && p.UserId == userId);
+
+            var totalProductsCount =  query.Count();
+
+            var pagedProducts = await query.Skip(pageSize * (pageNo - 1)).Take(pageSize).ToListAsync();
+
+            var productsToShow = _mapper.Map<List<ProductForListVm>>(pagedProducts);
+
             var productList = new ListProductForListVm()
             {
                 PageSize = pageSize,
                 CurrentPage = pageNo,
                 SearchString = searchString,
                 Products = productsToShow,
-                Count = products.Count
+                Count = totalProductsCount
             };
 
             return productList;
         }
+
 
         public async Task<int> AddNewAsync(NewProductVm newProductVm, string userId)
         {
